@@ -5,7 +5,7 @@
 
 wm_panel <- function(){
     fluidRow(
-        
+        column(1),
         column(
             7,
             h2(HTML('<b><u>Western Mountains SDAM</u></b>')),

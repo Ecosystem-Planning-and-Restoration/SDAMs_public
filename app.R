@@ -58,6 +58,23 @@ ui <- fluidPage(
             border-color: black;
             border-width: px;
         }
+        #indicator_button {
+            background-color:#94d9f2;
+            padding: 7px;
+            font-size: 110%;
+            font-weight: bold;
+            border-style: outset;
+            
+            box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
+            transition-duration: 0.1s;
+        }
+        #indicator_button:hover {
+            background-color:#5d8b9c;
+            color: black;
+            border-style: solid;
+            border-color: black;
+            border-width: px;
+        }
         #runmodel {
             background-color:#94d9f2;
             padding: 7px;
@@ -115,24 +132,34 @@ ui <- fluidPage(
     
     ),
     fluidRow(
+      
         column(
-            12,
+            10,
             tabsetPanel(
                 id = "tabs",
+                
                 # tabPanel(
                 #     "Background Info",
                 #     bkgrnd
                 # ),
                 # Overview -----------------------------------------------------
                 tabPanel(
+                  
+                    # style = 'background-color: #8a8f96;',
                     "Enter Data", 
                     br(),
-                    h4(p(HTML("<b><u><i>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</i></u></b>"),style="color:#b80404")),
-                    fluidRow(column(12, h3("Step 1: Enter reach coordinates or select reach location on map."), 
-                                    )),
+                    
+                    fluidRow(
+                      column(1),
+                      column(10, 
+                        h4(p(HTML("<b><u><i>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</i></u></b>"),style="color:#b80404")),
+                        h3("Step 1: Enter reach coordinates or select reach location on map."), 
+                      )
+                    ),
                     # coordinates----
                     fluidRow(
-                      column(12,
+                      column(1),
+                      column(10,
                              selectInput(
                                "vol_region",
                                label = HTML("<b><i>Method for Assessing Reach Location</b></i>"),
@@ -147,6 +174,7 @@ ui <- fluidPage(
                       )
                     ),
                     fluidRow(
+                        column(1),
                         column(7,
                                HTML('<hr style="color: black; height: 1px; background-color: black;">')
                                )
@@ -156,6 +184,7 @@ ui <- fluidPage(
                         
                       condition = "input.vol_region == 'Enter Coordinates'",
                       fluidRow(
+                          column(1),
                           column(
                               4,
                               div(HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area. </i></b>')),
@@ -196,7 +225,8 @@ ui <- fluidPage(
                     conditionalPanel(
                       condition = "input.vol_region == 'Select Region'",
                       fluidRow(
-                        column(12,
+                        column(1),
+                        column(10,
                                selectInput(
                                  "user_region",
                                  HTML("<b><i>Select SDAM Region if not entering coordinates:</b></i>"),
@@ -217,6 +247,7 @@ ui <- fluidPage(
                     conditionalPanel(
                         condition = "input.vol_region == 'Select Location on Map'",
                         fluidRow(
+                            column(1),
                             column(6,
                                 leafletOutput("map", height ='500px')
                             )
@@ -224,13 +255,15 @@ ui <- fluidPage(
                     ),
 
                     fluidRow(
+                        column(1),
                         column(
-                            12,
+                            10,
                             HTML('<hr style="color: black; height: 7px; background-color: black;">')
                         )
                     ),
 
                     fluidRow(
+                        column(1),
                         column(4,
                                 br(),
                                 div(actionButton("indicator_button", 
@@ -260,6 +293,7 @@ ui <- fluidPage(
                 
             )
         )
+      
     )
 
 )

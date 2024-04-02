@@ -3,7 +3,7 @@
 
 pnw_panel <- function(){
     fluidRow(
-        
+        column(1),
         column(
             7,
             h2(HTML('<b><u>Pacific Northwest SDAM</u></b>')),

@@ -2,7 +2,7 @@
 library(tidyverse)
 library(sf)
 library(prism)
-library(rgdal)
+# library(rgdal)
 library(elevatr)
 library(raster)
 library(exactextractr)
