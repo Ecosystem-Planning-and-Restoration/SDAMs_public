@@ -1,4 +1,4 @@
-# source('global_new_v2_1.R')
+source('global_new_v2_1.R')
 source('./models/sdam_models.R')
 source('./models/model_inputs.R')
 source('./R/additionalinfo.R')
@@ -7,6 +7,7 @@ source('./panels/panels_gp.R')
 source('./panels/panels_pnw.R')
 source('./panels/panels_aw.R')
 source('./panels/panels_wm.R')
+source('./spatial/region_check.R')
 # source('./panels.R')
 source('./R/report.R')
 # source('gen_report.R')
@@ -228,9 +229,26 @@ ui <- fluidPage(
                             HTML('<hr style="color: black; height: 7px; background-color: black;">')
                         )
                     ),
+
+                    fluidRow(
+                        column(4,
+                                br(),
+                                div(actionButton("indicator_button", 
+                                                label=div("Enter Model Data", icon('arrow-down'))
+                                                ) 
+                                    ),
+                                br(),
+                                br(),
+                                    
+                              )
+                              ),
                     
                     # Region UI Split-----
-                    uiOutput("regionPanel"),
+                    conditionalPanel(
+                      condition = "input.indicator_button != 0",
+                      uiOutput("regionPanel") 
+                    ),
+                    # uiOutput("regionPanel"),
                     uiOutput("reportPanel"),
                       
                     
@@ -265,7 +283,15 @@ server <- function(input, output, session) {
         }
         x
     })
+
+      # Alert user if their site is located within a 10-mile distance of another region(s)
+    # observeEvent(c(input$reg_button, input$map_click,input$vol_region, input$user_region),{
+    #   if ()
     
+
+    # })
+    
+      
     output$regionSelection <- renderText({
       region_class()$region
     })
@@ -350,8 +376,7 @@ server <- function(input, output, session) {
         }
     })
 
-  # Alert user if their site is located within a 10-mile distance of another region(s)
-  
+
     
   # If site out of SDAM study areas, return warning message from global function
   final_sdams <- list('Great Plains', 'Arid West', 'Western Mountains', 'Pacific Northwest')
@@ -635,9 +660,9 @@ server <- function(input, output, session) {
       # )
     })
     
-    observeEvent(AllInputs(), {
-      print(AllInputs())
-    })
+    # observeEvent(AllInputs(), {
+    #   print(AllInputs())
+    # })
     
     
     # # retrive precip prism value for report
