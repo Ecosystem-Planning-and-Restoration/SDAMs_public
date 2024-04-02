@@ -1035,15 +1035,6 @@ server <- function(input, output, session) {
       fig7_1 <- reactive({gsub("\\\\", "/", input$inv5$datapath)})
       fig8_1 <- reactive({gsub("\\\\", "/", input$inv6$datapath)})
 
-      # drain area photos
-      fig9 <- reactive({gsub("\\\\", "/", input$da1$datapath)})
-      fig10 <- reactive({gsub("\\\\", "/", input$da2$datapath)})
-
-      # retroactively added photos; naming convention broken
-      # fig9_1 <- reactive({gsub("\\\\", "/", input$rich4$datapath)})
-      # fig10_1 <- reactive({gsub("\\\\", "/", input$rich5$datapath)})
-      # fig11_1 <- reactive({gsub("\\\\", "/", input$rich6$datapath)})
-
       # Substrate photos
       fig12 <- reactive({gsub("\\\\", "/", input$sub1$datapath)})
       fig13 <- reactive({gsub("\\\\", "/", input$sub2$datapath)})
@@ -1054,25 +1045,63 @@ server <- function(input, output, session) {
       fig16 <- reactive({gsub("\\\\", "/", input$veg2$datapath)})
       fig17 <- reactive({gsub("\\\\", "/", input$veg3$datapath)})
 
-      # Natural Valley
-      fig18 <- reactive({gsub("\\\\", "/", input$nv1$datapath)})
-      fig19 <- reactive({gsub("\\\\", "/", input$nv2$datapath)})
-      fig20 <- reactive({gsub("\\\\", "/", input$nv3$datapath)})
+      # Sediment on Plants photos
+      fig18 <- reactive({gsub("\\\\", "/", input$sed1$datapath)})
+      fig19 <- reactive({gsub("\\\\", "/", input$sed2$datapath)})
+      fig20 <- reactive({gsub("\\\\", "/", input$sed3$datapath)})
 
-      # Slope
+      # Slope photos
       fig21 <- reactive({gsub("\\\\", "/", input$slope1$datapath)})
       fig22 <- reactive({gsub("\\\\", "/", input$slope2$datapath)})
       fig23 <- reactive({gsub("\\\\", "/", input$slope3$datapath)})
 
+      # Hydrophyte photos
+      fig24 <- reactive({gsub("\\\\", "/", input$hydro1$datapath)})
+      fig25 <- reactive({gsub("\\\\", "/", input$hydro2$datapath)})
+      fig26 <- reactive({gsub("\\\\", "/", input$hydro3$datapath)})
+      fig27 <- reactive({gsub("\\\\", "/", input$hydro4$datapath)})
+      fig28 <- reactive({gsub("\\\\", "/", input$hydro5$datapath)})
+      fig29 <- reactive({gsub("\\\\", "/", input$hydro6$datapath)})
+      
+      # Fish photos
+      fig30 <- reactive({gsub("\\\\", "/", input$fish1$datapath)})
+      fig31 <- reactive({gsub("\\\\", "/", input$fish2$datapath)})
+      fig32 <- reactive({gsub("\\\\", "/", input$fish3$datapath)})
+
+      # Perennial Indicator photos
+      fig33 <- reactive({gsub("\\\\", "/", input$per1$datapath)})
+      fig34 <- reactive({gsub("\\\\", "/", input$per2$datapath)})
+      fig35 <- reactive({gsub("\\\\", "/", input$per3$datapath)})
+
+      # Algal Cover photos
+      fig36 <- reactive({gsub("\\\\", "/", input$algal1$datapath)})
+      fig37 <- reactive({gsub("\\\\", "/", input$algal2$datapath)})
+      fig38 <- reactive({gsub("\\\\", "/", input$algal3$datapath)})
+
+      # Amphibian photos
+      fig39 <- reactive({gsub("\\\\", "/", input$amph1$datapath)})
+      fig40 <- reactive({gsub("\\\\", "/", input$amph2$datapath)})
+      fig41 <- reactive({gsub("\\\\", "/", input$amph3$datapath)})
+
+      # Riffle Pool photos
+      fig42 <- reactive({gsub("\\\\", "/", input$riff1$datapath)})
+      fig43 <- reactive({gsub("\\\\", "/", input$riff2$datapath)})
+      fig44 <- reactive({gsub("\\\\", "/", input$riff3$datapath)})
+
+      # Upland rooted photos
+      fig45 <- reactive({gsub("\\\\", "/", input$ur1$datapath)})
+      fig46 <- reactive({gsub("\\\\", "/", input$ur2$datapath)})
+      fig47 <- reactive({gsub("\\\\", "/", input$ur3$datapath)})
+
       # Supplemental Info photos
-      fig24 <- reactive({gsub("\\\\", "/", input$add1$datapath)})
-      fig25 <- reactive({gsub("\\\\", "/", input$add2$datapath)})
-      fig26 <- reactive({gsub("\\\\", "/", input$add3$datapath)})
-      fig27 <- reactive({gsub("\\\\", "/", input$add4$datapath)})
+      fig48 <- reactive({gsub("\\\\", "/", input$add1$datapath)})
+      fig49 <- reactive({gsub("\\\\", "/", input$add2$datapath)})
+      fig50 <- reactive({gsub("\\\\", "/", input$add3$datapath)})
+      fig51 <- reactive({gsub("\\\\", "/", input$add4$datapath)})
 
 
       output$report <- downloadHandler(
-                filename = glue::glue("Eastern SDAM Report ({format(Sys.time(), '%B %d, %Y')}).pdf"),
+                filename = glue::glue("SDAM Report ({format(Sys.time(), '%B %d, %Y')}).pdf"),
                 content = function(file) {
                   if (region_class()$region == 'Northeast'){
                     ### NE Report----
