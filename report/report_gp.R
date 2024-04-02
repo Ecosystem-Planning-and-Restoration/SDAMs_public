@@ -1,12 +1,12 @@
-# western mountains report panel
+# great plains report panel
 
-wm_report <- fluidRow(
+gp_report <- fluidRow(
     column(1),
     column(7,
 
         ## General Information----
         HTML('<hr style="color: black; height: 6px; background-color: black;">'),
-        h2(HTML("Western Mountains SDAM Report")),
+        h2(HTML("Great Plains SDAM Report")),
         h4(HTML("* Maximum file upload size is 30MB.")),
         h3(HTML(
         "Step 3: Enter additional information (optional)")
@@ -206,7 +206,7 @@ wm_report <- fluidRow(
             accept = c('image/png', 'image/jpeg')
         ),
 
-        # Biological----
+        # Invertebrates----
         h4(HTML("<b>Aquatic Benthic Macroinvertebrates</b>")),
 
         textAreaInput(
@@ -591,57 +591,52 @@ wm_report <- fluidRow(
             placeholder = NULL
         ),
         
-        ### Slope----
-        h4(HTML("<b>Slope</b>")),
+        ### Sediment on Plants----
+        h4(HTML("<b>Presence of Sediment on Plants</b>")),
         
         textAreaInput(
-            inputId = "notes_slope",
-            label = "Notes about slope:",
+            inputId = "notes_sed",
+            label = "Notes about sediment on plants:",
             value = "",
             width = '300px',
             height = '300px',
             placeholder = NULL
         ),
-        # numericInput(
-        #   inputId = "valley_length",
-        #   label = "Valley length (m):",
-        #   value = 0,
-        #   min = 0,
-        # ),
+
         slatesFileInput(
-            "slope1",
-            HTML("slope Photo #1<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
+            "sed1",
+            HTML("Sediment Photo #1<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "slope1_cap",
-            label = HTML("<span style='font-weight:normal'>slope Photo #1 caption: </span>"),
+            inputId = "sed1_cap",
+            label = HTML("<span style='font-weight:normal'>Sediment Photo #1 caption: </span>"),
             value = "",
             width = NULL,
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "slope2",
-            HTML("slope Photo #2<br /> <span style='font-weight:normal'> Upload photo file here: </span>"),
+            "sed2",
+            HTML("Sediment Photo #2<br /> <span style='font-weight:normal'> Upload photo file here: </span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "slope2_cap",
-            label = HTML("<span style='font-weight:normal'>slope Photo #2 caption: </span>"),
+            inputId = "sed2_cap",
+            label = HTML("<span style='font-weight:normal'>Sediment Photo #2 caption: </span>"),
             value = "",
             width = NULL,
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "slope3",
-            HTML("slope Photo #3<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+            "sed3",
+            HTML("Sediment Photo #3<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "slope3_cap",
-            label = HTML("<span style='font-weight:normal'>slope Photo #3 caption:</span>"),
+            inputId = "sed3_cap",
+            label = HTML("<span style='font-weight:normal'>Sediment Photo #3 caption:</span>"),
             value = "",
             width = NULL,
             placeholder = NULL

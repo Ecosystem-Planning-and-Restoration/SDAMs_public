@@ -1,12 +1,12 @@
-# western mountains report panel
+# arid west report panel
 
-wm_report <- fluidRow(
+aw_report <- fluidRow(
     column(1),
     column(7,
 
         ## General Information----
         HTML('<hr style="color: black; height: 6px; background-color: black;">'),
-        h2(HTML("Western Mountains SDAM Report")),
+        h2(HTML("Arid West SDAM Report")),
         h4(HTML("* Maximum file upload size is 30MB.")),
         h3(HTML(
         "Step 3: Enter additional information (optional)")
@@ -438,12 +438,12 @@ wm_report <- fluidRow(
             placeholder = NULL
         ),
         
-        ### Substrate----
-        h4(HTML("<b>Substrate Sorting</b>")),
+        ### Algal Cover----
+        h4(HTML("<b>Algal Cover</b>")),
         
         textAreaInput(
-            inputId = "notes_sub",
-            label = "Notes about substrate sorting:",
+            inputId = "notes_algal",
+            label = "Notes about algal cover:",
             value = "",
             width = '300px',
             height = '300px',
@@ -451,39 +451,39 @@ wm_report <- fluidRow(
         ),
 
         slatesFileInput(
-            "sub1",
-            HTML("Substrate Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"),
+            "algal1",
+            HTML("Algal Cover Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "sub1_cap",
-            label = HTML("<span style='font-weight:normal'>Substrate Photo #1 caption:</span>"),
+            inputId = "algal1_cap",
+            label = HTML("<span style='font-weight:normal'>Algal Cover Photo #1 caption:</span>"),
             value = "",
             width = NULL,
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "sub2",
-            HTML("Substrate Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+            "algal2",
+            HTML("Algal Cover Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "sub2_cap",
-            label = HTML("<span style='font-weight:normal'>Substrate Photo #2 caption:</span>"),
+            inputId = "algal2_cap",
+            label = HTML("<span style='font-weight:normal'>Algal Cover Photo #2 caption:</span>"),
             value = "",
             width = NULL,
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "sub3",
-            HTML("Substrate Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+            "algal3",
+            HTML("Algal Cover Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "sub3_cap",
-            label = HTML("<span style='font-weight:normal'>Substrate Photo #3 caption: </span>"),
+            inputId = "algal3_cap",
+            label = HTML("<span style='font-weight:normal'>Algal Cover Photo #3 caption: </span>"),
             value = "",
             width = NULL,
             placeholder = NULL

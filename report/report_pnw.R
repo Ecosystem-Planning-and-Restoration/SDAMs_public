@@ -1,12 +1,12 @@
-# western mountains report panel
+# PNW report panel
 
-wm_report <- fluidRow(
+gp_report <- fluidRow(
     column(1),
     column(7,
 
         ## General Information----
         HTML('<hr style="color: black; height: 6px; background-color: black;">'),
-        h2(HTML("Western Mountains SDAM Report")),
+        h2(HTML("Pacific Northwest SDAM Report")),
         h4(HTML("* Maximum file upload size is 30MB.")),
         h3(HTML(
         "Step 3: Enter additional information (optional)")
@@ -206,7 +206,7 @@ wm_report <- fluidRow(
             accept = c('image/png', 'image/jpeg')
         ),
 
-        # Biological----
+        # Invertebrates----
         h4(HTML("<b>Aquatic Benthic Macroinvertebrates</b>")),
 
         textAreaInput(
@@ -387,12 +387,12 @@ wm_report <- fluidRow(
         ),
         br(),
 
-        ### Upland Rooted-----
-        h4(HTML("<b>Absence of upland rooted plants in the streambed.</b>")),
+        ### Perennial Taxa-----
+        h4(HTML("<b>Perennial Taxa.</b>")),
 
         textAreaInput(
-            inputId = "notes_rooted", 
-            label = "Notes about upland rooted vegetation:", 
+            inputId = "notes_per", 
+            label = "Notes about perennial taxa:", 
             value = "", 
             width = '300px',
             height = '300px',
@@ -400,50 +400,50 @@ wm_report <- fluidRow(
         ),
 
         slatesFileInput(
-            "ur1", 
-            HTML("Upland Rooted Plants Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
+            "per1", 
+            HTML("Perennial Taxa Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "ur1_cap", 
-            label = HTML("<span style='font-weight:normal'>Upland Rooted Plants Photo #1 caption:</span>"), 
+            inputId = "per1_cap", 
+            label = HTML("<span style='font-weight:normal'>Perennial Taxa Photo #1 caption:</span>"), 
             value = "", 
             width = NULL, 
             placeholder = NULL
         ),
         
         slatesFileInput(
-            "ur2", 
-            HTML("Upland Rooted Plants Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+            "per2", 
+            HTML("Perennial Taxa Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "ur2_cap", 
-            label = HTML("<span style='font-weight:normal'>Upland Rooted Plants Photo #2 caption:</span>"), 
+            inputId = "per2_cap", 
+            label = HTML("<span style='font-weight:normal'>Perennial Taxa Photo #2 caption:</span>"), 
             value = "", 
             width = NULL, 
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "ur3", 
-            HTML("Upland Rooted Plants Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+            "per3", 
+            HTML("Perennial Taxa Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "ur3_cap", 
-            label = HTML("<span style='font-weight:normal'>Upland Rooted Plants Photo #3 caption: </span>"), 
+            inputId = "per3_cap", 
+            label = HTML("<span style='font-weight:normal'>Perennial Taxa Photo #3 caption: </span>"), 
             value = "", 
             width = NULL, 
             placeholder = NULL
         ),
         
-        ### Substrate----
-        h4(HTML("<b>Substrate Sorting</b>")),
+        ### Fish----
+        h4(HTML("<b>Fish</b>")),
         
         textAreaInput(
-            inputId = "notes_sub",
-            label = "Notes about substrate sorting:",
+            inputId = "notes_fish",
+            label = "Notes about fish:",
             value = "",
             width = '300px',
             height = '300px',
@@ -451,50 +451,50 @@ wm_report <- fluidRow(
         ),
 
         slatesFileInput(
-            "sub1",
-            HTML("Substrate Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"),
+            "fish1",
+            HTML("Fish Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "sub1_cap",
-            label = HTML("<span style='font-weight:normal'>Substrate Photo #1 caption:</span>"),
-            value = "",
-            width = NULL,
-            placeholder = NULL
-        ),
-
-        slatesFileInput(
-            "sub2",
-            HTML("Substrate Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
-            accept = c('image/png', 'image/jpeg')
-        ),
-        textInput(
-            inputId = "sub2_cap",
-            label = HTML("<span style='font-weight:normal'>Substrate Photo #2 caption:</span>"),
+            inputId = "fish1_cap",
+            label = HTML("<span style='font-weight:normal'>Fish Photo #1 caption:</span>"),
             value = "",
             width = NULL,
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "sub3",
-            HTML("Substrate Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+            "fish2",
+            HTML("Fish Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "sub3_cap",
-            label = HTML("<span style='font-weight:normal'>Substrate Photo #3 caption: </span>"),
+            inputId = "fish2_cap",
+            label = HTML("<span style='font-weight:normal'>Fish Photo #2 caption:</span>"),
             value = "",
             width = NULL,
             placeholder = NULL
         ),
 
-        ### Difference in Vegetation----
-        h4(HTML("<b>Differences in Vegetation</b>")),
+        slatesFileInput(
+            "fish3",
+            HTML("Fish Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+            accept = c('image/png', 'image/jpeg')
+        ),
+        textInput(
+            inputId = "fish3_cap",
+            label = HTML("<span style='font-weight:normal'>Fish Photo #3 caption: </span>"),
+            value = "",
+            width = NULL,
+            placeholder = NULL
+        ),
+
+        ### Amphibians----
+        h4(HTML("<b>Amphibians</b>")),
 
         textAreaInput(
-            inputId = "notes_veg", 
-            label = "Notes about vegetation:", 
+            inputId = "notes_amph", 
+            label = "Notes about amphibians:", 
             value = "", 
             width = '300px',
             height = '300px',
@@ -502,95 +502,44 @@ wm_report <- fluidRow(
         ),
 
         slatesFileInput(
-            "veg1", 
-            HTML("Vegetation Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
+            "amph1", 
+            HTML("Amphibians Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "veg1_cap", 
-            label = HTML("<span style='font-weight:normal'>Vegetation Photo #1 caption:</span>"), 
+            inputId = "amph1_cap", 
+            label = HTML("<span style='font-weight:normal'>Amphibians Photo #1 caption:</span>"), 
             value = "", 
             width = NULL, 
             placeholder = NULL
         ),
         
         slatesFileInput(
-            "veg2", 
-            HTML("Vegetation Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+            "amph2", 
+            HTML("Amphibians Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "veg2_cap", 
-            label = HTML("<span style='font-weight:normal'>Vegetation Photo #2 caption:</span>"), 
+            inputId = "amph2_cap", 
+            label = HTML("<span style='font-weight:normal'>Amphibians Photo #2 caption:</span>"), 
             value = "", 
             width = NULL, 
             placeholder = NULL
         ),
 
         slatesFileInput(
-            "veg3", 
-            HTML("Vegetation Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+            "amph3", 
+            HTML("Amphibians Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
             accept = c('image/png', 'image/jpeg')
         ),
         textInput(
-            inputId = "veg3_cap", 
-            label = HTML("<span style='font-weight:normal'>Vegetation Photo #3 caption: </span>"), 
+            inputId = "amph3_cap", 
+            label = HTML("<span style='font-weight:normal'>Amphibians Photo #3 caption: </span>"), 
             value = "", 
             width = NULL, 
             placeholder = NULL
         ),
 
-        ### Riffle----
-        h4(HTML("<b>Riffle Pool Sequence</b>")),
-
-        textAreaInput(
-            inputId = "notes_riff", 
-            label = "Notes about the riffle pool sequence:", 
-            value = "", 
-            width = '300px',
-            height = '300px',
-            placeholder = NULL
-        ),
-
-        slatesFileInput(
-            "riff1", 
-            HTML("Riffle Pool Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
-            accept = c('image/png', 'image/jpeg')
-        ),
-        textInput(
-            inputId = "riff1_cap", 
-            label = HTML("<span style='font-weight:normal'>Riffle Pool Photo #1 caption:</span>"), 
-            value = "", 
-            width = NULL, 
-            placeholder = NULL
-        ),
-        
-        slatesFileInput(
-            "riff2", 
-            HTML("Riffle Pool Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
-            accept = c('image/png', 'image/jpeg')
-        ),
-        textInput(
-            inputId = "riff2_cap", 
-            label = HTML("<span style='font-weight:normal'>Riffle Pool Photo #2 caption:</span>"), 
-            value = "", 
-            width = NULL, 
-            placeholder = NULL
-        ),
-
-        slatesFileInput(
-            "riff3", 
-            HTML("Riffle Pool Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
-            accept = c('image/png', 'image/jpeg')
-        ),
-        textInput(
-            inputId = "riff3_cap", 
-            label = HTML("<span style='font-weight:normal'>Riffle Pool Photo #3 caption: </span>"), 
-            value = "", 
-            width = NULL, 
-            placeholder = NULL
-        ),
-        
         ### Slope----
         h4(HTML("<b>Slope</b>")),
         
@@ -646,6 +595,7 @@ wm_report <- fluidRow(
             width = NULL,
             placeholder = NULL
         ),
+
         
         ## Notes and Photos----
         h4(HTML("<b>Supplemental Information</b>")),
