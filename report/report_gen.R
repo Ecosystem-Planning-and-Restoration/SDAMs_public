@@ -67,14 +67,14 @@ general_params <- list(
 
     # ------------------- Supplemental Information
     notes_supplemental_information = input$notes_supplemental_information,
-    f24 = fig24(),
-    f24_cap = input$add1_cap,
-    f25 = fig25(),
-    f25_cap = input$add2_cap,
-    f26 = fig26(),
-    f26_cap = input$add3_cap,
-    f27 = fig27(),
-    f27_cap = input$add4_cap
+    f48 = fig48(),
+    f48_cap = input$add1_cap,
+    f49 = fig49(),
+    f49_cap = input$add2_cap,
+    f50 = fig50(),
+    f50_cap = input$add3_cap,
+    f51 = fig51(),
+    f51_cap = input$add4_cap,
 )
 
 # combine the general parameters and region specific parameters for markdown; knits the report document for download
@@ -157,6 +157,7 @@ generate_report <- function(region){
                         f16_cap = input$veg2_cap,
                         f17 = fig17(),
                         f17_cap = input$veg3_cap,
+                        notes_vegetation = input$notes_veg
 
                         # Slope
                         slope = input$user_slope,
@@ -291,6 +292,7 @@ generate_report <- function(region){
                         f16_cap = input$veg2_cap,
                         f17 = fig17(),
                         f17_cap = input$veg3_cap,
+                        notes_vegetation = input$notes_veg
 
                         # Sediment on plants
                         sediment = input$user_sediment_plants,
@@ -364,6 +366,7 @@ generate_report <- function(region){
                         # ------------------- Biological indicators
                         # EPT Taxa
                         aqua_inv = input$user_total_abundance,
+                        ephem = input$user_ephemeroptera,
                         f6 = fig6(),
                         f6_cap = input$inv1_cap,
                         f7 = fig7(),
@@ -540,6 +543,7 @@ generate_report <- function(region){
                         f16_cap = input$veg2_cap,
                         f17 = fig17(),
                         f17_cap = input$veg3_cap,
+                        notes_vegetation = input$notes_veg
 
                         # Slope
                         slope = input$user_slope,
