@@ -37,12 +37,13 @@ source('./report/report_aw.R')
 source('./report/report_gp.R')
 source('./report/report_pnw.R')
 source('./report/report_wm.R')
+# source('./report/report_params.R')
 
 ## spatial funtions
 source('./spatial/region_check.R')
 # source('./panels.R')
 # source('./R/report.R')
-# source('gen_report.R')
+
 
 # Load shapefile with regions
 regions_leaflet <- read_sf("./spatial/regions_simp_noPRVI.shp")

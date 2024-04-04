@@ -45,3 +45,6 @@ markdown/se_report.Rmd
 markdown/texput.log
 /prism_temp
 unique_model_inputs.txt
+report/report_params.R
+report/report_gen.R
+report/report_gen.R

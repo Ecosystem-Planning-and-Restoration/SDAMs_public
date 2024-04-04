@@ -11,7 +11,7 @@ header-includes:
 output: pdf_document
 always_allow_html: no
 params:
-   stream_class: NA
+    stream_class: NA
     region: NA
     precip: NA
     drain_area: NA
@@ -20,22 +20,59 @@ params:
     c: NA
     d: NA
     e: NA
-    bm: NA
-    j: NA
+    f: NA
     g: NA
     h: NA
+    i: NA
+    j: NA
+    k: NA
     l: NA
-    fff: NA
-    bn: NA
-    v: NA
-    u: NA
-    t: NA
-    s: NA
     m: NA
     n: NA
     o: NA
+    p: NA
     r: NA
+    s: NA
+    t: NA
+    u: NA
+    v: NA
     w: NA
+    aa: NA
+    ab: NA
+    ac: NA
+    ad: NA
+    ae: NA
+    af: NA
+    ag: NA
+    ah: NA
+    ai: NA
+    aj: NA
+    ak: NA
+    al: NA
+    am: NA
+    an: NA
+    ao: NA
+    ap: NA
+    aq: NA
+    ar: NA
+    as: NA
+    at: NA
+    av: NA
+    ba: NA
+    bb: NA
+    bc: NA
+    bd: NA
+    be: NA
+    bf: NA
+    bg: NA
+    bh: NA
+    bi: NA
+    bl: NA
+    bm: NA
+    bn: NA
+    bo: NA
+    tbl: NA
+    fff: NA
     notes_supplemental_information: NA
     f48: NA
     f48_cap: NA
@@ -58,7 +95,7 @@ params:
     f7_1: NA
     f7_1cap: NA
     f8_1: NA
-    f8_cap: NA
+    f8_1cap: NA
     notes_aquainv: NA
     hydro: NA
     f24: NA
