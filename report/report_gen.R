@@ -382,7 +382,7 @@ generate_report <- function(region){
                         notes_aquainv = input$notes_totalAbundance,
 
                         # Hydrophytes
-                        hydro = input$user_hydrophyte,
+                        hydro = input$user_plants,
                         f24 = fig24(),
                         f24_cap = input$hydro1_cap,
                         f25 = fig25(),

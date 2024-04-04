@@ -1,16 +1,5 @@
-source('global_new_v2_1.R')
-source('./models/sdam_models.R')
-source('./models/model_inputs.R')
-source('./R/additionalinfo.R')
-source('./R/background.R')
-source('./panels/panels_gp.R')
-source('./panels/panels_pnw.R')
-source('./panels/panels_aw.R')
-source('./panels/panels_wm.R')
-source('./spatial/region_check.R')
-# source('./panels.R')
-source('./R/report.R')
-# source('gen_report.R')
+source('./global/global.R')
+
 
 
 ui <- fluidPage(
@@ -390,16 +379,34 @@ server <- function(input, output, session) {
     
     ### report panel--------
     output$reportPanel <- renderUI({
-      if(region_class()$region == 'Great Plains' & input$runmodel != 0){
-        gp_report()
-      } else if (region_class()$region == 'Western Mountains' & input$runmodel != 0){
-        wm_report()
-      } else if (region_class()$region == 'Arid West' & input$runmodel != 0){
-        aw_report()
-      } else if (region_class()$region == 'Pacific Northwest' & input$runmodel != 0){
-        pnw_report()
-      }
-    })
+        if (is.atomic(region_class())){
+
+          if(region_class() == 'Great Plains' & input$runmodel != 0){
+            gp_report()
+          } else if (region_class() == 'Western Mountains' & input$runmodel != 0){
+            wm_report()
+          } else if (region_class() == 'Arid West' & input$runmodel != 0){
+            aw_report()
+          } else if (region_class() == 'Pacific Northwest' & input$runmodel != 0){
+            pnw_report()
+          }
+
+        } else if (!is.atomic(region_class())){
+
+          if(region_class()$region == 'Great Plains' & input$runmodel != 0){
+            gp_report()
+          } else if (region_class()$region == 'Western Mountains' & input$runmodel != 0){
+            wm_report()
+          } else if (region_class()$region == 'Arid West' & input$runmodel != 0){
+            aw_report()
+          } else if (region_class()$region == 'Pacific Northwest' & input$runmodel != 0){
+            pnw_report()
+          }
+
+        }
+        
+      })
+
     
     observe({
         print(is.atomic(region_class()))
@@ -686,13 +693,13 @@ server <- function(input, output, session) {
     })
     
     # used to check all of the inputs
-    AllInputs <- reactive({
-      x <- reactiveValuesToList(input)
-      # data.frame(
-      #   names = names(x),
-      #   values = unlist(x, use.names = FALSE)
-      # )
-    })
+    # AllInputs <- reactive({
+    #   x <- reactiveValuesToList(input)
+    #   # data.frame(
+    #   #   names = names(x),
+    #   #   values = unlist(x, use.names = FALSE)
+    #   # )
+    # })
     
     # observeEvent(AllInputs(), {
     #   print(AllInputs())
@@ -845,9 +852,9 @@ server <- function(input, output, session) {
       } else return(NULL)
     })
 
-    observeEvent(df(), {
-      print(df())
-    })
+    # observeEvent(df(), {
+    #   print(df())
+    # })
 
     
     # run rf model and output stream classification----
