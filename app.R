@@ -752,6 +752,58 @@ server <- function(input, output, session){
         x
     })
 
+    # store adjacent regions for report
+    alt_regions_str <- reactive({
+      if(!is.null(map_coords()) && input$vol_region == 'Select Location on Map'){
+            alt_regions <- region_checker(map_coords()[1], map_coords()[2])
+            alt_regions <- alt_regions[alt_regions != 'East']
+            alt_regions_str <- str_c(alt_regions, collapse=', ')
+            if (length(alt_regions) > 0){
+                show_alert(
+                    title = "Location Warning!",
+                    text = tagList(
+                            tags$p(
+                                    HTML(paste0("This site is located within 10 miles of another SDAM region. Please consider using one of the following SDAMs:",
+                                                "<br><br>",
+                                                "<b>", alt_regions_str, "</b>"
+                                            )
+                                        )
+                                )
+                            ),
+                    type = "info"
+                )
+
+            }
+        } else if (input$vol_region != 'Select Region' && input$vol_region != 'Select Location on Map'){
+            alt_regions <- region_checker(input$lat, input$lon)
+            alt_regions <- alt_regions[alt_regions != 'East']
+            alt_regions_str <- str_c(alt_regions, collapse=', ')
+            if (length(alt_regions) > 0){
+                show_alert(
+                    title = "Location Warning!",
+                    text = tagList(
+                            tags$p(
+                                    HTML(paste0("This site is located within 10 miles of another SDAM region.  <br>Please consider using one of the following SDAMs:",
+                                                "<br><br>",
+                                                "<b>", alt_regions_str, "</b>"
+                                            )
+                                        )
+                                    )
+                                ),
+                    type = "info"
+                )
+
+            }
+        } else {
+          alt_regions_str <- 'No Regions Within 10 Miles'
+        }
+        alt_regions_str
+    })
+
+    observeEvent(alt_regions_str(), {
+        print(alt_regions_str())
+    })
+
       # Alert user if their site is located within a 10-mile distance of another region(s)
     observeEvent(c(input$reg_button, input$map_click,input$vol_region, input$user_region),{
       if(!is.null(map_coords()) && input$vol_region == 'Select Location on Map'){
@@ -1342,34 +1394,7 @@ server <- function(input, output, session){
     })
 
 
-    # Conditions in STEP 3
-    observeEvent(input$user_richness, {
-      if (!is.na(input$user_richness)){
-        if (input$user_richness  > input$user_TotalAbundance ){
-          show_alert(
-            title = "Value Error!",
-            text = tagList(
-              tags$p(HTML(paste0("Benthic macroinvertebrate richness can not be higher than benthic macroinvertebrate abundance.")
-                )
-              )
-            ),
-            type = "error"
-          )
-          # showModal(
-          #   modalDialog(
-          #     "Error – benthic macroinvertebrate richness can not be higher than benthic macroinvertebrate abundance.",
-          #     footer= modalButton("OK"),
-          #     easyClose = FALSE
-          #   )
-          # )
-          updateNumericInput(
-            session,
-            "user_richness",
-            value = 0
-          )
-        }
-      }
-    })
+
     
     observeEvent(input$surfflow, {
         print(input$surfflow)
@@ -1581,7 +1606,7 @@ server <- function(input, output, session){
               c = input$code,
               d = input$waterway,
               e = input$date,
-              adj_regions = alt_regions_str,
+              adj_regions = alt_regions_str(),
               bm = case_when(input$radio_weather == 'heavyrain' ~ "Storm/heavy rain",
                               input$radio_weather == 'steadyrain' ~ "Steady rain",
                               input$radio_weather == 'intermittentrain' ~ "Intermittent rain",
