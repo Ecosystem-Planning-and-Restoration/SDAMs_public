@@ -15,6 +15,7 @@ params:
     region: NA
     precip: NA
     drain_area: NA
+    adj_regions: NA
     a: NA
     b: NA
     c: NA
@@ -188,6 +189,8 @@ Project name or number: `r params$a`
 Site code or identifier: `r params$c`
 
 SDAM Region: `r params$region`
+
+Adjacent SDAM Regions within 10 Miles: `r params$adj_regions`
 
 Assessor(s): `r params$b`
 

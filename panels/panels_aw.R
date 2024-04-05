@@ -166,7 +166,7 @@ aw_panel <- function(){
                 HTML('<hr style="color: black; height: 3px; background-color: black;">'),
                 tags$head(
                     tags$style(HTML('#runmodel {background-color:#94d9f2;
-                                                                padding: 8px;
+                                                                padding: 15px;
                                                                 font-size: 110%;
                                                                 font-weight: bold;
                                                                 border-style: outset;
@@ -196,6 +196,7 @@ aw_panel <- function(){
                     )
                 ),
             ),
+
             fluidRow(
                 column(
                     12,

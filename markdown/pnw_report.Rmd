@@ -15,6 +15,7 @@ params:
     region: NA
     precip: NA
     drain_area: NA
+    adj_regions: NA
     a: NA
     b: NA
     c: NA
@@ -180,6 +181,8 @@ Site code or identifier: `r params$c`
 
 SDAM Region: `r params$region`
 
+Adjacent SDAM Regions within 10 Miles: `r params$adj_regions`
+
 Assessor(s): `r params$b`
 
 Waterway name: `r params$d`
@@ -274,6 +277,7 @@ if (!identical(params[["w"]], character(0))){
 ### Aquatic Invertebrates
 
 Aquatic benthic macroinvertebrates present: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`
+ 
 Six or more individuals of the order of Ephemeroptera present: `r if (!is.null(params$ephem)) {params$ephem}`
 
 Notes on aquatic invertebrates:
