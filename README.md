@@ -1,7 +1,7 @@
 # Streamflow Duration Assessment Methods (SDAMs) Application 
 
 ## Project Description
-The application allows users to input field data that is specific to the SDAM region.  Afer inputting the field data, users can run a random forest model to predict the streamflow duration of their assessed stream.  Users can generate a PDF report of their inputted metrics, the stream classification, and representatitve photos.
+The application allows users to input field data that is specific to the SDAM region.  After inputting the field data, users can run a random forest model to predict the streamflow duration of their assessed stream.  Users can generate a PDF report of their inputted metrics, the stream classification, and representatitve photos.
  
  
 # Disclaimer
