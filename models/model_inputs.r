@@ -30,7 +30,6 @@ gp_df <- function(
   user_lon = 0,
   user_total_abundance = NA,
   user_hydrophyte = NA,
-  user_eph_isa = NA,
   user_upland_rooted = NA,
   user_diff_veg = NA,
   user_sediment_plants = NA,
@@ -40,26 +39,22 @@ gp_df <- function(
 ){
 
         df_input <- tibble(
-                        lat = user_lat, 
-                        lon = user_lon,
-                        BankWidthMean = user_bank_mean,
-                        SubstrateSorting_score = user_substrate,
-                        DifferencesInVegetation_score = user_diff_veg,
-                        RifflePoolSeq_score = user_riff_pool,
-                        SedimentOnPlantsDebris_score = user_sediment_plants,
-                        TotalAbundance = user_total_abundance,
-                        UplandRootedPlants_score = user_upland_rooted,
-                        ephinteph_ISA_abundance = user_eph_isa,
-                        hydrophytes_present = user_hydrophyte,
+                        lat = as.numeric(user_lat), 
+                        lon = as.numeric(user_lon),
+                        BankWidthMean = as.numeric(user_bank_mean),
+                        SubstrateSorting_score = as.numeric(user_substrate),
+                        DifferencesInVegetation_score = as.numeric(user_diff_veg),
+                        RifflePoolSeq_score = as.numeric(user_riff_pool),
+                        SedimentOnPlantsDebris_score = as.numeric(user_sediment_plants),
+                        TotalAbundance = as.numeric(user_total_abundance),
+                        UplandRootedPlants_score = as.numeric(user_upland_rooted),
+                        hydrophytes_present = as.numeric(user_hydrophyte),
                 )
 
         df_input <- df_input %>% mutate(
-                TotalAbund_0_10 = case_when(TotalAbundance==0~0,
-                                ((TotalAbundance>0) & (TotalAbundance<=10)~1),
-                                TotalAbundance>=10~2),
-                UplandRooted_PA = case_when(UplandRootedPlants_score<3~0, T~1),
-                ephISAabund_PA = case_when(ephinteph_ISA_abundance==0~0, T~1),
-                hydrophytes_2 = case_when(hydrophytes_present<3~0, T~1)
+                TotalAbund_0_10 = as.numeric(user_total_abundance),
+                UplandRooted_PA = as.numeric(UplandRootedPlants_score),
+                hydrophytes_2 = as.numeric(user_hydrophyte)
                 ) 
         df_input
 }       
@@ -78,29 +73,30 @@ aw_df <- function(
 ){
 
         df_input <- tibble(
-                        lat = user_lat, 
-                        lon = user_lon,
-                        BankWidthMean = user_bank_mean,
-                        AlgalCover_LiveOrDead_NoUpstream = user_algal_cover,
-                        DifferencesInVegetation_score = user_diff_veg,
-                        RifflePoolSeq_score = user_riff_pool,
-                        Slope = user_slope,
-                        UplandRootedPlants_score = user_upland_rooted,
-                        perennial_West_abundance_simplified2 = user_eph_isa,
-                        hydrophytes_present = user_hydrophyte,
+                        lat = as.numeric(user_lat), 
+                        lon = as.numeric(user_lon),
+                        BankWidthMean = as.numeric(user_bank_mean),
+                        AlgalCover_LiveOrDead_NoUpstream = as.numeric(user_algal_cover),
+                        DifferencesInVegetation_score = as.numeric(user_diff_veg),
+                        RifflePoolSeq_score = as.numeric(user_riff_pool),
+                        UplandRootedPlants_score = as.numeric(user_upland_rooted),
+                        perennial_West_abundance_simplified2 = as.numeric(user_eph_isa),
+                        hydrophytes_present = as.numeric(user_hydrophyte),
+                        Slope = as.numeric(user_slope)
                 )
-        # Need rafi to provide the code for perennial_West_abundance_simplified2
+        
         df_input <- df_input %>% 
-                        mutate(hydrophytes_present_0_1_2_3_4_5 = 
-                                        case_when(hydrophytes_present<5~hydrophytes_present,T~5),
+                        mutate(
+                                hydrophytes_present_0_1_2_3_4_5 = as.numeric(user_hydrophyte),
+                                perennial_ISAsubregion_abundance_simp2_0_5_10_20 = as.numeric(user_eph_isa)
+                        )                      
+   
 
-                                perennial_ISAsubregion_abundance_simp2_0_5_10_20 = 
-                                        case_when(perennial_West_abundance_simplified2==0~0,
-                                                perennial_West_abundance_simplified2<5~1,
-                                                perennial_West_abundance_simplified2<10~2,
-                                                perennial_West_abundance_simplified2<20~3,
-                                                T~4),
-                        )
+        # for (t in names(df_input)){        
+        
+        #         print(paste0(t, ": ", df_input[[t]]))
+        # }
+        
         df_input
 }  
 
@@ -121,37 +117,25 @@ wm_df <- function(
 ){
 
         df_input <- tibble(
-                        lat = user_lat, 
-                        lon = user_lon,
-                        BankWidthMean = user_bank_mean,
-                        TotalAbundance = user_total_abundance,
-                        DifferencesInVegetation_score = user_diff_veg,
-                        UplandRootedPlants_score = user_upland_rooted,
-                        RifflePoolSeq_score = user_riff_pool,
-                        PctShading = user_PctShade,
-                        Slope = user_slope,
-                        SubstrateSorting_score = user_substrate,
-                        perennial_West_abundance_simplified2 = user_eph_isa,
-                        hydrophytes_present = user_hydrophyte,
+                        lat = as.numeric(user_lat), 
+                        lon = as.numeric(user_lon),
+                        BankWidthMean = as.numeric(user_bank_mean),
+                        TotalAbundance = as.numeric(user_total_abundance),
+                        DifferencesInVegetation_score = as.numeric(user_diff_veg),
+                        UplandRootedPlants_score = as.numeric(user_upland_rooted),
+                        RifflePoolSeq_score = as.numeric(user_riff_pool),
+                        PctShading = as.numeric(user_PctShade),
+                        Slope = as.numeric(user_slope),
+                        SubstrateSorting_score = as.numeric(user_substrate),
+                        perennial_West_abundance_simplified2 = as.numeric(user_eph_isa),
+                        hydrophytes_present = as.numeric(user_hydrophyte),
                 )
-        # Need rafi to provide the code for perennial_West_abundance_simplified2
+
         df_input <- df_input %>% 
                         mutate(
-                                hydrophytes_present_0_1_2_3_4_5 = 
-                                        case_when(hydrophytes_present<5~hydrophytes_present,
-                                        T~5),
-                                perennial_ISAsubregion_abundance_simp2_0_5_10_20 = 
-                                        case_when(perennial_West_abundance_simplified2==0~0,
-                                                perennial_West_abundance_simplified2<5~1,
-                                                perennial_West_abundance_simplified2<10~2,
-                                                perennial_West_abundance_simplified2<20~3,
-                                                T~4),
-                                EPT_abundance_0_5_10_20 = 
-                                        case_when(TotalAbundance==0~0,
-                                                TotalAbundance<5~1,
-                                                TotalAbundance<10~2,
-                                                TotalAbundance<20~3,
-                                                T~4)
+                                hydrophytes_present_0_1_2_3_4_5 = as.numeric(user_hydrophyte),
+                                perennial_ISAsubregion_abundance_simp2_0_5_10_20 = as.numeric(user_eph_isa),
+                                EPT_abundance_0_5_10_20 = as.numeric(user_total_abundance)
                         )
 
         df_input

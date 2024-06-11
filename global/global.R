@@ -1,8 +1,9 @@
 # app packages
 library(tidyverse)
 library(randomForest)
+library(bslib)
 library(sf)
-library(rgdal)
+# library(rgdal)
 library(shiny)
 library(shinycssloaders)
 library(shinycustomloader)
@@ -14,6 +15,8 @@ library(rslates)
 library(leaflet)
 library(leaflet.extras)
 library(dataRetrieval)
+library(ggplot2)
+library(usmap)
 
 # app code inputs
 #-----------------------------------------
@@ -21,10 +24,6 @@ library(dataRetrieval)
 ## data processing and model imports
 source('./models/sdam_models.R')
 source('./models/model_inputs.R')
-
-## additional information panel
-source('./R/additionalinfo.R')
-# source('./R/background.R')
 
 ## regional data entry panels
 source('./panels/panels_aw.R')
@@ -39,16 +38,26 @@ source('./report/report_pnw.R')
 source('./report/report_wm.R')
 # source('./report/report_params.R')
 
+## addtional information tabs
+source('./info/info_aw.R')
+source('./info/info_gp.R')
+source('./info/info_pnw.R')
+source('./info/info_wm.R')
+
 ## spatial funtions
 source('./spatial/region_check.R')
-# source('./panels.R')
-# source('./R/report.R')
-
 
 # Load shapefile with regions
 regions_leaflet <- read_sf("./spatial/regions_simp_noPRVI.shp")
 
+# pre-load random forest models for each region
+load("./models/rf_models/all_refined_rf_mods.Rdata")
+aw_rf <- all_refined_rf_mods[[1]]
+gp_rf <- readRDS("./models/rf_models/GreatPlainsFinal.rds")
+wm_rf <- all_refined_rf_mods[[3]]
+
   
+# return the SDAM region using lat/long inputs
 point_region <- function(
   user_lat = 0,
   user_lon = 0

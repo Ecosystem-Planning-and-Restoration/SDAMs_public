@@ -1,20 +1,3 @@
-library(tidyverse)
-# library(prism)
-library(randomForest)
-library(sf)
-library(rgdal)
-library(shiny)
-library(shinycssloaders)
-library(shinycustomloader)
-library(shinyWidgets)
-library(formatR)
-library(shinyjs)
-library(magrittr)
-library(rslates)
-library(leaflet)
-library(leaflet.extras)
-library(dataRetrieval)
-
 
 # Load shapefile with regions
 regions_shp <- read_sf("./spatial/simplified_regions.shp")
@@ -53,9 +36,9 @@ run_sdam <- function(
                                 )
 
                         } else if (pnts_join_df$Strata_UNC == 'Great Plains'){
-                                RF <- readRDS("RF_NoGIS_Unstrat_4.rds")
-                                ClassProbs <- predict(RF, newdata = df, type="prob") %>% as.data.frame()
-                                # assign appropriate class based on probabilities
+                                set.seed(1111)
+                                ClassProbs <- predict(gp_rf, newdata = df, type="prob") %>% as.data.frame()
+                                
                                 output_df <- bind_cols(pnts_join_df, ClassProbs) %>%
                                         mutate(ALI = I + P,
                                                 Class = case_when(P>=.5~"perennial",
@@ -67,12 +50,16 @@ run_sdam <- function(
                                                                 P==E & I<=P ~ "Need more information",
                                                                 T~"Other")
                                         )
-                                paste0("This reach is classified as ", output_df$Class)
+                                for (t in names(ClassProbs)){        
+                
+                                        print(paste0(t, ": ", output_df[[t]]))
+                                }
+                                paste0("This reach is classified as ", output_df$Class,".")
 
                         } else if (pnts_join_df$Strata_UNC == 'Western Mountains'){
                                 load("NotForGit/Step5/all_refined_rf_mods.Rdata")
-                                RF <- all_refined_rf_mods[[3]]
-                                ClassProbs <- predict(RF, newdata = pnts_join_df, type="prob") %>% as.data.frame()
+                                # RF <- all_refined_rf_mods[[3]]
+                                ClassProbs <- predict(wm_rf, newdata = pnts_join_df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                                 output_df <- bind_cols(df, ClassProbs) %>%
                                         mutate(ALI = I + P,
@@ -85,12 +72,12 @@ run_sdam <- function(
                                                                 P==E & I<=P ~ "Need more information",
                                                                 T~"Other")
                                         )
-                                paste0("This reach is classified as ", output_df$Class)
+                                paste0("This reach is classified as ", output_df$Class,".")
 
                         } else if (pnts_join_df$Strata_UNC == 'Arid West'){
-                                load("NotForGit/Step5/all_refined_rf_mods.Rdata")
-                                RF <- all_refined_rf_mods[[1]]
-                                ClassProbs <- predict(RF, newdata = df, type="prob") %>% as.data.frame()
+                                # load("NotForGit/Step5/all_refined_rf_mods.Rdata")
+                                # RF <- all_refined_rf_mods[[1]]
+                                ClassProbs <- predict(aw_rf, newdata = df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                                 output_df <- bind_cols(pnts_join_df, ClassProbs) %>%
                                         mutate(ALI = I + P,
@@ -103,7 +90,7 @@ run_sdam <- function(
                                                                 P==E & I<=P ~ "Need more information",
                                                                 T~"Other")
                                         )
-                                paste0("This reach is classified as ", output_df$Class)
+                                paste0("This reach is classified as ", output_df$Class,".")
 
                         } else if (pnts_join_df$Strata_UNC == 'Pacific Northwest'){
                         
@@ -142,7 +129,7 @@ run_sdam <- function(
                                         }
                                 }
 
-                                paste0("This reach is classified as ", df$Class)
+                                paste0("This reach is classified as ", df$Class,".")
                         }
 
                 } else if (var_input_reg == 'East'){
@@ -158,8 +145,9 @@ run_sdam <- function(
                                 )
 
                 } else if (var_input_reg == 'Great Plains'){
-                        RF <- readRDS("./models/rf_models/RF_NoGIS_Unstrat_4.rds")
-                        ClassProbs <- predict(RF, newdata = df, type="prob") 
+                        set.seed(1111)
+                        # RF <- readRDS("./models/rf_models/RF_NoGIS_Unstrat_4.rds")
+                        ClassProbs <- predict(gp_rf, newdata = df, type="prob") 
                                 # assign appropriate class based on probabilities
                         output_df <- bind_cols(df, ClassProbs) %>%
                                 mutate(ALI = I + P,
@@ -172,12 +160,17 @@ run_sdam <- function(
                                                         P==E & I<=P ~ "Need more information",
                                                         T~"Other")
                                 )
-                        paste0("This reach is classified as ", output_df$Class)
+                        for (t in names(output_df)){        
+                                print(paste0(t, ": ", output_df[[t]]))
+                        }
+                        paste0("This reach is classified as ", output_df$Class,".")
 
                 } else if (var_input_reg == 'Western Mountains'){
-                        load("./models/rf_models/all_refined_rf_mods.Rdata")
-                        RF <- all_refined_rf_mods[[3]]
-                        ClassProbs <- predict(RF, newdata = df, type="prob") %>% as.data.frame()
+                        # print('trying western model')
+                        # load("./models/rf_models/all_refined_rf_mods.Rdata")
+                        # RF <- all_refined_rf_mods[[3]]
+                        
+                        ClassProbs <- predict(wm_rf, newdata = df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                         output_df <- bind_cols(df, ClassProbs) %>%
                                 mutate(ALI = I + P,
@@ -190,12 +183,17 @@ run_sdam <- function(
                                                         P==E & I<=P ~ "Need more information",
                                                         T~"Other")
                                 )
-                        paste0("This reach is classified as ", output_df$Class)
+                        paste0("This reach is classified as ", output_df$Class,".")
 
                 } else if (var_input_reg == 'Arid West'){
-                        load("./models/rf_models/all_refined_rf_mods.Rdata")
-                        RF <- all_refined_rf_mods[[1]]
-                        ClassProbs <- predict(RF, newdata = df, type="prob") %>% as.data.frame()
+                        # load("./models/rf_models/all_refined_rf_mods.Rdata")
+                        print('running Arid West model')
+                        # for (t in names(df)){        
+        
+                        #         print(paste0(t, ": ", df[[t]], " ", class(df[[t]])))
+                        # }
+                        # RF <- all_refined_rf_mods[[1]]
+                        ClassProbs <- predict(aw_rf, newdata = df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                         output_df <- bind_cols(df, ClassProbs) %>%
                                 mutate(ALI = I + P,
@@ -208,7 +206,13 @@ run_sdam <- function(
                                                         P==E & I<=P ~ "Need more information",
                                                         T~"Other")
                                 )
-                        paste0("This reach is classified as ", output_df$Class)
+
+                         for (t in names(ClassProbs)){        
+        
+                                print(paste0(t, ": ", output_df[[t]]))
+                        }
+                        
+                        paste0("This reach is classified as ", output_df$Class,".")
 
                 } else if (var_input_reg == 'Pacific Northwest'){
 
@@ -250,7 +254,7 @@ run_sdam <- function(
                         }
 
 
-                        paste0("This reach is classified as ", df$Class)
+                        paste0("This reach is classified as ", df$Class,".")
                         
         }
 }
@@ -258,35 +262,7 @@ run_sdam <- function(
 
 
 
-point_region <- function(
-        user_lat = 0,
-        user_lon = 0
-){
-        df <- tibble(lat = user_lat,
-                     lon = user_lon)
-        # check to see if user supplied lat/long is in Great Plains regions
-        pnts_df <- sf::st_as_sf(df, coords = c("lon", "lat"), crs = 4326, remove = FALSE)
-        pnts_join_df <- sf::st_join(pnts_df, regions_shp) 
-        # if (is.na(pnts_join_df$region)){
-        #         spatial_msg <- paste0(
-        #                 "<h5>",
-        #                 "<p>The location of your site is outside of the SDAM study areas.<p><br>",
-        #                 "<p>Please check your latitude and longitude coordinates to ensure they are entered correctly.<p><br>"
-        #         )
-        #         print(spatial_msg)
-        # } else {
-        # 
-        #         pnts_join_df
-        # }
-        pnts_join_df
-        
-}
 
-
-
-
-        
-        
 
 
         

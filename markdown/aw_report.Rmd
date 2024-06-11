@@ -1,10 +1,12 @@
 ---
-title: "Streamflow Duration Assessment Methods"
+title: \vspace{-2cm} \begin{Huge} Streamflow Duration Assessment Methods \end{Huge}
 subtitle: "SDAM Version 1.1 Release Date: Spring 2024"
 revision: "SDAM revision date: Spring, 2024" 
 date: "Report generated on: `r format(Sys.time(), '%B %d, %Y')`"
 header-includes:
+- \usepackage{xcolor}
 - \usepackage{fancyhdr}
+- \renewcommand{\headrulewidth}{0.0pt}
 - \pagestyle{fancy}
 - \usepackage{lastpage}
 - \cfoot{Page \thepage\ of \pageref{LastPage}}
@@ -152,11 +154,17 @@ params:
     f44_cap: NA
     notes_riff: NA
     bankwidth: NA
+    hp1: NA
+    hp2: NA
+    hp3: NA
+    notes_landuse: NA
 ---
 
 
 ```{r, setup, include=FALSE}
 library(knitr)
+library(ggplot2)
+library(usmap)
 # Removing all code from appearing in the final knit document.
 knitr::opts_chunk$set(echo = FALSE)
 
@@ -169,18 +177,39 @@ options(tinytex.verbose = TRUE)
 opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 ```
 
-<!-- *** -->
+```{r, out.width='32%', fig.align='center', fig.show='hold'}
 
-<!-- ## Classification: -->
+knitr::include_graphics(c(params$hp1, params$hp2, params$hp3))
 
-<!-- ```{r} -->
-<!-- cat(params$class_wm) -->
-<!-- cat(paste0(glue::glue("Note: {params$class_wm_msg}"))) -->
-<!-- ``` -->
+```
 
-***
+```{r, out.width='100%', out.height='50%'}
+if (params$h != 'Not Provided'){
+  x <- data.frame(lon = params$h, lat = params$g, type = 'Site Location')
 
-## General Site Information
+  transformed_data <- usmap_transform(x)
+
+  plot_usmap("states") + 
+          geom_point(data = transformed_data, 
+                    aes(x = transformed_data$geometry[1][[1]][1], 
+                        y = transformed_data$geometry[1][[1]][2],
+                        fill = type
+                        ), 
+                    color = "red",
+                    size = 5)  + 
+          theme(legend.position = 'bottom',
+                legend.direction = 'horizontal',
+                legend.title = element_blank(),
+                legend.text=element_text(size=12))
+}
+```
+
+\pagebreak
+
+
+\begin{center}
+\textbf{\underline{\LARGE{General Site Information}}}
+\end{center}
 
 Project name or number: `r params$a`
 
@@ -207,6 +236,8 @@ Location: `r paste0(params$g," N, ", params$h, " E")`
 
 Surrounding land use within 100 m: `r params$l`
 
+Notes on land use: `r params$notes_landuse`
+
 Description of reach boundaries: `r params$f`
 
 Assessment reach length (m): `r if (!is.na(params$fff)){params$fff}`
@@ -221,7 +252,10 @@ Notes on disturbances or difficult site conditions:
 cat(params$k)
 ```
 
-## Observed hydrology:
+\vspace{3mm}
+\begin{center}
+\textbf{\underline{\LARGE{Observed Hydrology}}}
+\end{center}
 
 Percent of reach with surface flow: `r params$m`
 
@@ -231,8 +265,10 @@ Number of isolated pools: `r params$o`
 
 Notes on observed hydrology: `r params$r`
 
-***
-## Site Photos
+\vspace{3mm}
+\begin{center}
+\textbf{\underline{\LARGE{Site Photos}}}
+\end{center}
 
 Top of reach looking downstream:
 ```{r, out.width = '50%', out.height= '50%', out.extra='angle=0', fig.align='center'}
@@ -265,7 +301,10 @@ if (!identical(params[["s"]], character(0))){
 
 ```
 
-## Site Sketch
+\vspace{3mm}
+\begin{center}
+\textbf{\underline{\LARGE{Site Sketch}}}
+\end{center}
 
 ```{r, out.width='50%', fig.align='center'}
 if (!identical(params[["w"]], character(0))){ 
@@ -274,16 +313,19 @@ if (!identical(params[["w"]], character(0))){
 
 ```
 
-***
-## Indicators
+\vfill
+\noindent\rule{16cm}{2pt}\
+\pagebreak
+
+\begin{center}
+\textbf{\underline{\LARGE{Biological Indicators}}}
+\end{center}
 
 
-## Biological indicators
 
+\textbf{\large{Aquatic Invertebrates}}
 
-### Aquatic Invertebrates
-
-Total abundance of aquatic benthic macroinvertebrates: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`
+Total abundance of Indicator Species Analysis-based perennial indicator taxa observed in the reach: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`
 
 Notes on aquatic invertebrates:
 
@@ -387,8 +429,9 @@ if (!identical(params[["f8_1"]], character(0))){
 ```
 
 
+\vspace{2mm}
+\textbf{\large{Hydrophytes}}
 
-### Hydrophytes
 Number of hydrophytic plant species: `r if (!is.null(params$hydro)) {params$hydro}`
 
 Notes on hydrophytic plants:
@@ -493,7 +536,8 @@ if (!identical(params[["f29"]], character(0))){
 ```
 
 
-### Algal Cover
+\vspace{2mm}
+\textbf{\large{Algal Cover}}
 
 Algal cover Score: `r if (!is.null(params$algal)){params$algal}`
 
@@ -549,10 +593,13 @@ if (!identical(params[["f38"]], character(0))){
 ```
 
 
-***
-## Geomorphic Indicators
+\vspace{3mm}
+\begin{center}
+\textbf{\underline{\LARGE{Geomorphic Indicators}}}
+\end{center}
 
-### Upland Rooted Plants
+\vspace{2mm}
+\textbf{\large{Upland Rooted Plants}}
 
 Upland Rooted Plants score: `r if (!is.null(params$upland_rooted)){params$upland_rooted}`
 
@@ -610,7 +657,8 @@ if (!identical(params[["f47"]], character(0))){
 ```
 
 
-### Differences in Vegetation
+\vspace{2mm}
+\textbf{\large{Differences in Vegetation}}
 
 Differences in vegetation score: `r if (!is.null(params$veg)){params$veg}`
 
@@ -668,7 +716,8 @@ if (!identical(params[["f17"]], character(0))){
 ```
 
 
-### Riffle Pool Sequence Score
+\vspace{2mm}
+\textbf{\large{Riffle Pool Sequence Score}}
 
 Riffle pool sequence score: `r if (!is.null(params$riff)){params$riff}`
 
@@ -726,15 +775,11 @@ if (!identical(params[["f44"]], character(0))){
 ```
 
 
+\vspace{2mm}
+\textbf{\large{Bankfull channel width (m):}} `r params$bankwidth`
 
-
-***
-
-### Bankfull channel width (m): `r params$bankwidth`
-
-***
-
-### Slope
+\vspace{2mm}
+\textbf{\large{Slope}}
 
 Slope Percent: `r if (!is.null(params$slope)){params$slope}`
 
@@ -793,9 +838,14 @@ if (!identical(params[["f23"]], character(0))){
 }
 ```
 
-***
+\vfill
+\noindent\rule{16cm}{2pt}\
+\pagebreak
 
-## Supplemental Information
+\begin{center}
+\textbf{\underline{\LARGE{Supplemental Information}}}
+\end{center}
+
 
 Additional notes about the assessment:
 
@@ -860,14 +910,27 @@ if (!identical(params[["f51"]], character(0))){
 ```
 
 
+\noindent\rule{16cm}{2.5pt}\
+\textbf{\Large{`r params$stream_class`}}
 
-*** 
+\noindent\rule{16cm}{2.5pt}
 
-## `r params$stream_class`
+\begin{center}
+\textbf{\underline{\LARGE{Additional Resources}}}
+\end{center}
 
-***
 
+[\textcolor{cyan}{User Manual}](https://www.epa.gov/streamflow-duration-assessment)
 
+[\textcolor{cyan}{Field Form}](https://www.epa.gov/streamflow-duration-assessment)
 
-**End of Report**
+[\textcolor{cyan}{Training Materials}](https://www.epa.gov/streamflow-duration-assessment)
+
+[\textcolor{cyan}{SDAMs Home}](https://www.epa.gov/streamflow-duration-assessment)
+ 
+\vfill
+\noindent\rule{16cm}{3pt}\
+\begin{center}
+\textbf{\LARGE{End of Report}}
+\end{center}
 

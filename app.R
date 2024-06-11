@@ -4,6 +4,7 @@ source('./global/global.R')
 
 ui <- fluidPage(
   tags$html(class = "no-js", lang="en"),
+
   tags$style(HTML("
         input[type=number] {
               -moz-appearance:textfield;
@@ -16,11 +17,21 @@ ui <- fluidPage(
               -webkit-appearance: none;
               margin: 0;
         }
+        #header{
+          position:fixed;
+          z-index: 100000;
+        }
         .border-my-text {
             border: 2px solid black;
             border-padding: 2px;
             background-color: #b4bfd1;
             text-align: center;
+            width: 80%
+        }
+        .center-div-text {
+            text-align: center;
+            font-weight: bold;
+            text-decoration:underline;
         }
         .border-my-class {
             border: 2px solid black;
@@ -38,6 +49,13 @@ ui <- fluidPage(
             
             box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
             transition-duration: 0.1s;
+        }
+        .question_box {
+            background-color: lightgrey;
+            width: 100%;
+            border: 3px solid black;
+            padding: 10px;
+            margin: 0px;
         }
         #reg_button:hover {
             background-color:#5d8b9c;
@@ -80,7 +98,7 @@ ui <- fluidPage(
             border-color: black;
             border-width: px;
         }
-        #report {
+        #report {z
             background-color:#94d9f2;
             padding: 7px;
             font-size: 110%;
@@ -336,165 +354,182 @@ ui <- fluidPage(
                 "Web application for the Final Streamflow Duration Assessment Methods 
         ")
             ),
-            h4(HTML("<p>Version <a href=\"https://github.com/WSaulnier/beta_sdam_nese/tree/beta_sdam_nese_v1_1\">1.1</a> Release date: November 2023 </p>")),
+            h4(HTML("<p>Version <a href=\"https://github.com/Ecosystem-Planning-and-Restoration/SDAMs_public\">1.1</a> Release date: April 2024 </p>")),
             img(src="eph.jpg", style = "height: 400px"),
             img(src="int.jpg", style = "height: 400px"),
             img(src="per.jpg", style = "height: 400px")
         ),
         "SDAMs"
-    
     ),
+
     fluidRow(
-      
+
         column(
             10,
             tabsetPanel(
                 id = "tabs",
-                
                 # tabPanel(
                 #     "Background Info",
                 #     bkgrnd
                 # ),
                 # Overview -----------------------------------------------------
                 tabPanel(
-                  
-                    # style = 'background-color: #8a8f96;',
+
                     "Enter Data", 
                     br(),
-                    
-                    fluidRow(
-                      column(1),
-                      column(10, 
-                        h4(p(HTML("<b><u><i>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</i></u></b>"),style="color:#b80404")),
-                        h3("Step 1: Enter reach coordinates or select reach location on map."), 
-                      )
-                    ),
-                    # coordinates----
                     fluidRow(
                       column(1),
                       column(10,
-                             selectInput(
-                               "vol_region",
-                               label = HTML("<b><i>Method for Assessing Reach Location</b></i>"),
-                               choices = c(
-                                 "Enter Coordinates",
-                                 "Select Region",
-                                 "Select Location on Map"
-                               ),
-                               selected = "No",
-                               width = '20%'
-                             )
-                      )
-                    ),
-                    fluidRow(
-                        column(1),
-                        column(7,
-                               HTML('<hr style="color: black; height: 1px; background-color: black;">')
-                               )
-                    ),
-                    
-                    conditionalPanel(
-                        
-                      condition = "input.vol_region == 'Enter Coordinates'",
-                      fluidRow(
-                          column(1),
-                          column(
-                              6,
-                              div(HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area. </i></b>')),
-                              div(id = "placeholder"),
-                              div(id = "coords",
-                                fluidRow(
-                                    column(4,
-                                           numericInput("lat", label = NULL, value = 40)),
-                                    column(4, h5("Latitude"))
-                                ),
-                                fluidRow(
-                                    column(4,numericInput("lon", label = NULL, value = -120)),
-                                    column(4, h5("Longitude"))
-                                ),
-                                fluidRow(
-                                    column(4,
-                                            br(),
-                                            div(actionButton("reg_button", 
-                                                            label=div("Assess Reach Location", icon('long-arrow-right'))
-                                                            ) 
-                                              ),
-                                            br(), br(),
+                        h4(p(HTML("<b><u><i>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</i></u></b>"),style="color:#b80404")),
+                        h2("Step 1: Enter reach coordinates or select reach location on map."), 
+                        div(
+                          style = 'background-color: white;
+                                    width: 100%;
+                                    border: 1px solid black;
+                                    padding: 10px;
+                                    margin: 0px;',
 
-                                          )
+                          # coordinates----
+                          fluidRow(
+                            column(1),
+                            column(10,
+                              HTML("<b><i>Method for Assessing Reach Location</b></i>"),
+                              selectInput(
+                                "vol_region",
+                                label = NULL,
+                                choices = c(
+                                  "Enter Coordinates",
+                                  "Select Region",
+                                  "Select Location on Map"
+                                ),
+                                selected = "No",
+                                width = '80%'
+                              )
+                            )
+                          ),
+                          fluidRow(
+                              column(1),
+                              column(10,
+                                    HTML('<hr style="color: black; height: 1px; background-color: black;">')
+                                    )
+                          ),
+                          
+                          conditionalPanel(
+                              
+                            condition = "input.vol_region == 'Enter Coordinates'",
+                            fluidRow(
+                                column(1),
+                                column(
+                                    6,
+                                    div(HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area. </i></b>')),
+                                    div(id = "placeholder"),
+                                    div(id = "coords",
+                                      fluidRow(
+                                          column(4,
+                                                numericInput("lat", 
+                                                label = NULL, 
+                                                value = 40)),
+                                          column(4, h5("Latitude"))
+                                      ),
+                                      fluidRow(
+                                          column(4,numericInput("lon", 
+                                          label = NULL, 
+                                          value = -98)),
+                                          column(4, h5("Longitude"))
+                                      ),
+                                      fluidRow(
+                                          column(4,
+                                                  br(),
+                                                  div(actionButton("reg_button", 
+                                                                  label=div("Assess Reach Location", icon('long-arrow-right'))
+                                                                  ) 
+                                                    ),
+                                                  br(), br(),
+
+                                                )
+                                      )
+                                    )
+                                ),
+                                column(
+                                    4,
+                                    conditionalPanel(
+                                        condition = "input.reg_button != 0",
+                                        
+                                        uiOutput(outputId = "reg_class") %>%
+                                        tagAppendAttributes(class = 'border-my-text')
+                                    )
+                                )
+                            )
+                          ),
+                          
+                          ## select region via dropdown menu----
+                          conditionalPanel(
+                            condition = "input.vol_region == 'Select Region'",
+                            fluidRow(
+                              column(1),
+                              column(10,
+                                HTML("<b><i>Select SDAM Region if not entering coordinates:</b></i>"),
+                                selectInput(
+                                  "user_region",
+                                  label = NULL,
+                                  c(
+                                      "No Region Selected" = "No Region",
+                                      "Arid West" = "Arid West",  
+                                      "East" = "East",
+                                      "Great Plains" = "Great Plains",
+                                      "Pacific Northwest" = "Pacific Northwest",
+                                      "Western Mountains" = "Western Mountains"
+                                  )
                                 )
                               )
-                          ),
-                          column(
-                              4,
-                              conditionalPanel(
-                                  condition = "input.reg_button != 0",
-                                  
-                                  uiOutput(outputId = "reg_class") %>%
-                                      tagAppendAttributes(class = 'border-my-text')
-                              )
-                          )
-                      )
-                    ),
-                    
-                    ## select region via dropdown menu----
-                    conditionalPanel(
-                      condition = "input.vol_region == 'Select Region'",
-                      fluidRow(
-                        column(1),
-                        column(10,
-                               selectInput(
-                                 "user_region",
-                                 HTML("<b><i>Select SDAM Region if not entering coordinates:</b></i>"),
-                                 c(
-                                    "No Region Selected" = "No Region",
-                                    "Arid West" = "Arid West",  
-                                    "East" = "East",
-                                    "Great Plains" = "Great Plains",
-                                    "Pacific Northwest" = "Pacific Northwest",
-                                    "Western Mountains" = "Western Mountains"
-                                 )
-                               )
-                        )
-                      )
-                    ),
-                    
-                    ## leaflet map----
-                    conditionalPanel(
-                        condition = "input.vol_region == 'Select Location on Map'",
-                        fluidRow(
-                            column(2),
-                            column(8,
-                                leafletOutput("map", height ='600px'),
-                                br(),
-                                br()
                             )
-                        )
-                    ),
-
-                    fluidRow(
-                        column(1),
-                        column(
-                            10,
-                            HTML('<hr style="color: black; height: 7px; background-color: black;">')
-                        )
-                    ),
-
-                    fluidRow(
-                        column(1),
-                        column(4,
-                                br(),
-                                div(actionButton("indicator_button", 
-                                                label=div("Enter Model Data", icon('arrow-down'))
-                                                ) 
-                                    ),
-                                br(),
-                                br(),
-                                    
+                          ),
+                          
+                          ## leaflet map----
+                          conditionalPanel(
+                              condition = "input.vol_region == 'Select Location on Map'",
+                              fluidRow(
+                                  column(2),
+                                  column(8,
+                                      leafletOutput("map", height ='600px'),
+                                      br(),
+                                      br()
+                                  )
                               )
+                          ),
+                        ),
+
+                        # fluidRow(
+                        #     column(1),
+                        #     column(
+                        #         10,
+                        #         br(),
+                        #         br(),
+                        #         HTML('<hr style="color: black; width: 100%; height: 7px; background-color: black;">')
+                        #     )
+                        # ),
+                        
+                        fluidRow(
+                            column(1),
+                            column(10,
+                                    br(),
+                                    div(
+                                      style = 'margin: auto;
+                                               text-align: center;',
+                                      actionButton("indicator_button", 
+                                                    label=div("Enter Model Data", icon('arrow-down'))
+                                                    ) 
+                                        ),
+                                    br(),
+                                    br(),
+                                        
+                                  )
                               ),
+                      )
+                    ),
                     
                     # Region UI Split-----
+                    
                     conditionalPanel(
                       condition = "input.indicator_button != 0",
                       uiOutput("regionPanel") 
@@ -504,9 +539,11 @@ ui <- fluidPage(
                       
                     
                 ),
+
+                # additional information tab
                 tabPanel(
                     "Additional Resources",
-                    addinfo
+                    uiOutput("addInfoPanel"),
                 )
                 
             )
@@ -815,7 +852,7 @@ server <- function(input, output, session){
                     title = "Location Warning!",
                     text = tagList(
                             tags$p(
-                                    HTML(paste0("This site is located within 10 miles of another SDAM region. Please consider using one of the following SDAMs:",
+                                    HTML(paste0("This site is located within 10 miles of another SDAM region:",
                                                 "<br><br>",
                                                 "<b>", alt_regions_str, "</b>"
                                             )
@@ -939,6 +976,36 @@ server <- function(input, output, session){
             aw_report()
           } else if (region_class()$region == 'Pacific Northwest' & input$runmodel != 0){
             pnw_report()
+          }
+
+        }
+        
+      })
+
+      ### additional information panel--------
+    output$addInfoPanel <- renderUI({
+        if (is.atomic(region_class())){
+
+          if(region_class() == 'Great Plains'){
+            gp_info(region_class())
+          } else if (region_class() == 'Western Mountains'){
+            wm_info(region_class())
+          } else if (region_class() == 'Arid West'){
+            aw_info(region_class())
+          } else if (region_class() == 'Pacific Northwest'){
+            pnw_info(region_class())
+          }
+
+        } else if (!is.atomic(region_class())){
+
+          if(region_class()$region == 'Great Plains'){
+            gp_info(region_class()$region)
+          } else if (region_class()$region == 'Western Mountains'){
+            wm_info(region_class()$region)
+          } else if (region_class()$region == 'Arid West'){
+            aw_info(region_class()$region)
+          } else if (region_class()$region == 'Pacific Northwest'){
+            pnw_info(region_class()$region)
           }
 
         }
@@ -1099,21 +1166,18 @@ server <- function(input, output, session){
         print(longitude())
     })
 
-    # map click----
+    # map popup----
     observe({
         click = input$map_click
         if(is.null(click))
             return()
-        region <- if(!is.na(region_class()$region)){
-    
-          if(region_class()$region == 'Southern' || region_class()$region == 'Northern'){
-              paste0(region_class()$region, ' Great Plains')
-          } else {
+        
+        region <- if (is.atomic(region_class())){
+              paste0(region_class(), ' SDAM Region')
+            } else {
               paste0(region_class()$region, ' SDAM Region')
-          }
-          
-        }
-
+            }
+        
         text<-HTML(paste("<b><u>", region, "</u></b><br>",
             "Latitude: ", round(click$lat, 4), ", Longtitude: ", round(click$lng, 4)))
         text2<-paste("You've selected point ", text)
@@ -1225,7 +1289,8 @@ server <- function(input, output, session){
     
     # calculated shade percentage
     bank_mean <- eventReactive(bank_values(),{
-        round((Reduce("+", bank_values()) / (input$select_bank)),2)
+        # round((Reduce("+", bank_values()) / (input$select_bank)),2)
+        (Reduce("+", bank_values()) / (input$select_bank))
     })
     
     # Show user calculated percent value
@@ -1250,16 +1315,16 @@ server <- function(input, output, session){
 
     # model df ----
     df <- eventReactive(input$runmodel, {
-
+      
       if (is.atomic(region_class())){
-
+        
         if (region_class() == 'Great Plains' ){
+          print(bank_mean())
           gp_df(
             user_lat = input$lat,
             user_lon = input$lon,
             user_total_abundance = input$user_total_abundance,
             user_hydrophyte = input$user_hydrophyte,
-            user_eph_isa = input$user_eph_isa,
             user_upland_rooted = input$user_upland_rooted,
             user_diff_veg = input$user_diff_veg,
             user_sediment_plants = input$user_sediment_plants,
@@ -1268,6 +1333,7 @@ server <- function(input, output, session){
             user_bank_mean = bank_mean()
           )
         } else  if (region_class() == 'Western Mountains' ){
+          print(paste0('Region is: ', region_class()))
           wm_df(
             user_lat = input$lat,
             user_lon = input$lon,
@@ -1275,7 +1341,7 @@ server <- function(input, output, session){
             user_hydrophyte = input$user_hydrophyte,
             user_substrate = input$user_substrate,
             user_eph_isa = input$user_eph_isa,
-            user_PctShade = densi_shade_perc(),
+            user_PctShade = input$user_shade,
             user_upland_rooted = input$user_upland_rooted,
             user_diff_veg = input$user_diff_veg,
             user_slope = input$user_slope,
@@ -1312,12 +1378,12 @@ server <- function(input, output, session){
       } else if (!is.atomic(region_class())){
 
         if (region_class()$region == 'Great Plains' ){
+          print(bank_mean())
           gp_df(
             user_lat = input$lat,
             user_lon = input$lon,
             user_total_abundance = input$user_total_abundance,
             user_hydrophyte = input$user_hydrophyte,
-            user_eph_isa = input$user_eph_isa,
             user_upland_rooted = input$user_upland_rooted,
             user_diff_veg = input$user_diff_veg,
             user_sediment_plants = input$user_sediment_plants,
@@ -1333,7 +1399,7 @@ server <- function(input, output, session){
             user_hydrophyte = input$user_hydrophyte,
             user_substrate = input$user_substrate,
             user_eph_isa = input$user_eph_isa,
-            user_PctShade = input$user_PctShade,
+            user_PctShade = input$user_shade,
             user_upland_rooted = input$user_upland_rooted,
             user_diff_veg = input$user_diff_veg,
             user_slope = input$user_slope,
@@ -1368,24 +1434,29 @@ server <- function(input, output, session){
         }
       } else return(NULL)
     })
-
-    # observeEvent(df(), {
-    #   print(df())
-    # })
-
     
     # run rf model and output stream classification----
     classification <- eventReactive(input$runmodel, {
+      for (col in colnames(df())){
+        print(df()[col])
+      }
+      
 
       if (is.atomic(region_class())){
-
+        # print(region_class())
+        set.seed(1111)
         run_sdam(df(), region_class())
 
       } else if (!is.atomic(region_class())){
-
+        # print(region_class()$region)
+        set.seed(1111)
         run_sdam(df(), region_class()$region)
       }
       
+    })
+
+    observeEvent(classification(), {
+      print(classification())
     })
 
     # output classification to ui
@@ -1394,8 +1465,26 @@ server <- function(input, output, session){
     })
 
 
+    # conditional checks for user inputs
+    observeEvent(input$user_slope, {
+        if (!is.na(input$user_slope)){
+            if ((input$user_slope  < 0) | (input$user_slope  > 200) ){
+                showModal(
+                    modalDialog(
+                        "Percent slope must be between 0 and 200",
+                        footer= modalButton("OK"),
+                        easyClose = FALSE
+                    )
+                )
+                updateNumericInput(
+                    session,
+                    "user_slope",
+                    value = 0
+                )
+            }
+        }
+    })
 
-    
     observeEvent(input$surfflow, {
         print(input$surfflow)
         if (!is.na(input$surfflow)){
@@ -1475,18 +1564,23 @@ server <- function(input, output, session){
         }
     })
     
+
+
+    observeEvent(fig6(),{
+      print(fig6())
+    })
+
+    file.copy("./www/eph.jpg",
+                tempdir(), overwrite = TRUE)
+    file.copy("./www/per.jpg",
+                tempdir(), overwrite = TRUE)
+    file.copy("./www/int.jpg",
+                tempdir(), overwrite = TRUE)
+
+    test_pic <- file.path(tempdir(), "eph.jpg")
   
     # Report Tab--------------------------------------------------------------
-    # 
-    # eventReactive(input$report,{
-    #   if (region_class()$region == 'Northeast'){
-    #     print('Northeast Report') 
-    #   } else if (region_class()$region == 'Southeast'){
-    #     print('Southeast Report')
-    #   }
-    # })
-
-
+      
       # Site photos----
       fig1 <- reactive({gsub("\\\\", "/", input$blu$datapath)})
       fig2 <- reactive({gsub("\\\\", "/", input$mld$datapath)})
@@ -1601,6 +1695,9 @@ server <- function(input, output, session){
 
 
               # -------------------General Site Information
+              hp1 = file.path(tempdir(), "eph.jpg"),
+              hp2 = file.path(tempdir(), "int.jpg"),
+              hp3 = file.path(tempdir(), "per.jpg"),
               a = input$project,
               b = input$assessor,
               c = input$code,
@@ -1618,15 +1715,16 @@ server <- function(input, output, session){
               j = input$weather,
               g = temp_lat,
               h = temp_lon,
+              notes_landuse = input$notes_landuse,
               l = plyr::mapvalues(
-                  input$check_use,
-                  from = c(
-                  "urban","agricultural", "Developed open-space (e.g., golf course, parks, lawn grasses)",
-                  "forested","othernatural","other"),
-                  to = c(
-                  "Urban, industrial, or residential", "Agricultural","Developed open-space",
-                  "Forested","Other Natural","Other")
-              ) %>% as.character() %>% paste0(collapse = ", "),
+                      input$check_use,
+                      from = c(
+                      "urban","agricultural", "Developed open-space (e.g., golf course, parks, lawn grasses)",
+                      "forested","othernatural","other"),
+                      to = c(
+                      "Urban, industrial, or residential", "Agricultural","Developed open-space",
+                      "Forested","Other Natural","Other")
+                  ) %>% as.character() %>% paste0(collapse = ", "),
               f = input$boundary,
               fff = input$actreach,
               bn = plyr::mapvalues(
@@ -1685,7 +1783,13 @@ server <- function(input, output, session){
                                 
                                 ### ------------------- Biological indicators
                                 # EPT Taxa
-                                aqua_inv = input$user_total_abundance,
+                                aqua_inv = case_when(
+                                  input$user_eph_isa == 0 ~ '0',
+                                  input$user_eph_isa == 1 ~ "1 to 4",
+                                  input$user_eph_isa == 2 ~ "5 to 9",
+                                  input$user_eph_isa == 3 ~ "10 to 19",
+                                  input$user_eph_isa == 4 ~ "Great than or equal to 20"
+                                ),
                                 f6 = fig6(),
                                 f6_cap = input$inv1_cap,
                                 f7 = fig7(),
@@ -1701,7 +1805,10 @@ server <- function(input, output, session){
                                 notes_aquainv = input$notes_totalAbundance,
 
                                 # Hydrophytes
-                                hydro = input$user_hydrophyte,
+                                hydro = case_when(
+                                  input$user_hydrophyte < 5 ~ as.character(input$user_hydrophyte),
+                                  T ~ "Greater than or equal to 5"
+                                ),
                                 f24 = fig24(),
                                 f24_cap = input$hydro1_cap,
                                 f25 = fig25(),
@@ -1717,7 +1824,16 @@ server <- function(input, output, session){
                                 notes_hydro = input$notes_hydro,                       
 
                                 # Upland Rooted
-                                upland_rooted = input$user_upland_rooted,
+                                upland_rooted = case_when(
+                                  input$user_upland_rooted == 0 ~ "0 (Poor)",
+                                  input$user_upland_rooted == 0.5 ~ "0.5",
+                                  input$user_upland_rooted == 1 ~ "1 (Weak)",
+                                  input$user_upland_rooted == 1.5 ~ "1.5",
+                                  input$user_upland_rooted == 2 ~ "2 (Moderate)",
+                                  input$user_upland_rooted == 2.5 ~ "2.5",
+                                  input$user_upland_rooted == 3 ~ "3 (Strong)"
+                                ),
+
                                 f45 = fig45(),
                                 f45_cap = input$ur1_cap,
                                 f46 = fig46(),
@@ -1727,7 +1843,13 @@ server <- function(input, output, session){
                                 notes_rooted = input$notes_rooted,
                                 
                                 # Agal Cover
-                                algal = input$user_algal_cover,
+                                algal = case_when(
+                                  input$user_algal_cover == 0 ~ "Not Detected",
+                                  input$user_algal_cover == 1 ~ "<2%",
+                                  input$user_algal_cover == 2 ~ "2-10%",
+                                  input$user_algal_cover == 3 ~ "10-40%",
+                                  input$user_algal_cover == 4 ~ ">40%"
+                                ),
                                 f36 = fig36(),
                                 f36_cap = input$algal1_cap,
                                 f37 = fig37(),
@@ -1737,7 +1859,15 @@ server <- function(input, output, session){
                                 notes_algal = input$notes_algal,
 
                                 # Difference in Veg
-                                vegetation = input$user_diff_veg,
+                                vegetation = case_when(
+                                  input$user_diff_veg == 0 ~ "0 (Poor)",
+                                  input$user_diff_veg == 0.5 ~ "0.5)",
+                                  input$user_diff_veg == 1 ~ "1 (Weak)",
+                                  input$user_diff_veg == 1.5 ~ "1.5",
+                                  input$user_diff_veg == 2 ~ "2 (Moderate)",
+                                  input$user_diff_veg == 2.5 ~ "2.5",
+                                  input$user_diff_veg == 3 ~ "3 (Strong)"
+                                ),
                                 f15 = fig15(),
                                 f15_cap = input$veg1_cap,
                                 f16 = fig16(),
@@ -1757,7 +1887,15 @@ server <- function(input, output, session){
                                 notes_slope = input$notes_slope,
 
                                 # Riffle Pool Sequence
-                                riff = input$user_riff_pool,
+                                riff = case_when(
+                                  input$user_riff_pool == 0 ~ "0 (Poor)",
+                                  input$user_riff_pool == 0.5 ~ "0.5)",
+                                  input$user_riff_pool == 1 ~ "1 (Weak)",
+                                  input$user_riff_pool == 1.5 ~ "1.5",
+                                  input$user_riff_pool == 2 ~ "2 (Moderate)",
+                                  input$user_riff_pool == 2.5 ~ "2.5",
+                                  input$user_riff_pool == 3 ~ "3 (Strong)"
+                                ),
                                 f42 = fig42(),
                                 f42_cap = input$riff1_cap,
                                 f43 = fig43(),
@@ -1813,7 +1951,11 @@ server <- function(input, output, session){
                                 
                                 # ------------------- Biological indicators
                                 # EPT Taxa
-                                aqua_inv = input$user_total_abundance,
+                                aqua_inv = case_when(
+                                  input$user_total_abundance == 0 ~ '0',
+                                  input$user_total_abundance == 1 ~ "1 to 9",
+                                  input$user_total_abundance == 2 ~ "10 or greater9"
+                                ),
                                 f6 = fig6(),
                                 f6_cap = input$inv1_cap,
                                 f7 = fig7(),
@@ -1829,7 +1971,10 @@ server <- function(input, output, session){
                                 notes_aquainv = input$notes_totalAbundance,
 
                                 # Hydrophytes
-                                hydro = input$user_hydrophyte,
+                                hydro = case_when(
+                                  input$user_hydrophyte == 0 ~ 'Less than 2',
+                                  T ~ "Greater than or equal to 2"
+                                ),
                                 f24 = fig24(),
                                 f24_cap = input$hydro1_cap,
                                 f25 = fig25(),
@@ -1845,7 +1990,15 @@ server <- function(input, output, session){
                                 notes_hydro = input$notes_hydro,                       
 
                                 # Upland Rooted
-                                upland_rooted = input$user_upland_rooted,
+                                upland_rooted = case_when(
+                                  input$user_upland_rooted == 0 ~ "0 (Poor)",
+                                  input$user_upland_rooted == 0.5 ~ "0.5",
+                                  input$user_upland_rooted == 1 ~ "1 (Weak)",
+                                  input$user_upland_rooted == 1.5 ~ "1.5",
+                                  input$user_upland_rooted == 2 ~ "2 (Moderate)",
+                                  input$user_upland_rooted == 2.5 ~ "2.5",
+                                  input$user_upland_rooted == 3 ~ "3 (Strong)"
+                                ),
                                 f45 = fig45(),
                                 f45_cap = input$ur1_cap,
                                 f46 = fig46(),
@@ -1855,7 +2008,13 @@ server <- function(input, output, session){
                                 notes_rooted = input$notes_rooted,
 
                                 # Substrate
-                                substrate = input$user_substrate,
+                                substrate = case_when(
+                                  input$user_substrate == 0 ~ "0 (Weak)",
+                                  input$user_substrate == 0.75 ~ "0.5)",
+                                  input$user_substrate == 1.5 ~ "1 (Moderate)",
+                                  input$user_substrate == 2.25 ~ "2.25",
+                                  input$user_substrate == 3 ~ "3 (Strong)"
+                                ),
                                 f12 = fig12(),
                                 f12_cap = input$sub1_cap,
                                 f13 = fig13(),
@@ -1865,7 +2024,15 @@ server <- function(input, output, session){
                                 notes_sub = input$notes_sub,
 
                                 # Difference in Veg
-                                vegetation = input$user_diff_veg,
+                                vegetation = case_when(
+                                  input$user_diff_veg == 0 ~ "0 (Poor)",
+                                  input$user_diff_veg == 0.5 ~ "0.5)",
+                                  input$user_diff_veg == 1 ~ "1 (Weak)",
+                                  input$user_diff_veg == 1.5 ~ "1.5",
+                                  input$user_diff_veg == 2 ~ "2 (Moderate)",
+                                  input$user_diff_veg == 2.5 ~ "2.5",
+                                  input$user_diff_veg == 3 ~ "3 (Strong)"
+                                ),
                                 f15 = fig15(),
                                 f15_cap = input$veg1_cap,
                                 f16 = fig16(),
@@ -1875,7 +2042,15 @@ server <- function(input, output, session){
                                 notes_vegetation = input$notes_veg,
 
                                 # Sediment on plants
-                                sediment = input$user_sediment_plants,
+                                sediment = case_when(
+                                  input$user_sediment_plants == 0 ~ "0 (Poor)",
+                                  input$user_sediment_plants == 0.25 ~ "0.25",
+                                  input$user_sediment_plants == 0.5 ~ "0.5 (Weak)",
+                                  input$user_sediment_plants == 0.75 ~ "0.75",
+                                  input$user_sediment_plants == 1 ~ "1 (Moderate)",
+                                  input$user_sediment_plants == 1.25 ~ "1.25",
+                                  input$user_sediment_plants == 1.5 ~ "1.5 (Strong)"
+                                ),
                                 f18 = fig18(),
                                 f18_cap = input$sed1_cap,
                                 f19 = fig19(),
@@ -1885,7 +2060,15 @@ server <- function(input, output, session){
                                 notes_sed = input$notes_sed,
 
                                 # Riffle Pool Sequence
-                                riff = input$user_riff_pool,
+                                riff = case_when(
+                                  input$user_riff_pool == 0 ~ "0 (Poor)",
+                                  input$user_riff_pool == 0.5 ~ "0.5)",
+                                  input$user_riff_pool == 1 ~ "1 (Weak)",
+                                  input$user_riff_pool == 1.5 ~ "1.5",
+                                  input$user_riff_pool == 2 ~ "2 (Moderate)",
+                                  input$user_riff_pool == 2.5 ~ "2.5",
+                                  input$user_riff_pool == 3 ~ "3 (Strong)"
+                                ),
                                 f42 = fig42(),
                                 f42_cap = input$riff1_cap,
                                 f43 = fig43(),
@@ -2052,7 +2235,13 @@ server <- function(input, output, session){
                                 
                                 # ------------------- Biological indicators
                                 # EPT Taxa
-                                aqua_inv = input$user_total_abundance,
+                                aqua_inv = case_when(
+                                  input$user_total_abundance == 0 ~ '0',
+                                  input$user_total_abundance == 1 ~ "1 to 4",
+                                  input$user_total_abundance == 2 ~ "5 to 9",
+                                  input$user_total_abundance == 3 ~ "10 to 19",
+                                  input$user_total_abundance == 4 ~ "Great than or equal to 20"
+                                ),
                                 f6 = fig6(),
                                 f6_cap = input$inv1_cap,
                                 f7 = fig7(),
@@ -2067,8 +2256,19 @@ server <- function(input, output, session){
                                 f8_cap = input$inv6_cap,
                                 notes_aquainv = input$notes_totalAbundance,
 
+                                eph_isa = case_when(
+                                  input$user_eph_isa == 0 ~ '0',
+                                  input$user_eph_isa == 1 ~ "1 to 4",
+                                  input$user_eph_isa == 2 ~ "5 to 9",
+                                  input$user_eph_isa == 3 ~ "10 to 19",
+                                  input$user_eph_isa == 4 ~ "Great than or equal to 20"
+                                ),
+
                                 # Hydrophytes
-                                hydro = input$user_hydrophyte,
+                                hydro = case_when(
+                                  input$user_hydrophyte < 5 ~ as.character(input$user_hydrophyte),
+                                  T ~ "Greater than or equal to 5"
+                                ),
                                 f24 = fig24(),
                                 f24_cap = input$hydro1_cap,
                                 f25 = fig25(),
@@ -2084,7 +2284,15 @@ server <- function(input, output, session){
                                 notes_hydro = input$notes_hydro,                       
 
                                 # Upland Rooted
-                                upland_rooted = input$user_upland_rooted,
+                                upland_rooted = case_when(
+                                  input$user_upland_rooted == 0 ~ "0 (Poor)",
+                                  input$user_upland_rooted == 0.5 ~ "0.5",
+                                  input$user_upland_rooted == 1 ~ "1 (Weak)",
+                                  input$user_upland_rooted == 1.5 ~ "1.5",
+                                  input$user_upland_rooted == 2 ~ "2 (Moderate)",
+                                  input$user_upland_rooted == 2.5 ~ "2.5",
+                                  input$user_upland_rooted == 3 ~ "3 (Strong)"
+                                ),
                                 f45 = fig45(),
                                 f45_cap = input$ur1_cap,
                                 f46 = fig46(),
@@ -2094,7 +2302,13 @@ server <- function(input, output, session){
                                 notes_rooted = input$notes_rooted,
 
                                 # Substrate
-                                substrate = input$user_substrate,
+                                substrate = case_when(
+                                  input$user_substrate == 0 ~ "0 (Weak)",
+                                  input$user_substrate == 0.75 ~ "0.5)",
+                                  input$user_substrate == 1.5 ~ "1 (Moderate)",
+                                  input$user_substrate == 2.25 ~ "2.25",
+                                  input$user_substrate == 3 ~ "3 (Strong)"
+                                ),
                                 f12 = fig12(),
                                 f12_cap = input$sub1_cap,
                                 f13 = fig13(),
@@ -2104,7 +2318,15 @@ server <- function(input, output, session){
                                 notes_sub = input$notes_sub,
 
                                 # Difference in Veg
-                                vegetation = input$user_diff_veg,
+                                vegetation = case_when(
+                                  input$user_diff_veg == 0 ~ "0 (Poor)",
+                                  input$user_diff_veg == 0.5 ~ "0.5)",
+                                  input$user_diff_veg == 1 ~ "1 (Weak)",
+                                  input$user_diff_veg == 1.5 ~ "1.5",
+                                  input$user_diff_veg == 2 ~ "2 (Moderate)",
+                                  input$user_diff_veg == 2.5 ~ "2.5",
+                                  input$user_diff_veg == 3 ~ "3 (Strong)"
+                                ),
                                 f15 = fig15(),
                                 f15_cap = input$veg1_cap,
                                 f16 = fig16(),
@@ -2124,7 +2346,15 @@ server <- function(input, output, session){
                                 notes_slope = input$notes_slope,
 
                                 # Riffle Pool Sequence
-                                riff = input$user_riff_pool,
+                                riff = case_when(
+                                  input$user_riff_pool == 0 ~ "0 (Poor)",
+                                  input$user_riff_pool == 0.5 ~ "0.5)",
+                                  input$user_riff_pool == 1 ~ "1 (Weak)",
+                                  input$user_riff_pool == 1.5 ~ "1.5",
+                                  input$user_riff_pool == 2 ~ "2 (Moderate)",
+                                  input$user_riff_pool == 2.5 ~ "2.5",
+                                  input$user_riff_pool == 3 ~ "3 (Strong)"
+                                ),
                                 f42 = fig42(),
                                 f42_cap = input$riff1_cap,
                                 f43 = fig43(),
@@ -2137,7 +2367,7 @@ server <- function(input, output, session){
                                 bankwidth = bank_mean(),
                 
                                 # Percent Shade
-                                shade = densi_shade_perc()
+                                shade = input$user_shade
 
 
                             )
