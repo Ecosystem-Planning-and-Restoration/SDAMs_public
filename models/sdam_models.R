@@ -50,15 +50,12 @@ run_sdam <- function(
                                                                 P==E & I<=P ~ "Need more information",
                                                                 T~"Other")
                                         )
-                                for (t in names(ClassProbs)){        
-                
-                                        print(paste0(t, ": ", output_df[[t]]))
-                                }
+
                                 paste0("This reach is classified as ", output_df$Class,".")
 
                         } else if (pnts_join_df$Strata_UNC == 'Western Mountains'){
                                 load("NotForGit/Step5/all_refined_rf_mods.Rdata")
-                                # RF <- all_refined_rf_mods[[3]]
+
                                 ClassProbs <- predict(wm_rf, newdata = pnts_join_df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                                 output_df <- bind_cols(df, ClassProbs) %>%
@@ -75,8 +72,7 @@ run_sdam <- function(
                                 paste0("This reach is classified as ", output_df$Class,".")
 
                         } else if (pnts_join_df$Strata_UNC == 'Arid West'){
-                                # load("NotForGit/Step5/all_refined_rf_mods.Rdata")
-                                # RF <- all_refined_rf_mods[[1]]
+
                                 ClassProbs <- predict(aw_rf, newdata = df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                                 output_df <- bind_cols(pnts_join_df, ClassProbs) %>%
@@ -146,7 +142,7 @@ run_sdam <- function(
 
                 } else if (var_input_reg == 'Great Plains'){
                         set.seed(1111)
-                        # RF <- readRDS("./models/rf_models/RF_NoGIS_Unstrat_4.rds")
+
                         ClassProbs <- predict(gp_rf, newdata = df, type="prob") 
                                 # assign appropriate class based on probabilities
                         output_df <- bind_cols(df, ClassProbs) %>%
@@ -160,15 +156,10 @@ run_sdam <- function(
                                                         P==E & I<=P ~ "Need more information",
                                                         T~"Other")
                                 )
-                        for (t in names(output_df)){        
-                                print(paste0(t, ": ", output_df[[t]]))
-                        }
+
                         paste0("This reach is classified as ", output_df$Class,".")
 
                 } else if (var_input_reg == 'Western Mountains'){
-                        # print('trying western model')
-                        # load("./models/rf_models/all_refined_rf_mods.Rdata")
-                        # RF <- all_refined_rf_mods[[3]]
                         
                         ClassProbs <- predict(wm_rf, newdata = df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
@@ -186,13 +177,7 @@ run_sdam <- function(
                         paste0("This reach is classified as ", output_df$Class,".")
 
                 } else if (var_input_reg == 'Arid West'){
-                        # load("./models/rf_models/all_refined_rf_mods.Rdata")
-                        print('running Arid West model')
-                        # for (t in names(df)){        
-        
-                        #         print(paste0(t, ": ", df[[t]], " ", class(df[[t]])))
-                        # }
-                        # RF <- all_refined_rf_mods[[1]]
+ 
                         ClassProbs <- predict(aw_rf, newdata = df, type="prob") %>% as.data.frame()
                                 # assign appropriate class based on probabilities
                         output_df <- bind_cols(df, ClassProbs) %>%
@@ -207,11 +192,7 @@ run_sdam <- function(
                                                         T~"Other")
                                 )
 
-                         for (t in names(ClassProbs)){        
-        
-                                print(paste0(t, ": ", output_df[[t]]))
-                        }
-                        
+
                         paste0("This reach is classified as ", output_df$Class,".")
 
                 } else if (var_input_reg == 'Pacific Northwest'){
@@ -245,7 +226,6 @@ run_sdam <- function(
                         }
 
                         if (df$Class == 'ephemeral'){
-                                print('checking fish')
                                 if (df$fish == 'Yes'){
                                         df$Class = 'at least intermittent'
                                 } else if (df$amphibians == 'Yes'){

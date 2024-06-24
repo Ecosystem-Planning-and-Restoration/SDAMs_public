@@ -17,6 +17,7 @@ library(leaflet.extras)
 library(dataRetrieval)
 library(ggplot2)
 library(usmap)
+library(gotop)
 
 # app code inputs
 #-----------------------------------------
