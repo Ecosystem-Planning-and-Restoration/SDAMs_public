@@ -6,9 +6,16 @@ wm_report <- function(){
         column(10,
 
             br(), br(),
-            h2(HTML(
-                "Step 3: Enter additional information (optional)")
-                ),
+             HTML(
+                '<h3 style="margin-top:5px; margin-bottom:-5px">
+                    <span class="badge badge-primary" 
+                        style="font-size:1.3rem;
+                                background-color:#1a4480;
+                                margin-right:8px;">Step 3
+                    </span>
+                    Enter additional information (optional)
+                </h3>'
+            ),
             div(
                 style = 'background-color: white;
                         width: 100%;

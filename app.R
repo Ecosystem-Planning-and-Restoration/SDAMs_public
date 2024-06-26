@@ -20,8 +20,10 @@ ui <- fluidPage(
 
             .border-my-text {
                 border: 2px solid black;
+                color: white;
+                padding-top:5%;
                 border-padding: 2px;
-                background-color: #b4bfd1;
+                background-color: #1a4480;
                 text-align: center;
                 width: 80%
             }
@@ -32,13 +34,16 @@ ui <- fluidPage(
             }
             .border-my-class {
                 border: 2px solid black;
+                color:white;
+                padding-top:5%;
                 border-padding: 40px;
-                background-color: black;
+                background-color: #1a4480;
                 color: white;
                 text-align: center;
             }
             #reg_button {
-                background-color:#94d9f2;
+                background-color:#005ea2;
+                color: white;
                 padding: 7px;
                 font-size: 110%;
                 font-weight: bold;
@@ -47,22 +52,16 @@ ui <- fluidPage(
                 box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
                 transition-duration: 0.1s;
             }
-            .question_box {
-                background-color: lightgrey;
-                width: 100%;
-                border: 3px solid black;
-                padding: 10px;
-                margin: 0px;
-            }
             #reg_button:hover {
-                background-color:#5d8b9c;
-                color: black;
+                background-color:#1a4480;
+                color: white;
                 border-style: solid;
                 border-color: black;
                 border-width: px;
             }
             #indicator_button {
-                background-color:#94d9f2;
+                background-color:#005ea2;
+                color:white;
                 padding: 7px;
                 font-size: 110%;
                 font-weight: bold;
@@ -72,14 +71,22 @@ ui <- fluidPage(
                 transition-duration: 0.1s;
             }
             #indicator_button:hover {
-                background-color:#5d8b9c;
-                color: black;
+                background-color:#1a4480;
+                color: white;
                 border-style: solid;
                 border-color: black;
                 border-width: px;
+              }
+            .question_box {
+                background-color: lightgrey;
+                width: 100%;
+                border: 3px solid black;
+                padding: 10px;
+                margin: 0px;
             }
             #runmodel {
-                background-color:#94d9f2;
+                background-color:#005ea2;
+                color:white;
                 padding: 7px;
                 font-size: 110%;
                 font-weight: bold;
@@ -89,14 +96,15 @@ ui <- fluidPage(
                 transition-duration: 0.1s;
             }
             #runmodel:hover {
-                background-color:#5d8b9c;
-                color: black;
+                background-color:#1a4480;
+                color: white;
                 border-style: solid;
                 border-color: black;
                 border-width: px;
             }
-            #report {z
-                background-color:#94d9f2;
+            #report {
+                background-color:#005ea2;
+                color:white;
                 padding: 7px;
                 font-size: 110%;
                 font-weight: bold;
@@ -106,8 +114,8 @@ ui <- fluidPage(
                 transition-duration: 0.1s;
             }
             #report:hover {
-                background-color:#5d8b9c;
-                color: black;
+                background-color:#1a4480;
+                color: white;
                 border-style: solid;
                 border-color: black;
                 border-width: px;
@@ -115,7 +123,7 @@ ui <- fluidPage(
             .leaflet-popup-content {
                 text-align: center;
             }
-                .header-color{
+            .header-color{
             background-color: #E3F0F6;
             }
             
@@ -238,8 +246,25 @@ ui <- fluidPage(
             .mobile-links {
                 margin-top: 0;
             }
-                
 
+            .menu-button {
+              display: none;
+            }
+
+            div.alert-info {
+              position: relative;
+            }
+
+            div.alert-info p.pull-left {
+              -webkit-transform: translateY(-50%);
+              -ms-transform: translateY(-50%);
+              -o-transform: translateY(-50%);
+              transform: translateY(-50%);
+              position: absolute;
+              top: 50%;
+            }
+
+           
             '
         )
     ),
@@ -311,7 +336,7 @@ ui <- fluidPage(
     tags$meta(name="viewport", content="width=device-width, initial-scale=1.0"),
     tags$meta(`http-equiv`="x-ua-compatible", content="ie=edge"),
     tags$script(src = "js/pattern-lab-head-script.js"),
-    # update this line with your title:    tags$title('ContDataQC | US EPA'),
+    tags$title('SDAMs | US EPA'),
     tags$link(rel="icon", type="image/x-icon", href="https://www.epa.gov/themes/epa_theme/images/favicon.ico"),
     tags$meta(name="msapplication-TileColor", content="#FFFFFF"),
     tags$meta(name="msapplication-TileImage", content="https://www.epa.gov/themes/epa_theme/images/favicon-144.png"),
@@ -541,19 +566,17 @@ ui <- fluidPage(
   
     # UI---------------------------------------------------------------------------------------------
 	titlePanel(
-        div(
-            class="jumbotron",
-            h2(
-                HTML(
-                "Web application for the Final Streamflow Duration Assessment Methods 
-                ")
-            ),
-            h4(HTML("<p>Version <a href=\"https://github.com/Ecosystem-Planning-and-Restoration/SDAMs_public\">1.1</a> Release date: April 2024 </p>")),
-            img(src="eph.jpg", style = "height: 400px", alt="Ephemeral Streamflow Example"),
-            img(src="int.jpg", style = "height: 400px", alt="Intermittent Streamflow Example"), 
-            img(src="per.jpg", style = "height: 400px", alt="Perennial Streamflow Example")
+    div(
+        class="jumbotron",
+        style='margin-top:-20px; margin-bottom:10px; padding-top:5px; padding-bottom:0px;',
+        h2(
+            HTML(
+            "Web application for the Regional Streamflow Duration Assessment Methods (SDAMs)"
+            )
         ),
-        "SDAMs"
+        h4(HTML("<p>Version <a href=\"https://github.com/Ecosystem-Planning-and-Restoration/SDAMs_public\">1.1</a> Release date: April 2024 </p>")),
+    ),
+    "SDAMs"
     ),
     
     fluidRow(
@@ -562,19 +585,45 @@ ui <- fluidPage(
      
                   column(
                       10,
-                      tabsetPanel(
-                          id = "tabs",
+
 
                           # Overview -----------------------------------------------------
-                          tabPanel(
-          
-                              "Enter Data", 
+
                               br(),
                               fluidRow(
                                 column(1),
                                 column(10,
-                                  h4(p(HTML("<b><u><i>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</i></u></b>"),style="color:#b80404")),
-                                  h2("Step 1: Enter reach coordinates or select reach location on map."), 
+                           
+                                  HTML(
+                                    '<div class="alert alert-danger" role="alert" 
+                                      style="background-color:#005ea2; margin-top:-50px; padding-top:0px; padding-bottom:0px;">
+                                      <h3 style=padding-top:2%;>
+                                        <span class="badge badge-info" 
+                                          style="font-size:1.5rem; margin-right:6px; background-color:#404040;">Info
+                                        </span>
+                                        <a href=\"https://www.epa.gov/streamflow-duration-assessment/supporting-materials\" style="color:#ffffff;">
+                                        Supporting Materials including User Manuals, Field Assessment Forms, Training Videos and more</a>
+                                      </h3>
+                                    </div>'                                      
+                                  ),
+
+                                  HTML(
+                                    '<div class="alert alert-danger" role="alert" style="color:#000000; text-align:center;">
+                                      <b>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</b>
+                                    </div>'
+                                  ),
+                                  
+                                  HTML(
+                                    '<h3 style="margin-top:5px; margin-bottom:-5px">
+                                      <span class="badge badge-primary" 
+                                        style="font-size:1.3rem;
+                                                background-color:#1a4480;
+                                                margin-right:8px;">Step 1
+                                      </span>
+                                      Enter reach coordinates or select reach location on map.
+                                    </h3>'
+                                  ),
+
                                   div(
                                     style = 'background-color: white;
                                               width: 100%;
@@ -613,8 +662,9 @@ ui <- fluidPage(
                                       fluidRow(
                                           column(1),
                                           column(
-                                              6,
-                                              div(HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area. </i></b>')),
+                                              7,
+                                              div(style="margin-bottom:5px;",
+                                                HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area. </i></b>')),
                                               div(id = "placeholder"),
                                               div(id = "coords",
                                                 fluidRow(
@@ -622,19 +672,19 @@ ui <- fluidPage(
                                                           numericInput("lat", 
                                                           label = NULL, 
                                                           value = 40)),
-                                                    column(4, h5("Latitude"))
+                                                    column(12, h5("Latitude"))
                                                 ),
                                                 fluidRow(
                                                     column(4,numericInput("lon", 
                                                     label = NULL, 
                                                     value = -98)),
-                                                    column(4, h5("Longitude"))
+                                                    column(12, h5("Longitude"))
                                                 ),
                                                 fluidRow(
                                                     column(4,
                                                             br(),
                                                             div(actionButton("reg_button", 
-                                                                            label=div("Assess Reach Location", icon('long-arrow-right'))
+                                                                            label=div("Assess Reach Location")
                                                                             ) 
                                                               ),
                                                             br(), br(),
@@ -700,7 +750,7 @@ ui <- fluidPage(
                                                 style = 'margin: auto;
                                                         text-align: center;',
                                                 actionButton("indicator_button", 
-                                                              label=div("Enter Model Data", icon('arrow-down'))
+                                                              label=div("Enter Model Data")
                                                               ) 
                                                   ),
                                               br(),
@@ -722,15 +772,8 @@ ui <- fluidPage(
                               uiOutput("reportPanel"),
                                 
                               
-                          ),
-          
-                          # additional information tab
-                          tabPanel(
-                              "Additional Resources",
-                              uiOutput("addInfoPanel"),
-                          )
-                          
-                      )
+                             
+                      
                   )
 
       ) # end div  

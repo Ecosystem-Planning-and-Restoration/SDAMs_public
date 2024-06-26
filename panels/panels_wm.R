@@ -8,7 +8,16 @@ wm_panel <- function(){
         column(1),
         column(
             10,
-            h2(HTML("Step 2: Enter required indicator data")),
+            HTML(
+                '<h3 style="margin-top:5px; margin-bottom:-5px">
+                <span class="badge badge-primary" 
+                    style="font-size:1.3rem;
+                            background-color:#1a4480;
+                            margin-right:8px;">Step 2
+                </span>
+                Enter required indicator data.
+                </h3>'
+            ),
 
             div(
                 style = 'background-color: white;
@@ -280,7 +289,7 @@ wm_panel <- function(){
                         ),
                         column(
                             6,
-                            actionButton("runmodel", div("Run Model", icon('long-arrow-right')))
+                            actionButton("runmodel", div("Run Model"))
                         ),
                         column(
                             6,
