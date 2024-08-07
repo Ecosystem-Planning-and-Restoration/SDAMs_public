@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 
+rsconnect/shinyapps.io/ecosystemplanningrestoration/SDAMS_staging.dcf
+gp_report.log
+*.tex
+/gp_report_files

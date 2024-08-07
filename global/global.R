@@ -40,10 +40,10 @@ source('./report/report_wm.R')
 # source('./report/report_params.R')
 
 ## addtional information tabs
-source('./info/info_aw.R')
-source('./info/info_gp.R')
-source('./info/info_pnw.R')
-source('./info/info_wm.R')
+# source('./info/info_aw.R')
+# source('./info/info_gp.R')
+# source('./info/info_pnw.R')
+# source('./info/info_wm.R')
 
 ## spatial funtions
 source('./spatial/region_check.R')

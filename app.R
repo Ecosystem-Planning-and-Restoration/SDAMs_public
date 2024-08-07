@@ -1847,8 +1847,7 @@ server <- function(input, output, session){
                         tryCatch({
             
                             showModal(modalDialog("Please wait while the report is being generated.....", footer=NULL))
-                            tempReport <- file.path("markdown/aw_report.Rmd")
-                            file.copy("aw_report.Rmd", tempReport, overwrite = TRUE)
+                            
             
                             # Set up parameters to pass to Rmd document
                             region_params <- list(
@@ -1984,22 +1983,23 @@ server <- function(input, output, session){
 
                             params <- c(general_params, region_params)
             
-                            # Knit the document, passing in the `params` list, and eval it in a
-                            # child of the global environment (this isolates the code in the document
-                            # from the code in this app).
-                            rmarkdown::render(
-                                tempReport,
-                                output_file = file,
-                                params = params,
-                                envir = new.env(parent = globalenv())
+                            tempReport <- "aw_report.qmd"
+               
+                            quarto::quarto_render(
+                              tempReport,
+                              output_format = "pdf",
+                              execute_params = params
                             )
+
+                            file.copy("aw_report.pdf", file, overwrite=TRUE)
+
                             removeModal()
                         },
                         warning = function(cond){
                             showModal(
                             modalDialog(
                                 "There was an error while generating the report.
-                            Please contact Will Saulnier (wsaulnier@eprusa.net) for more details.",
+                              Please contact Will Saulnier (wsaulnier@eprusa.net) for more details.",
                                 footer = modalButton("Ok")
                             )
                             )
@@ -2015,9 +2015,7 @@ server <- function(input, output, session){
                         tryCatch({
             
                             showModal(modalDialog("Please wait while the report is being generated.....", footer=NULL))
-                            tempReport <- file.path("markdown/gp_report.Rmd")
-                            file.copy("gp_report.Rmd", tempReport, overwrite = TRUE)
-            
+
                             # Set up parameters to pass to Rmd document
                             region_params <- list(
                                 
@@ -2154,18 +2152,19 @@ server <- function(input, output, session){
 
 
                             )
-
+            
                             params <- c(general_params, region_params)
             
-                            # Knit the document, passing in the `params` list, and eval it in a
-                            # child of the global environment (this isolates the code in the document
-                            # from the code in this app).
-                            rmarkdown::render(
-                            tempReport,
-                            output_file = file,
-                            params = params,
-                            envir = new.env(parent = globalenv())
+                            tempReport <- "gp_report.qmd"
+               
+                            quarto::quarto_render(
+                              tempReport,
+                              output_format = "pdf",
+                              execute_params = params
                             )
+
+                            file.copy("gp_report.pdf", file, overwrite=TRUE)
+
                             removeModal()
                         },
                         warning = function(cond){
@@ -2185,9 +2184,7 @@ server <- function(input, output, session){
                         tryCatch({
             
                             showModal(modalDialog("Please wait while the report is being generated.....", footer=NULL))
-                            tempReport <- file.path("markdown/pnw_report.Rmd")
-                            file.copy("pnw_report.Rmd", tempReport, overwrite = TRUE)
-            
+
                             # Set up parameters to pass to Rmd document
                             region_params <- list(
                                 
@@ -2270,15 +2267,16 @@ server <- function(input, output, session){
 
                             params <- c(general_params, region_params)
             
-                            # Knit the document, passing in the `params` list, and eval it in a
-                            # child of the global environment (this isolates the code in the document
-                            # from the code in this app).
-                            rmarkdown::render(
-                            tempReport,
-                            output_file = file,
-                            params = params,
-                            envir = new.env(parent = globalenv())
+                            tempReport <- "pnw_report.qmd"
+               
+                            quarto::quarto_render(
+                              tempReport,
+                              output_format = "pdf",
+                              execute_params = params
                             )
+
+                            file.copy("pnw_report.pdf", file, overwrite=TRUE)
+
                             removeModal()
                         },
                         warning = function(cond){
@@ -2299,9 +2297,7 @@ server <- function(input, output, session){
                         tryCatch({
             
                             showModal(modalDialog("Please wait while the report is being generated.....", footer=NULL))
-                            tempReport <- file.path("markdown/wm_report.Rmd")
-                            file.copy("wm_report.Rmd", tempReport, overwrite = TRUE)
-            
+
                             # Set up parameters to pass to Rmd document
                             region_params <- list(
                                 
@@ -2446,15 +2442,16 @@ server <- function(input, output, session){
 
                             params <- c(general_params, region_params)
             
-                            # Knit the document, passing in the `params` list, and eval it in a
-                            # child of the global environment (this isolates the code in the document
-                            # from the code in this app).
-                            rmarkdown::render(
-                                tempReport,
-                                output_file = file,
-                                params = params,
-                                envir = new.env(parent = globalenv())
+                            tempReport <- "wm_report.qmd"
+               
+                            quarto::quarto_render(
+                              tempReport,
+                              output_format = "pdf",
+                              execute_params = params
                             )
+
+                            file.copy("wm_report.pdf", file, overwrite=TRUE)
+
                             removeModal()
                         },
                         warning = function(cond){
