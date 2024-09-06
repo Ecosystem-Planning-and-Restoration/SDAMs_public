@@ -13,7 +13,7 @@ pnw_report <- function(){
                                 background-color:#1a4480;
                                 margin-right:8px;">Step 3
                     </span>
-                    Enter additional information (optional)
+                    (optional) Enter additional information and generate a report (no information saved or stored)
                 </h3>'
             ),
             div(
@@ -24,22 +24,20 @@ pnw_report <- function(){
                         margin: 0px;',
 
                 ## General Information----
-                h3(
+                h2(
                     style = 'text-align:center;',
-                    HTML(
-                    "Pacific Northwest SDAM Report"
-                    )
+                    HTML('<b><u>Pacific Northwest SDAM Report</u></b>')
                 ),
                 h4(HTML("* Maximum file upload size is 30MB.")),
                 
                 h5('Enter information about the assessment. Indicators required for classification are filled in from entries above'),
+                HTML('<hr style="color: black; height: 5px; background-color: black;">'),
 
+                h2(
+                    HTML("<b><u>General information</u></b>")
+                ) %>% tagAppendAttributes(class = 'center-div-text'),
+                
                 div(
-                    
-                    h4(HTML(
-                    "General Site Information</b>")
-                    ) %>% tagAppendAttributes(class = 'center-div-text'),
-
                     textInput(
                         "project",
                         label = "Project Name or Number:" ,
@@ -72,12 +70,11 @@ pnw_report <- function(){
                         placeholder = NULL
                     ),
 
-                    textInput(
+                    dateInput(
                         "date",
                         label = "Visit Date:",
                         value = "",
-                        width = NULL,
-                        placeholder = NULL
+                        format = "yyyy-mm-dd"
                     ),
 
                     radioButtons(
@@ -170,14 +167,18 @@ pnw_report <- function(){
                 br(),
                 
                 ## Observed Hydrology----
-                
-                div(
-                    h4(
-                        HTML(
-                        "<b><u>Observed Hydrology</u></b>"
-                        )
-                    ) %>% tagAppendAttributes(class = 'center-div-text'),
+                HTML('<hr style="color: black; height: 5px; background-color: black;">'),
 
+                h2(
+                    HTML("<b><u>Observed hydrology</u></b>")
+                ) %>% tagAppendAttributes(class = 'center-div-text'),
+                div(
+                    numericInput(
+                        inputId = "subflow",
+                        label = "Percent of reach with surface and sub-surface flows:",
+                        value = 0,
+                        min = 0,
+                    ),
                     numericInput(
                         inputId = "surfflow",
                         label = "Percent of reach with surface flows:",
@@ -185,12 +186,7 @@ pnw_report <- function(){
                         min = 0,
                     ),
 
-                    numericInput(
-                        inputId = "subflow",
-                        label = "Percent of reach with surface and sub-surface flows:",
-                        value = 0,
-                        min = 0,
-                    ),
+                    
 
                     numericInput(
                         inputId = "pool",
@@ -210,13 +206,14 @@ pnw_report <- function(){
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
                 
-                ## Indicators----
+                ## Site photos----
+                HTML('<hr style="color: black; height: 5px; background-color: black;">'),
+
+                h2(
+                    HTML("<b><u>Site photos</u></b>")
+                ) %>% tagAppendAttributes(class = 'center-div-text'),
                 div(
-                    h4(
-                        HTML("<b><u>General Photos</u></b>")
-                    ) %>% tagAppendAttributes(class = 'center-div-text'),
-                
-                    ### General Photos----
+                    ### General photos----
                     slatesFileInput(
                         "tld",
                         "Top of reach looking downstream:",
@@ -240,7 +237,17 @@ pnw_report <- function(){
                         "Bottom of reach looking upstream:",
                         accept = c('image/png', 'image/jpeg')
                     ),
-                    
+
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+
+                # Site Sketch----
+                HTML('<hr style="color: black; height: 5px; background-color: black;">'),
+
+                h2(
+                    HTML("<b><u>Site sketch</u></b>")
+                ) %>% tagAppendAttributes(class = 'center-div-text'),
+                div(                
                     slatesFileInput(
                         "sketch",
                         "Site Sketch:",
@@ -248,21 +255,21 @@ pnw_report <- function(){
                     ),
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
-                br(),
 
+                # Indicators----
                 HTML('<hr style="color: black; height: 5px; background-color: black;">'),
+                h2(
+                    HTML("<b><u>Indicators</u></b>")
+                ) %>% tagAppendAttributes(class = 'center-div-text'),
 
-                br(),
-                h3(HTML("<b>Add photos and notes about indicators</b>")),
-
-                # Invertebrates----
+                # Macroinvertebrates----
                 div(
-                    h4(HTML("<b>Aquatic Benthic Macroinvertebrates</b>")
+                    h4(HTML("<b><u>Macroinvertebrates</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
 
                     textAreaInput(
                         inputId = "notes_totalAbundance",
-                        label = "Notes about aquatic benthic macroinvertebrates:",
+                        label = "Notes about observed macroinvertebrates (including taxa names, indicator status, Order, and number of individuals observed):",
                         value = "",
                         width = '100%',
                         height = '75px',
@@ -271,12 +278,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "inv1",
-                        HTML("Invertebrate Photo #1<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Macroinvertebrate photo #1<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "inv1_cap",
-                        label = HTML("<span style='font-weight:normal'> Invertebrate Photo #1 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'> Macroinvertebrate photo #1 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -284,12 +291,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "inv2",
-                        HTML("Invertebrate Photo #2<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Macroinvertebrate photo #2<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),   
                     textInput(
                         inputId = "inv2_cap",
-                        label = HTML("<span style='font-weight:normal'>Invertebrate Photo #2 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Macroinvertebrate photo #2 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -297,12 +304,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "inv3",
-                        HTML("Invertebrate Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Macroinvertebrate photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "inv3_cap",
-                        label = HTML("<span style='font-weight:normal'>Invertebrate Photo #3 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Macroinvertebrate photo #3 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -310,12 +317,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "inv4",
-                        HTML("Invertebrate Photo #4<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Macroinvertebrate photo #4<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "inv4_cap",
-                        label = HTML("<span style='font-weight:normal'> Invertebrate Photo #4 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'> Macroinvertebrate photo #4 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -323,12 +330,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "inv5",
-                        HTML("Invertebrate Photo #5<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Macroinvertebrate photo #5<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "inv5_cap",
-                        label = HTML("<span style='font-weight:normal'>Invertebrate Photo #5 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Macroinvertebrate photo #5 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -336,12 +343,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "inv6",
-                        HTML("Invertebrate Photo #6<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Macroinvertebrate photo #6<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "inv6_cap",
-                        label = HTML("<span style='font-weight:normal'>Invertebrate Photo #6 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Macroinvertebrate photo #6 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -351,12 +358,12 @@ pnw_report <- function(){
 
                 # Hydrophytes ----
                 div(
-                    h4(HTML("<b>Hydrophytes</b>")
+                    h4(HTML("<b><u>Wetland plants</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
 
                     textAreaInput(
                         inputId = "notes_hydro",
-                        label = "Notes about hydrophytic vegetation:",
+                        label = "Notes about observed wetland plants (including taxa names and indicator status):",
                         value = "",
                         width = '100%',
                         height = '75px',
@@ -365,12 +372,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "hydro1",
-                        HTML("Hydrophyte Photo #1<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Wetland plant photo #1<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "hydro1_cap",
-                        label = HTML("<span style='font-weight:normal'> Hydrophyte Photo #1 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'> Wetland plant photo #1 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -378,12 +385,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "hydro2",
-                        HTML("Hydrophyte Photo #2<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Wetland plant photo #2<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),   
                     textInput(
                         inputId = "hydro2_cap",
-                        label = HTML("<span style='font-weight:normal'>Hydrophyte Photo #2 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Wetland plant photo #2 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -391,12 +398,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "hydro3",
-                        HTML("Hydrophyte Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Wetland plant photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "hydro3_cap",
-                        label = HTML("<span style='font-weight:normal'>Hydrophyte Photo #3 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Wetland plant photo #3 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -404,12 +411,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "hydro4",
-                        HTML("Hydrophyte Photo #4<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Wetland plant photo #4<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "hydro4_cap",
-                        label = HTML("<span style='font-weight:normal'> Hydrophyte Photo #4 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'> Wetland plant photo #4 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -417,12 +424,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "hydro5",
-                        HTML("Hydrophyte Photo #5<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Wetland plant photo #5<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "hydro5_cap",
-                        label = HTML("<span style='font-weight:normal'>Hydrophyte Photo #5 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Wetland plant photo #5 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -430,179 +437,14 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "hydro6",
-                        HTML("Hydrophyte Photo #6<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Wetland plant photo #6<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "hydro6_cap",
-                        label = HTML("<span style='font-weight:normal'>Hydrophyte Photo #6 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Wetland plant photo #6 caption:</span>"),
                         value = "",
                         width = NULL,
-                        placeholder = NULL
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-
-                ### Perennial Taxa-----
-                div(
-                    h4(HTML("<b>Perennial Taxa.</b>")
-                    ) %>% tagAppendAttributes(class = 'center-div-text'),
-
-                    textAreaInput(
-                        inputId = "notes_per", 
-                        label = "Notes about perennial taxa:", 
-                        value = "", 
-                        width = '100%',
-                        height = '75px',
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "per1", 
-                        HTML("Perennial Taxa Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "per1_cap", 
-                        label = HTML("<span style='font-weight:normal'>Perennial Taxa Photo #1 caption:</span>"), 
-                        value = "", 
-                        width = NULL, 
-                        placeholder = NULL
-                    ),
-                    
-                    slatesFileInput(
-                        "per2", 
-                        HTML("Perennial Taxa Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "per2_cap", 
-                        label = HTML("<span style='font-weight:normal'>Perennial Taxa Photo #2 caption:</span>"), 
-                        value = "", 
-                        width = NULL, 
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "per3", 
-                        HTML("Perennial Taxa Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "per3_cap", 
-                        label = HTML("<span style='font-weight:normal'>Perennial Taxa Photo #3 caption: </span>"), 
-                        value = "", 
-                        width = NULL, 
-                        placeholder = NULL
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-                
-                ### Fish----
-                div(
-                    h4(HTML("<b>Fish</b>")
-                    ) %>% tagAppendAttributes(class = 'center-div-text'),
-                    
-                    textAreaInput(
-                        inputId = "notes_fish",
-                        label = "Notes about fish:",
-                        value = "",
-                        width = '100%',
-                        height = '75px',
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "fish1",
-                        HTML("Fish Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"),
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "fish1_cap",
-                        label = HTML("<span style='font-weight:normal'>Fish Photo #1 caption:</span>"),
-                        value = "",
-                        width = NULL,
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "fish2",
-                        HTML("Fish Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "fish2_cap",
-                        label = HTML("<span style='font-weight:normal'>Fish Photo #2 caption:</span>"),
-                        value = "",
-                        width = NULL,
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "fish3",
-                        HTML("Fish Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "fish3_cap",
-                        label = HTML("<span style='font-weight:normal'>Fish Photo #3 caption: </span>"),
-                        value = "",
-                        width = NULL,
-                        placeholder = NULL
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-
-                ### Amphibians----
-                div(
-                    h4(HTML("<b>Amphibians</b>")
-                    ) %>% tagAppendAttributes(class = 'center-div-text'),
-
-                    textAreaInput(
-                        inputId = "notes_amph", 
-                        label = "Notes about amphibians:", 
-                        value = "", 
-                        width = '100%',
-                        height = '75px',
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "amph1", 
-                        HTML("Amphibians Photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "amph1_cap", 
-                        label = HTML("<span style='font-weight:normal'>Amphibians Photo #1 caption:</span>"), 
-                        value = "", 
-                        width = NULL, 
-                        placeholder = NULL
-                    ),
-                    
-                    slatesFileInput(
-                        "amph2", 
-                        HTML("Amphibians Photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "amph2_cap", 
-                        label = HTML("<span style='font-weight:normal'>Amphibians Photo #2 caption:</span>"), 
-                        value = "", 
-                        width = NULL, 
-                        placeholder = NULL
-                    ),
-
-                    slatesFileInput(
-                        "amph3", 
-                        HTML("Amphibians Photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
-                        accept = c('image/png', 'image/jpeg')
-                    ),
-                    textInput(
-                        inputId = "amph3_cap", 
-                        label = HTML("<span style='font-weight:normal'>Amphibians Photo #3 caption: </span>"), 
-                        value = "", 
-                        width = NULL, 
                         placeholder = NULL
                     ),
                 ) %>% tagAppendAttributes(class = 'question_box'),
@@ -610,7 +452,7 @@ pnw_report <- function(){
 
                 ### Slope----
                 div(
-                    h4(HTML("<b>Slope</b>")
+                    h4(HTML("<b><u>Slope</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
                     
                     textAreaInput(
@@ -629,12 +471,12 @@ pnw_report <- function(){
                     # ),
                     slatesFileInput(
                         "slope1",
-                        HTML("Slope Photo #1<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
+                        HTML("Slope photo #1<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "slope1_cap",
-                        label = HTML("<span style='font-weight:normal'>Slope Photo #1 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'>Slope photo #1 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -642,12 +484,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "slope2",
-                        HTML("Slope Photo #2<br /> <span style='font-weight:normal'> Upload photo file here: </span>"),
+                        HTML("Slope photo #2<br/> <span style='font-weight:normal'> Upload photo file here: </span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "slope2_cap",
-                        label = HTML("<span style='font-weight:normal'>Slope Photo #2 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'>Slope photo #2 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -655,12 +497,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "slope3",
-                        HTML("Slope Photo #3<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
+                        HTML("Slope photo #3<br /> <span style='font-weight:normal'>Upload photo file here:</span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "slope3_cap",
-                        label = HTML("<span style='font-weight:normal'>Slope Photo #3 caption:</span>"),
+                        label = HTML("<span style='font-weight:normal'>Slope photo #3 caption:</span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -668,11 +510,163 @@ pnw_report <- function(){
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
 
+
+                ### Perennial Taxa-----
+                # div(
+                #     h4(HTML("<b><u>Perennial Taxa</b>")
+                #     ) %>% tagAppendAttributes(class = 'center-div-text'),
+
+                #     textAreaInput(
+                #         inputId = "notes_per", 
+                #         label = "Notes about perennial taxa:", 
+                #         value = "", 
+                #         width = '100%',
+                #         height = '75px',
+                #         placeholder = NULL
+                #     ),
+
+                #     slatesFileInput(
+                #         "per1", 
+                #         HTML("Perennial Taxa photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
+                #         accept = c('image/png', 'image/jpeg')
+                #     ),
+                #     textInput(
+                #         inputId = "per1_cap", 
+                #         label = HTML("<span style='font-weight:normal'>Perennial Taxa photo #1 caption:</span>"), 
+                #         value = "", 
+                #         width = NULL, 
+                #         placeholder = NULL
+                #     ),
+                    
+                #     slatesFileInput(
+                #         "per2", 
+                #         HTML("Perennial Taxa photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+                #         accept = c('image/png', 'image/jpeg')
+                #     ),
+                #     textInput(
+                #         inputId = "per2_cap", 
+                #         label = HTML("<span style='font-weight:normal'>Perennial Taxa photo #2 caption:</span>"), 
+                #         value = "", 
+                #         width = NULL, 
+                #         placeholder = NULL
+                #     ),
+
+                #     slatesFileInput(
+                #         "per3", 
+                #         HTML("Perennial Taxa photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+                #         accept = c('image/png', 'image/jpeg')
+                #     ),
+                #     textInput(
+                #         inputId = "per3_cap", 
+                #         label = HTML("<span style='font-weight:normal'>Perennial Taxa photo #3 caption: </span>"), 
+                #         value = "", 
+                #         width = NULL, 
+                #         placeholder = NULL
+                #     ),
+                # ) %>% tagAppendAttributes(class = 'question_box'),
+                # br(),
                 
-                ## Notes and Photos----
+                ### Fish----
                 div(
-                    h4(HTML("<b>Supplemental Information</b>")
+                    h4(HTML("<b><u>Amphibians, snake, and fish</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
+                    
+                    textAreaInput(
+                        inputId = "notes_fish",
+                        label = "Notes about observed amphibians, snakes, and fish (including taxa names, life history stage, location observed, and number of individuals observed):",
+                        value = "",
+                        width = '100%',
+                        height = '75px',
+                        placeholder = NULL
+                    ),
+
+                    slatesFileInput(
+                        "fish1",
+                        HTML("Amphibian, snake, or fish photo #1<br/><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        accept = c('image/png', 'image/jpeg')
+                    ),
+                    textInput(
+                        inputId = "fish1_cap",
+                        label = HTML("<span style='font-weight:normal'>Amphibian, snake, or fish photo #1 caption:</span>"),
+                        value = "",
+                        width = NULL,
+                        placeholder = NULL
+                    ),
+
+                    slatesFileInput(
+                        "fish2",
+                        HTML("Amphibian, snake, or fish photo #2<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        accept = c('image/png', 'image/jpeg')
+                    ),
+                    textInput(
+                        inputId = "fish2_cap",
+                        label = HTML("<span style='font-weight:normal'>Amphibian, snake, or fish photo #2 caption:</span>"),
+                        value = "",
+                        width = NULL,
+                        placeholder = NULL
+                    ),
+
+                    slatesFileInput(
+                        "fish3",
+                        HTML("Amphibian, snake, or fish photo #3<br /><span style='font-weight:normal'>Upload photo file here:</span>"),
+                        accept = c('image/png', 'image/jpeg')
+                    ),
+                    textInput(
+                        inputId = "fish3_cap",
+                        label = HTML("<span style='font-weight:normal'>Amphibian, snake, or fish photo #3 caption: </span>"),
+                        value = "",
+                        width = NULL,
+                        placeholder = NULL
+                    ),
+
+                    slatesFileInput(
+                        "amph1", 
+                        HTML("Amphibian, snake, or fish photo #4<br/><span style='font-weight:normal'>Upload photo file here:</span>"), 
+                        accept = c('image/png', 'image/jpeg')
+                    ),
+                    textInput(
+                        inputId = "amph1_cap", 
+                        label = HTML("<span style='font-weight:normal'>Amphibian, snake, or fish photo #4 caption:</span>"), 
+                        value = "", 
+                        width = NULL, 
+                        placeholder = NULL
+                    ),
+                    
+                    slatesFileInput(
+                        "amph2", 
+                        HTML("Amphibian, snake, or fish photo #5<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+                        accept = c('image/png', 'image/jpeg')
+                    ),
+                    textInput(
+                        inputId = "amph2_cap", 
+                        label = HTML("<span style='font-weight:normal'>Amphibian, snake, or fish photo #5 caption:</span>"), 
+                        value = "", 
+                        width = NULL, 
+                        placeholder = NULL
+                    ),
+
+                    slatesFileInput(
+                        "amph3", 
+                        HTML("Amphibian, snake, or fish photo #6<br /><span style='font-weight:normal'>Upload photo file here:</span>"), 
+                        accept = c('image/png', 'image/jpeg')
+                    ),
+                    textInput(
+                        inputId = "amph3_cap", 
+                        label = HTML("<span style='font-weight:normal'>Amphibian, snake, or fish photo #6 caption: </span>"), 
+                        value = "", 
+                        width = NULL, 
+                        placeholder = NULL
+                    ),
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+
+                
+                ## Notes and photos----
+                HTML('<hr style="color: black; height: 5px; background-color: black;">'),
+                h2(
+                    HTML("<b><u>Supplemental information</u></b>")
+                ) %>% tagAppendAttributes(class = 'center-div-text'),
+                div(
                     HTML(
                     "Note if assessment was also conducted on different dates, historical photo interpretation, etc "
                     ),
@@ -687,17 +681,17 @@ pnw_report <- function(){
                     ),
                     
                     HTML('<hr style="color: black; height: 3px; background-color: black;">'),    
-                    h4(HTML("<b>Additional Photos</b>")
+                    h4(HTML("<b>Additional photos</b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
 
                     slatesFileInput(
                         "add1",
-                        HTML("Additional Photo #1<br/> <span style='font-weight:normal'>Upload photo file here: </span>"),
+                        HTML("Additional photo #1<br/> <span style='font-weight:normal'>Upload photo file here: </span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "add1_cap",
-                        label = HTML("<span style='font-weight:normal'>Additional Photo #1 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'>Additional photo #1 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -705,12 +699,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "add2",
-                        HTML("Additional Photo #2<br/> <span style='font-weight:normal'>Upload photo file here: </span>"),
+                        HTML("Additional photo #2<br/> <span style='font-weight:normal'>Upload photo file here: </span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "add2_cap",
-                        label = HTML("<span style='font-weight:normal'>Additional Photo #2 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'>Additional photo #2 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -718,12 +712,12 @@ pnw_report <- function(){
                     
                     slatesFileInput(
                         "add3",
-                        HTML("Additional Photo #3<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
+                        HTML("Additional photo #3<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "add3_cap",
-                        label = HTML("<span style='font-weight:normal'>Additional Photo #3 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'>Additional photo #3 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -731,12 +725,12 @@ pnw_report <- function(){
 
                     slatesFileInput(
                         "add4",
-                        HTML("Additional Photo #4<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
+                        HTML("Additional photo #4<br /> <span style='font-weight:normal'>Upload photo file here: </span>"),
                         accept = c('image/png', 'image/jpeg')
                     ),
                     textInput(
                         inputId = "add4_cap",
-                        label = HTML("<span style='font-weight:normal'>Additional Photo #4 caption: </span>"),
+                        label = HTML("<span style='font-weight:normal'>Additional photo #4 caption: </span>"),
                         value = "",
                         width = NULL,
                         placeholder = NULL

@@ -51,7 +51,7 @@ run_sdam <- function(
                                                                 T~"Other")
                                         )
 
-                                paste0("This reach is classified as ", output_df$Class,".")
+                                output_df$Class
 
                         } else if (pnts_join_df$Strata_UNC == 'Western Mountains'){
                                 load("NotForGit/Step5/all_refined_rf_mods.Rdata")
@@ -69,7 +69,7 @@ run_sdam <- function(
                                                                 P==E & I<=P ~ "Need more information",
                                                                 T~"Other")
                                         )
-                                paste0("This reach is classified as ", output_df$Class,".")
+                                output_df$Class
 
                         } else if (pnts_join_df$Strata_UNC == 'Arid West'){
 
@@ -86,7 +86,7 @@ run_sdam <- function(
                                                                 P==E & I<=P ~ "Need more information",
                                                                 T~"Other")
                                         )
-                                paste0("This reach is classified as ", output_df$Class,".")
+                                output_df$Class
 
                         } else if (pnts_join_df$Strata_UNC == 'Pacific Northwest'){
                         
@@ -125,7 +125,7 @@ run_sdam <- function(
                                         }
                                 }
 
-                                paste0("This reach is classified as ", df$Class,".")
+                                output_df$Class
                         }
 
                 } else if (var_input_reg == 'East'){
@@ -157,7 +157,7 @@ run_sdam <- function(
                                                         T~"Other")
                                 )
 
-                        paste0("This reach is classified as ", output_df$Class,".")
+                        output_df$Class
 
                 } else if (var_input_reg == 'Western Mountains'){
                         
@@ -174,7 +174,7 @@ run_sdam <- function(
                                                         P==E & I<=P ~ "Need more information",
                                                         T~"Other")
                                 )
-                        paste0("This reach is classified as ", output_df$Class,".")
+                        output_df$Class
 
                 } else if (var_input_reg == 'Arid West'){
  
@@ -193,7 +193,7 @@ run_sdam <- function(
                                 )
 
 
-                        paste0("This reach is classified as ", output_df$Class,".")
+                        output_df$Class
 
                 } else if (var_input_reg == 'Pacific Northwest'){
 
@@ -234,7 +234,7 @@ run_sdam <- function(
                         }
 
 
-                        paste0("This reach is classified as ", df$Class,".")
+                        df$Class
                         
         }
 }

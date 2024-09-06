@@ -15,7 +15,7 @@ wm_panel <- function(){
                             background-color:#1a4480;
                             margin-right:8px;">Step 2
                 </span>
-                Enter required indicator data.
+                Enter field measurements for all indicators
                 </h3>'
             ),
 
@@ -29,17 +29,14 @@ wm_panel <- function(){
                     style = 'text-align:center;',
                     HTML('<b><u>Western Mountains SDAM</u></b>')
                     ),
-                
-                ## biological indicators----
-                h4(HTML("<b><u>Biological Indicators</u></b>")),
-
+                h3(HTML('<b><u>Indicators</u></b>')),
                 div(
                     fluidRow(
                         column(
                             12,
                             radioButtons(
                                 "user_total_abundance", 
-                                HTML("<b><i>Total abundance of Ephemeroptera, Plecoptera, and Trichoptera.</b></i><br>"),
+                                HTML("<b><i>Abundance of Ephemeroptera, Plecoptera, and Trichoptera</b></i><br>"),
                                 c(
                                     "0" = 0,
                                     "1 to 4" = 1,
@@ -48,7 +45,67 @@ wm_panel <- function(){
                                     "Greater than or equal to 20" = 4
                                 ),
                                 inline = F,
-                                width = '100%'
+                                width = '100%',
+                                selected = character(0)
+                            )
+                        )
+                    ),
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+
+                div(
+                    fluidRow(
+                        column(
+                            12,
+                            radioButtons(
+                                "user_eph_isa", 
+                                HTML("<b><i>Perennial indicator taxa</b></i><br>"),
+                                c(
+                                    "0" = 0,
+                                    "1 to 4" = 1,
+                                    "5 to 9" = 2,
+                                    "10 to 19" = 3,
+                                    "Great than or equal to 20" = 4
+                                ),
+                                inline = F,
+                                width = '100%',
+                                selected = character(0)
+                            )
+                        )
+                    ),
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+
+                div(
+                    fluidRow(
+                        column(
+                            12,
+                            HTML("<b><i>Slope</b></i>"),
+                            numericInputIcon("user_slope",
+                                label = NULL,
+                                min = 0,
+                                max = 500,
+                                value = NULL,
+                                step = 0.01,
+                                icon = icon("percent")
+                            )
+                        )
+                    ),
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+
+                div(
+                    fluidRow(
+                        column(
+                            12,
+                            HTML("<b><i>Shading</b></i>"),
+                            numericInputIcon("user_shade",
+                                label = NULL,
+                                min = 0,
+                                max = 100,
+                                value = NULL,
+                                step = 0.01,
+                                icon = icon("percent")
                             )
                         )
                     ),
@@ -61,7 +118,7 @@ wm_panel <- function(){
                             12,
                             radioButtons(
                                 "user_hydrophyte", 
-                                HTML("<b><i>Number of hydrophytic plant species not having an odd distribution pattern (e.g., <2% of assessment area) from the assessment.</b></i><br>"),
+                                HTML("<b><i>Number of hydrophytic plant species</b></i><br>"),
                                 c(
                                     "0" = 0,
                                     "1" = 1,
@@ -71,44 +128,21 @@ wm_panel <- function(){
                                     "Greater than or equal to 5" = 5
                                 ),
                                 inline = F,
-                                width = '100%'
+                                width = '100%',
+                                selected = character(0)
                             )
                         )
                     ),
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
-                
-                div(
-                    fluidRow(
-                        column(
-                            12,
-                            radioButtons(
-                                "user_eph_isa", 
-                                HTML("<b><i>Total abundance of Indicator Species Analysis-based perennial
-                                indicator taxa observed in the reach.</b></i><br>"),
-                                c(
-                                    "0" = 0,
-                                    "1 to 4" = 1,
-                                    "5 to 9" = 2,
-                                    "10 to 19" = 3,
-                                    "Great than or equal to 20" = 4
-                                ),
-                                inline = F,
-                                width = '100%'
-                            )
-                        )
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-                
+
                 div(
                     fluidRow(
                         column(
                             12,
                             radioButtons(
                                 "user_upland_rooted", 
-                                HTML("<b><i>Absence of upland rooted plants in the streambed.</b></i><br>
-                                    Note, upland plants include FAC species for the purposes of this indicator."),
+                                HTML("<b><i>Prevalence of upland rooted plants in streambed"),
                                 c(
                                     "0 (Poor)" = 0,
                                     "0.5" = 0.5,
@@ -119,7 +153,8 @@ wm_panel <- function(){
                                     "3 (Strong)" = 3
                                 ),
                                 inline = F,
-                                width = '100%'
+                                width = '100%',
+                                selected = character(0)
                             )
                         )
                     ),
@@ -132,7 +167,7 @@ wm_panel <- function(){
                             12,
                             radioButtons(
                                 "user_diff_veg", 
-                                HTML("<b><i>Differences in vegetation score.</b></i>"),
+                                HTML("<b><i>Differences in vegetation</b></i>"),
                                 c(
                                     "0 (Poor)" = 0,
                                     "0.5" = 0.5,
@@ -143,70 +178,8 @@ wm_panel <- function(){
                                     "3 (Strong)" = 3
                                 ),
                                 inline = F,
-                                width = '100%'
-                            )
-                        )
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-                
-                div(
-                    # h5(HTML("<b>Densiometer Reading</b>")),
-                    fluidRow(
-                        column(
-                            12,
-                            HTML("<b><i>Enter the percent shade.</b></i>"),
-                            numericInputIcon("user_shade",
-                                label = NULL,
-                                min = 0,
-                                max = 100,
-                                value = 25,
-                                step = 0.01,
-                                icon = icon("percent")
-                            )
-                        )
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-                
-                ## geomorphic Indicators----
-                HTML('<hr style="color: black; height: 2px; background-color: black;">'),
-                h4(HTML("<b><u>Geomorphic Indicators</u></b>")),
-                
-                div(
-                    fluidRow(
-                        column(
-                            12,
-                            HTML("<b><i>Enter the percent slope to the nearest 1/2 percent.</b></i>"),
-                            numericInputIcon("user_slope",
-                                label = NULL,
-                                min = 0,
-                                max = 500,
-                                value = 3,
-                                step = 0.01,
-                                icon = icon("hashtag")
-                            )
-                        )
-                    ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
-                
-                div(
-                    fluidRow(
-                        column(
-                            12,
-                            radioButtons(
-                                "user_substrate", 
-                                HTML("<b><i>Substrate sorting score.</b></i>"),
-                                c(
-                                    "0 (Weak)" = 0,
-                                    "0.75" = 0.75,
-                                    "1.5 (Moderate)" = 1,
-                                    "2.25" = 2.5,
-                                    "3 (Strong)" = 3
-                                ),
-                                inline = F,
-                                width = '100%'
+                                width = '100%',
+                                selected = character(0)
                             )
                         )
                     ),
@@ -219,7 +192,7 @@ wm_panel <- function(){
                             12,
                             radioButtons(
                                 "user_riff_pool", 
-                                HTML("<b><i>Riffle pool sequence score.</b></i>"),
+                                HTML("<b><i>Riffle-pool sequence</b></i>"),
                                 c(
                                     "0 (Poor)" = 0,
                                     "0.5" = 0.5,
@@ -230,24 +203,48 @@ wm_panel <- function(){
                                     "3 (Strong)" = 3
                                 ),
                                 inline = F,
-                                width = '100%'
+                                width = '100%',
+                                selected = character(0)
                             )
                         )
                     ),
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
-                
+
+                div(
+                    fluidRow(
+                        column(
+                            12,
+                            radioButtons(
+                                "user_substrate", 
+                                HTML("<b><i>Particle size or stream substrate sorting</b></i>"),
+                                c(
+                                    "0 (Weak)" = 0,
+                                    "0.75" = 0.75,
+                                    "1.5 (Moderate)" = 1,
+                                    "2.25" = 2.5,
+                                    "3 (Strong)" = 3
+                                ),
+                                inline = F,
+                                width = '100%',
+                                selected = character(0)
+                            )
+                        )
+                    ),
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+ 
                 div(
                     fluidRow(
                         column(width = 12,
-                            HTML("<b><i>Enter the Number of Bankfull Measurements (m) <br>(min. 1, max. 3)</b></i>"),
+                            HTML("<b><i>Enter the number of bankfull measurements (m) (min. 1, max. 3) and associated measurement values to the nearest 0.1 m</b></i>"),
                             numericInputIcon("select_bank",
                                 label = NULL,
-                                width = "325px",
                                 min = 1,
                                 max = 3,
                                 value = 3,
                                 step = 1,
+                                width = '300px',
                                 icon = icon("hashtag")
                             )
                         )
@@ -268,40 +265,52 @@ wm_panel <- function(){
 
                 div(
                     fluidRow(
+                        
+                        # HTML('<hr style="color: black; width: 100%; height: 3px; background-color: black;">'),
                         tags$head(
-                            tags$style(HTML('#runmodel {background-color:#94d9f2;
-                                                                        padding: 8px;
-                                                                        font-size: 110%;
-                                                                        font-weight: bold;
-                                                                        border-style: outset;
-                                                                        
-                                                                        box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
-                                                                        transition-duration: 0.1s;
-                                                                        }',
-                                            '#runmodel:hover {
-                                                                        background-color:#5d8b9c;
-                                                                        color: black;
-                                                                        border-style: solid;
-                                                                        border-color: black;
-                                                                        border-width: px;
-                                                                        
-                                                                        }'))
+                        tags$style(HTML('#runmodel {background-color:#94d9f2;
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    align-items: center;
+                                                    padding: 8px;
+                                                    font-size: 110%;
+                                                    font-weight: bold;
+                                                    border-style: outset;
+                                                    
+                                                    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
+                                                    transition-duration: 0.1s;
+                                                    }',
+                                        '#runmodel:hover {
+                                                            background-color:#5d8b9c;
+                                                            color: black;
+                                                            border-style: solid;
+                                                            border-color: black;
+                                                            border-width: px;
+                                                            
+                                                            }'
+                                        )
+                                    )
                         ),
                         column(
-                            6,
-                            actionButton("runmodel", div("Run Model"))
-                        ),
-                        column(
-                            6,
-                            conditionalPanel(
-                                condition = "input.runmodel != 0",
-                                uiOutput("class_out") %>%
-                                    tagAppendAttributes(class = 'border-my-class')
-                            )
+                        12,
+                        actionButton("runmodel", div("Run model")),
+                        align = 'center',
                         ),
                     ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
-                br(),
+                    ) %>% tagAppendAttributes(class = 'question_box'),
+                    div(
+                    fluidRow(
+
+                        column(
+                        12,
+                        conditionalPanel(
+                            condition = "input.runmodel != 0",
+                            uiOutput("class_out") %>%
+                            tagAppendAttributes(class = 'border-my-class')
+                        )
+                        ),
+                    ),
+                    ) %>% tagAppendAttributes(class = 'question_box'),
 
                 fluidRow(
                     column(

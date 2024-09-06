@@ -1,9 +1,8 @@
 source('./global/global.R')
 
-
+print(paste0('phantom: ', webshot:::find_phantom()))
 
 ui <- fluidPage(
-
     tags$style(
         HTML('
             input[type=number] {
@@ -574,7 +573,7 @@ ui <- fluidPage(
             "Web application for the Regional Streamflow Duration Assessment Methods (SDAMs)"
             )
         ),
-        h4(HTML("<p>Version <a href=\"https://github.com/Ecosystem-Planning-and-Restoration/SDAMs_public\">1.1</a> Release date: April 2024 </p>")),
+        h4(HTML("<p>Version <a href=\"https://github.com/Ecosystem-Planning-and-Restoration/SDAMs_public\">1.0</a> Release date: September 2024 </p>")),
     ),
     "SDAMs"
     ),
@@ -602,7 +601,7 @@ ui <- fluidPage(
                                           style="font-size:1.5rem; margin-right:6px; background-color:#404040;">Info
                                         </span>
                                         <a href=\"https://www.epa.gov/streamflow-duration-assessment/supporting-materials\" style="color:#ffffff;">
-                                        Supporting Materials including User Manuals, Field Assessment Forms, Training Videos and more</a>
+                                        Supporting materials including user manuals, field assessment forms, training videos and more</a>
                                       </h3>
                                     </div>'                                      
                                   ),
@@ -620,7 +619,7 @@ ui <- fluidPage(
                                                 background-color:#1a4480;
                                                 margin-right:8px;">Step 1
                                       </span>
-                                      Enter reach coordinates or select reach location on map.
+                                      Method for documenting reach location
                                     </h3>'
                                   ),
 
@@ -635,14 +634,14 @@ ui <- fluidPage(
                                     fluidRow(
                                       column(1),
                                       column(10,
-                                        HTML("<b><i>Method for Assessing Reach Location</b></i>"),
+                                        HTML("<b><i>Method for assessing reach location</b></i>"),
                                         selectInput(
                                           "vol_region",
                                           label = NULL,
                                           choices = c(
-                                            "Enter Coordinates",
-                                            "Select Region",
-                                            "Select Location on Map"
+                                            "Enter coordinates",
+                                            "Select region",
+                                            "Select location on map"
                                           ),
                                           selected = "No",
                                           width = '80%'
@@ -658,13 +657,13 @@ ui <- fluidPage(
                                     
                                     conditionalPanel(
                                         
-                                      condition = "input.vol_region == 'Enter Coordinates'",
+                                      condition = "input.vol_region == 'Enter coordinates'",
                                       fluidRow(
                                           column(1),
                                           column(
                                               7,
                                               div(style="margin-bottom:5px;",
-                                                HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area. </i></b>')),
+                                                HTML('<b><i>Enter coordinates in decimal degrees to determine if the site is in a SDAM study area </i></b>')),
                                               div(id = "placeholder"),
                                               div(id = "coords",
                                                 fluidRow(
@@ -684,7 +683,7 @@ ui <- fluidPage(
                                                     column(4,
                                                             br(),
                                                             div(actionButton("reg_button", 
-                                                                            label=div("Assess Reach Location")
+                                                                            label=div("Assess reach location")
                                                                             ) 
                                                               ),
                                                             br(), br(),
@@ -707,16 +706,16 @@ ui <- fluidPage(
                                     
                                     ## select region via dropdown menu----
                                     conditionalPanel(
-                                      condition = "input.vol_region == 'Select Region'",
+                                      condition = "input.vol_region == 'Select region'",
                                       fluidRow(
                                         column(1),
                                         column(10,
-                                          HTML("<b><i>Select SDAM Region if not entering coordinates:</b></i>"),
+                                          HTML("<b><i>Select SDAM Region if not entering coordinates</b></i>"),
                                           selectInput(
                                             "user_region",
                                             label = NULL,
                                             c(
-                                                "No Region Selected" = "No Region",
+                                                "No region selected" = "No Region",
                                                 "Arid West" = "Arid West",  
                                                 "East" = "East",
                                                 "Great Plains" = "Great Plains",
@@ -730,7 +729,7 @@ ui <- fluidPage(
                                     
                                     ## leaflet map----
                                     conditionalPanel(
-                                        condition = "input.vol_region == 'Select Location on Map'",
+                                        condition = "input.vol_region == 'Select location on map'",
                                         fluidRow(
                                             column(2),
                                             column(8,
@@ -907,9 +906,9 @@ server <- function(input, output, session){
     # region -----
 
     region_class <- eventReactive(c(input$reg_button, input$map_click,input$vol_region, input$user_region),{
-        if(!is.null(map_coords()) && input$vol_region == 'Select Location on Map'){
+        if(!is.null(map_coords()) && input$vol_region == 'Select location on map'){
             x <- point_region(map_coords()[1], map_coords()[2])
-        } else if (input$vol_region == 'Select Region' && input$user_region != 'No Region'){
+        } else if (input$vol_region == 'Select region' && input$user_region != 'No Region'){
             x <- input$user_region
         } else {
             x <- point_region(user_lat = input$lat, user_lon = input$lon)
@@ -919,7 +918,7 @@ server <- function(input, output, session){
 
     # store adjacent regions for report
     alt_regions_str <- reactive({
-      if(!is.null(map_coords()) && input$vol_region == 'Select Location on Map'){
+      if(!is.null(map_coords()) && input$vol_region == 'Select location on map'){
             alt_regions <- region_checker(map_coords()[1], map_coords()[2])
             alt_regions <- alt_regions[alt_regions != 'East']
             alt_regions_str <- str_c(alt_regions, collapse=', ')
@@ -939,7 +938,7 @@ server <- function(input, output, session){
                 )
 
             }
-        } else if (input$vol_region != 'Select Region' && input$vol_region != 'Select Location on Map'){
+        } else if (input$vol_region != 'Select region' && input$vol_region != 'Select location on map'){
             alt_regions <- region_checker(input$lat, input$lon)
             alt_regions <- alt_regions[alt_regions != 'East']
             alt_regions_str <- str_c(alt_regions, collapse=', ')
@@ -968,13 +967,13 @@ server <- function(input, output, session){
 
     # Alert user if their site is located within a 10-mile distance of another region(s)
     observeEvent(c(input$reg_button, input$map_click,input$vol_region, input$user_region),{
-      if(!is.null(map_coords()) && input$vol_region == 'Select Location on Map'){
+      if(!is.null(map_coords()) && input$vol_region == 'Select location on map'){
             alt_regions <- region_checker(map_coords()[1], map_coords()[2])
             alt_regions <- alt_regions[alt_regions != 'East']
             alt_regions_str <- str_c(alt_regions, collapse=', ')
             if (length(alt_regions) > 0){
                 show_alert(
-                    title = "Location Warning!",
+                    title = "",
                     text = tagList(
                             tags$p(
                                     HTML(paste0("This site is located within 10 miles of another SDAM region:",
@@ -988,7 +987,7 @@ server <- function(input, output, session){
                 )
 
             }
-        } else if (input$vol_region != 'Select Region' && input$vol_region != 'Select Location on Map'){
+        } else if (input$vol_region != 'Select region' && input$vol_region != 'Select location on map'){
             alt_regions <- region_checker(input$lat, input$lon)
             alt_regions <- alt_regions[alt_regions != 'East']
             alt_regions_str <- str_c(alt_regions, collapse=', ')
@@ -1028,15 +1027,15 @@ server <- function(input, output, session){
 
         if (region_class() == 'East'){
             show_alert(
-                    title = "Location Error!",
+                    title = "",
                     text = tagList(
-                            tags$p(HTML(paste0("This site is located in the East Beta SDAM study area.",
+                            tags$p(HTML(paste0("This site is located in the East Beta SDAM study area. ",
                                             "Please visit the <a href=\"https://ecosystemplanningrestoration.shinyapps.io/beta_sdam_nese/\">East Beta SDAM application</a>  for the Northeast and Southeast."
                                             )
                                         )
                                     )
                                 ),
-                            type = "error"
+                            type = "default"
             )
 
         } else  if (region_class() == 'Great Plains' ){
@@ -1053,15 +1052,15 @@ server <- function(input, output, session){
 
         if (region_class()$region == 'East'){
           show_alert(
-                title = "Location Error!",
+                title = "",
                 text = tagList(
-                        tags$p(HTML(paste0("This site is located in the East Beta SDAM study area.",
+                        tags$p(HTML(paste0("This site is located in the East Beta SDAM study area. ",
                                         "Please visit the <a href=\"https://ecosystemplanningrestoration.shinyapps.io/beta_sdam_nese/\">East Beta SDAM application</a>  for the Northeast and Southeast."
                                         )
                                     )
                                 )
                             ),
-                        type = "error"
+                        type = "default"
                         )
 
         } else  if (region_class()$region == 'Great Plains' ){
@@ -1150,14 +1149,14 @@ server <- function(input, output, session){
         if (is.na(region_class()$region)){
           
           show_alert(
-            title = "Location Error!",
+            title = "",
             text = tagList(
-              tags$p(HTML(paste0("The location of your site is outside of the SDAM study areas.",
-                                 " Please check your latitude and longitude coordinates to ensure they are entered correctly.<br>")
+              tags$p(HTML(paste0("The location of your site is outside of any SDAM region.",
+                                 " Please check your latitude and longitude coordinates to ensure they are entered in the correct format (decimal degrees and WGS84 datum).<br>")
               )
               )
             ),
-            type = "error"
+            type = "default"
           )
           
         } else {
@@ -1166,26 +1165,29 @@ server <- function(input, output, session){
 
                 if (region_class()$URL != 'development' && region_class()$URL != 'planning'){
                     show_alert(
-                        title = "Location Error!",
+                        title = "",
                         text = tagList(
                             tags$p(HTML(paste0("This site is outside of the Final SDAM study areas.  The site is located in the ",
                                                '<a href=\"', region_class()$URL, '">',
                                                region_class()$region), ' SDAM.</a>')
                             )
                         ),
-                        type = "error"
+                        type = "default"
                     )
                 } else {
                     show_alert(
-                        title = "Location Error!",
+                        title = "",
                         text = tagList(
-                            tags$p(HTML(paste0("This site is located outside of the Final SDAM study areas.  The site is located in the <b>",
-                                               region_class()$region, "</b> SDAM region.  The ",
-                                               region_class()$region, " is in the <b>",
-                                               region_class()$URL, "</b> stage."))
+                            tags$p(HTML(paste0(region_class()$region, ' - A Regional SDAM has not been developed for ', region_class()$region, '.  ',
+                                                'A literature review for ', region_class()$region, ' has been completed.')
+                                # paste0("This site is located outside of the Final SDAM study areas.  The site is located in the <b>",
+                                #                region_class()$region, "</b> SDAM region.  The ",
+                                #                region_class()$region, " is in the <b>",
+                                #                region_class()$URL, "</b> stage.")
+                                               )
                             )
                         ),
-                        type = "error"
+                        type = "default"
                     )
                 }
   
@@ -1359,8 +1361,8 @@ server <- function(input, output, session){
             X = 1:input$select_bank,
             FUN = function(i) {
                 numericInput(inputId = paste0("bank", i),
-                             label = paste0("Bankfull Measurement ", i), 
-                             value = 0)
+                             label = paste0("bankfull measurement ", i), 
+                             value = NULL)
             }
         )
     })
@@ -1375,7 +1377,7 @@ server <- function(input, output, session){
         )
     })
     
-    # Densiometer input names to be possibly used in report
+    # BFW input names to be possibly used in report
     bank_inputs <- reactive({
         list_names <- c()
         for(x in 1:length(bank_list())){
@@ -1384,7 +1386,7 @@ server <- function(input, output, session){
         return(list_names)
     })
     
-    # Densiometer input values
+    # BFW input values
     bank_values <- reactive({
         list_values <- c()
         for(x in 1:length(bank_list())){
@@ -1393,14 +1395,14 @@ server <- function(input, output, session){
         return(list_values)
     })
     
-    # calculated shade percentage
+    # BFW percentage
     bank_mean <- eventReactive(bank_values(),{
         (Reduce("+", bank_values()) / (input$select_bank))
     })
     
-    # Show user calculated percent value
+    # Show user calculated BFW
     output$bank_text <- renderUI ({
-        h3(HTML(paste0("<b>Bankful Width (m): ", bank_mean(), "</b>")))
+        h3(HTML(paste0("<b>Mean bankfull width (m): ", round(bank_mean(),1), "</b>")))
         
     })
     
@@ -1528,19 +1530,54 @@ server <- function(input, output, session){
 
       if (is.atomic(region_class())){
         set.seed(1111)
-        run_sdam(df(), region_class())
+        toupper(run_sdam(df(), region_class()))
 
       } else if (!is.atomic(region_class())){
         set.seed(1111)
-        run_sdam(df(), region_class()$region)
+        toupper(run_sdam(df(), region_class()$region))
       }
       
     })
 
+    # format site visit date
+    visit_date <- eventReactive(input$date, {
+      as.character(input$date)
+      # print(format(input$date, '%Y-%m-%d'))
+    })
+
+
+    observeEvent(input$runmodel, {
+        check_list <- list()
+        for (t in names(df())){
+            if(length(df()[[t]]) == 0){
+                cv <- 'NULL'
+                print('something')
+                check_list <- append(check_list, cv)
+            }
+        }
+
+        if ('NULL' %in% check_list) {
+            print('Null found in check list')
+            show_alert(
+                title = "",
+                text = tagList(
+                        tags$p(HTML(paste0("Indicator data missing!  Please fill in all indicators before running the model prediction.")
+                                    )
+                                )
+                            ),
+                        type = "default"
+                        )
+        }
+        
+      
+   
+    })
+
+
 
     # output classification to ui
     output$class_out <- renderUI ({
-      h2(HTML(paste0("<b>", classification(), "</b>")))
+      h2(HTML(paste0("<b>", "This reach is classified as:<br>", classification(), "</b>")))
     })
 
     # conditional checks for user inputs
@@ -1733,6 +1770,16 @@ server <- function(input, output, session){
       fig50 <- reactive({gsub("\\\\", "/", input$add3$datapath)})
       fig51 <- reactive({gsub("\\\\", "/", input$add4$datapath)})
 
+      # Mean bankfull width
+      fig52 <- reactive({gsub("\\\\", "/", input$mb1$datapath)})
+      fig53 <- reactive({gsub("\\\\", "/", input$mb2$datapath)})
+      fig54 <- reactive({gsub("\\\\", "/", input$mb3$datapath)})
+
+      # Shading
+      fig55 <- reactive({gsub("\\\\", "/", input$shade1$datapath)})
+      fig56 <- reactive({gsub("\\\\", "/", input$shade2$datapath)})
+      fig57 <- reactive({gsub("\\\\", "/", input$shade3$datapath)})
+      fig58 <- reactive({gsub("\\\\", "/", input$shade4$datapath)})
 
     output$report <- downloadHandler(
         filename = glue::glue("SDAM Report ({format(Sys.time(), '%B %d, %Y')}).pdf"),
@@ -1744,13 +1791,13 @@ server <- function(input, output, session){
               region_class()$region 
             }       
 
-            temp_lat <- if (input$vol_region == 'Select Region'){
+            temp_lat <- if (input$vol_region == 'Select region'){
               'Not Provided'
             } else {
               as.numeric(input$lat)
             }
 
-            temp_lon <- if (input$vol_region == 'Select Region'){
+            temp_lon <- if (input$vol_region == 'Select region'){
               'Not Provided'
             } else {
               as.numeric(input$lon)
@@ -1774,7 +1821,7 @@ server <- function(input, output, session){
               b = input$assessor,
               c = input$code,
               d = input$waterway,
-              e = input$date,
+              e = visit_date(),
               adj_regions = alt_regions_str(),
               bm = case_when(input$radio_weather == 'heavyrain' ~ "Storm/heavy rain",
                               input$radio_weather == 'steadyrain' ~ "Steady rain",
@@ -1836,7 +1883,16 @@ server <- function(input, output, session){
               f50 = fig50(),
               f50_cap = input$add3_cap,
               f51 = fig51(),
-              f51_cap = input$add4_cap
+              f51_cap = input$add4_cap,
+
+              # ------------------- Mean bankfull width
+              f52 = fig52(),
+              f52_cap = input$mb1_cap,
+              f53 = fig53(),
+              f53_cap = input$mb2_cap,
+              f54 = fig54(),
+              f54_cap = input$mb3_cap,
+              notes_mb = input$notes_mb
             )   
 
             if (temp_region == 'Arid West'){
@@ -1914,6 +1970,7 @@ server <- function(input, output, session){
                                 notes_rooted = input$notes_rooted,
                                 
                                 # Agal Cover
+                                algal_cb = input$user_algal_cb,
                                 algal = case_when(
                                   input$user_algal_cover == 0 ~ "Not Detected",
                                   input$user_algal_cover == 1 ~ "<2%",
@@ -2413,6 +2470,18 @@ server <- function(input, output, session){
                                 f23_cap = input$slope3_cap,
                                 notes_slope = input$notes_slope,
 
+                                # Shading
+                                shade = input$user_shade,
+                                f55 = fig55(),
+                                f55_cap = input$shade1_cap,
+                                f56 = fig56(),
+                                f56_cap = input$shade2_cap,
+                                f57 = fig57(),
+                                f57_cap = input$shade3_cap,
+                                f58 = fig58(),
+                                f58_cap = input$shade4_cap,
+                                notes_shade = input$notes_shade,
+
                                 # Riffle Pool Sequence
                                 riff = case_when(
                                   input$user_riff_pool == 0 ~ "0 (Poor)",
@@ -2432,11 +2501,8 @@ server <- function(input, output, session){
                                 notes_riff = input$notes_riff,
                 
                                 # Bank Width
-                                bankwidth = bank_mean(),
+                                bankwidth = bank_mean()
                 
-                                # Percent Shade
-                                shade = input$user_shade
-
 
                             )
 

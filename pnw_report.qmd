@@ -1,19 +1,34 @@
 ---
 title: \vspace{-2cm} \begin{huge} Streamflow Duration Assessment Methods \end{huge}
+title-block-banner: false
+title-block-banner-color: "#03fcfc"
 subtitle: "SDAM Version 1.1 Release Date: Spring 2024"
 revision: "SDAM revision date: Spring, 2024" 
 date: "Report generated on: `r format(Sys.time(), '%B %d, %Y')`"
-embed-resources: true
+embed-resources: false
+filters: [remove_title.lua]
+mainfont: Roboto
+monofont: Roboto
 format: 
   pdf:
     include-in-header:
       - text: |
+          \usepackage{geometry}
           \usepackage{xcolor}
           \usepackage{fancyhdr}
           \renewcommand{\headrulewidth}{0.0pt}
           \pagestyle{fancy}
           \usepackage{lastpage}
-          \cfoot{Page \thepage\ of \pageref{LastPage}}
+          \usepackage{afterpage}
+          \usepackage{tcolorbox}
+          \definecolor{my-blue}{RGB}{0, 94, 162}
+          \definecolor{darker-blue}{RGB}{22, 46, 81}
+          \newtcolorbox{mybox}{colback=red!5!white,colframe=red!75!black}
+          \rfoot{Page \thepage\ of \pageref{LastPage}}
+          \cfoot{}
+          \lfoot{SDAM Version 1.0 September 2024, Date of site visit: \sitedate}
+    template-partials:
+      - before-body.tex
 params:
     stream_class: NA
     region: NA
@@ -152,14 +167,28 @@ params:
     hp2: NA
     hp3: NA
     notes_landuse: NA
+    f52: NA
+    f52_cap: NA
+    f53: NA
+    f53_cap: NA
+    f54: NA
+    f54_cap: NA
+    notes_mb: NA
   
 ---
-
+\newcommand{\sitedate}{`r params$e`}
+\newgeometry{left=20mm, right=20mm, top=10mm, bottom=4mm}
+\thispagestyle{empty}
+\pagecolor{darker-blue}
 
 ```{r, setup, include=FALSE}
 library(knitr)
 library(ggplot2)
 library(usmap)
+library(mapview)
+library(leaflet)
+library(sp)
+
 # Removing all code from appearing in the final knit document.
 knitr::opts_chunk$set(echo = FALSE)
 
@@ -172,43 +201,114 @@ options(tinytex.verbose = TRUE)
 opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 ```
 
-::::: {layout-ncol="3"}
-:::{}
-![](www/eph.jpg){width=2in}
-:::
+\vspace{-3cm}
+\begin{tcolorbox}
+    \begin{center}
+        \begin{huge} Streamflow Duration Assessment Methods \end{huge}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+        \begin{Large} SDAM Version 1.0 Release Date: September 2024 \end{Large}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+        \begin{large}\href{https://www.epa.gov/streamflow-duration-assessment}{https://www.epa.gov/streamflow-duration-assessment}\end{large}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+       \begin{large}Visit date: `r params$e`  \end{large}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+        \begin{large} Report generated date: `r format(Sys.time(), '%Y-%m-%d')` \end{large}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+        \begin{large}Project name: `r params$a`\end{large}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+        \begin{large}Site code: `r params$c`\end{large}
+    \end{center}
+    \vspace{2mm}
+    \begin{center}
+        \begin{large}Regional SDAM classification: `r params$stream_class`\end{large}
+    \end{center}
+    
+\end{tcolorbox}
 
-:::{}
-![](www/int.jpg){width=2in}
-:::
 
+::::: {layout="[8,90]"}
 :::{}
-![](www/per.jpg){width=2in}
+\hspace{2mm}
 :::
-
-:::::
+:::{}
 ```{r, out.width='100%', out.height='38%', fig.align="center"}
+
+regions <- sf::read_sf("./spatial/regions_noAKHI.shp")
+region_labels <- sf::read_sf("./spatial/regions_labels.shp")
+transformed_data <- usmap_transform(regions)
+states_data <- us_map("states", exclude=c("AK","HI"))
+rmap <- plot_usmap(exclude=c("AK","HI"), color=NA) + 
+    geom_sf(data=transformed_data, 
+            aes(fill=region),
+            color=NA) +
+    scale_fill_manual(values=c('#bf88a0', '#d4c498', '#c4978d', '#c196d4', '#b2d6b5', '#9bafc7')) + 
+     geom_sf(data = states_data,
+          mapping = aes(geometry = geom),
+          color = alpha('black',0.15),
+          linewidth = 0.7,
+          fill = NA) +
+    geom_sf_text(data=region_labels, aes(label=stringr::str_wrap(region,5))) +
+    theme(legend.position='none',
+          plot.margin = margin(t = 0,  # Top margin
+                             r = 0,  # Right margin
+                             b = 0,  # Bottom margin
+                             l = 0)) # Left margin) 
+
 if (params$h != 'Not Provided'){
   x <- data.frame(lon = params$h, lat = params$g, type = 'Site Location')
+  x2 <- sf::st_as_sf(x,coords=c("lon","lat"), crs=4326)
+  
+  rmap <- rmap +
+      geom_sf(data=x2, color='red',size=3)
+  rmap
 
-  transformed_data <- usmap_transform(x)
+} else {
+  rmap
+}
 
-  plot_usmap("states") + 
-          geom_point(data = transformed_data, 
-                    aes(x = transformed_data$geometry[1][[1]][1], 
-                        y = transformed_data$geometry[1][[1]][2],
-                        fill = type
-                        ), 
-                    color = "red",
-                    size = 5)  + 
-          theme(legend.position = 'bottom',
-                legend.direction = 'horizontal',
-                legend.title = element_blank(),
-                legend.text=element_text(size=12))
+if (params$h != 'Not Provided'){
+  lmap <- leaflet(options=leafletOptions(minZoom=16, maxZoom=16)) %>%
+    addTiles() %>%
+    addCircleMarkers(
+        lng=params$h,
+        lat=params$g,
+        weight=10,
+        opacity=1,
+        fill=TRUE,
+        color='red',
+        fillOpacity=1,
+        fillColor='red',
+        group = "point")
+
+  mapshot(lmap, file="temp.png")
+}
+
+```
+:::
+:::::
+```{r, out.width='100%', out.height='35%', fig.align='center'}
+
+if (params$h != 'Not Provided'){
+    knitr::include_graphics("temp.png")
 }
 ```
 
-\pagebreak
-
+\restoregeometry
+\clearpage
+\pagecolor{white}
+\setcounter{page}{1}
 
 \begin{center}
 \textbf{\underline{\LARGE{General Site Information}}}
@@ -231,9 +331,7 @@ Visit date: `r params$e`
 Current weather conditions: `r params$bm`
 
 Notes on current or recent weather conditions:
-```{r}
-cat(params$j)
-```
+`r params$j`
 
 Location: `r paste0(params$g," N, ", params$h, " E")`
 
@@ -251,9 +349,7 @@ cat(params$bn)
 ```
 
 Notes on disturbances or difficult site conditions:
-```{r}
-cat(params$k)
-```
+`r params$k`
 
 \vspace{3mm}
 \begin{center}
@@ -322,12 +418,11 @@ if (!length(params$w)==0){
 \pagebreak
 
 \begin{center}
-\textbf{\underline{\LARGE{Biological Indicators}}}
+\textbf{\underline{\LARGE{Indicators}}}
 \end{center}
 
 
 \vspace{2mm}
-\textbf{\large{Aquatic Invertebrates}}
 
 Aquatic benthic macroinvertebrates present: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`
  
@@ -335,9 +430,7 @@ Six or more individuals of the order of Ephemeroptera present: `r if (!is.null(p
 
 Notes on aquatic invertebrates:
 
-```{r}
-cat(params$notes_aquainv)
-```
+`r params$notes_aquainv`
 
 
 Aquatic invertebrate photos and photo descriptions:
@@ -437,7 +530,6 @@ if (!length(params$f8_1)==0){
 
 
 \vspace{2mm}
-\textbf{\large{Hydrophytes}}
 
 Number of hydrophytic plant species: `r if (!is.null(params$hydro)) {params$hydro}`
 
@@ -445,9 +537,7 @@ FACW, OBL, or SAV plants present (within ½ channel width): `r if (!is.null(para
 
 Notes on hydrophytic plants:
 
-```{r}
-cat(params$notes_hydro)
-```
+`r params$notes_hydro`
 
 
 Hydrophyte photos and photo descriptions:
@@ -546,17 +636,16 @@ if (!length(params$f29)==0){
 
 
 \vspace{2mm}
-\textbf{\large{Fish}}
 
 Fish present: `r if (!is.null(params$fish)){params$fish}`
 
+Amphibians present: `r if (!is.null(params$amphibians)){params$amphibians}`
+
 Notes about fish:
 
-```{r}
-cat(params$notes_fish)
-```
+`r params$notes_fish`
 
-Fish photos and descriptions:
+Amphibians, snake, and fish  photos and descriptions:
 
 ```{r, out.width='50%', fig.align='center'}
 
@@ -600,21 +689,6 @@ if (!length(params$f32)==0){
   cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f32_cap, perl = TRUE)))
 }
 ```
-
-\vspace{2mm}
-\textbf{\large{Amphibians}}
-
-Amphibians present: `r if (!is.null(params$amphibians)){params$amphibians}`
-
-
-Notes about amphibians:
-
-```{r}
-cat(params$notes_amph)
-```
-
-
-Amphbian photos and descriptions:
 
 ```{r, out.width='50%', fig.align='center'}
 
@@ -660,16 +734,26 @@ if (!length(params$f41)==0){
 ```
 
 \vspace{2mm}
-\textbf{\large{Perennial Taxa}}
+
+
+
+
+Notes about amphibians:
+
+`r params$notes_amph`
+
+
+Amphbian photos and descriptions:
+
+
+\vspace{2mm}
 
 Perennial taxa present: `r if (!is.null(params$per_taxa)){params$per_taxa}`
 
 
 Notes about perennial taxa:
 
-```{r}
-cat(params$notes_per)
-```
+`r params$notes_per`
 
 
 Perennial taxa photos and descriptions:
@@ -718,7 +802,6 @@ if (!length(params$f35)==0){
 ```
 
 \vspace{2mm}
-\textbf{\large{Slope}}
 
 Slope Percent: `r if (!is.null(params$slope)){params$slope}`
 
@@ -730,9 +813,7 @@ Slope Percent: `r if (!is.null(params$slope)){params$slope}`
 
 Notes about slope:
 
-```{r}
-cat(params$notes_slope)
-```
+`r params$notes_slope`
 
 
 Slope photos and descriptions:
@@ -787,9 +868,7 @@ if (!length(params$f23)==0){
 
 Additional notes about the assessment:
 
-```{r}
-cat(params$notes_supplemental_information)
-```
+`r params$notes_supplemental_information`
 
 Supplemental information photos and descriptions:
 ```{r, out.width='50%', fig.align='center'}
@@ -848,8 +927,16 @@ if (!length(params$f51)==0){
 ```
 
 
+
 \noindent\rule{16cm}{2.5pt}\
-\textbf{\Large{`r params$stream_class`}}
+\begin{tcolorbox}[colframe=darker-blue,
+  colback=my-blue,
+  width=16cm,
+  squeezed title*={\Huge{\underline{\textcolor{white}{`r params$region` Regional SDAM classification}}}}]
+  \begin{center}
+    \Huge{\textcolor{white}{`r params$stream_class`}}
+  \end{center}
+\end{tcolorbox}
 
 \noindent\rule{16cm}{2.5pt}
 

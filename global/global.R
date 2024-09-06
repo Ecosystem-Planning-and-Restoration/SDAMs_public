@@ -19,6 +19,23 @@ library(ggplot2)
 library(usmap)
 library(gotop)
 
+# check for webshot and phantom
+#list of packages required
+list.of.packages <- c("webshot")
+
+#checking missing packages from list
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+
+#install missing ones
+if(length(new.packages)) install.packages(new.packages, dependencies = TRUE)
+
+# check for phantom.js
+ws <- webshot:::find_phantom()
+if (is.null(ws)){
+    webshot::install_phantomjs()
+}
+
+Sys.setenv(OPENSSL_CONF="/dev/null")
 # app code inputs
 #-----------------------------------------
 

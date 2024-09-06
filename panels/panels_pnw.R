@@ -13,7 +13,7 @@ pnw_panel <- function(){
                             background-color:#1a4480;
                             margin-right:8px;">Step 2
                 </span>
-                Enter required indicator data.
+                Enter field measurements for all indicators
                 </h3>'
             ),
 
@@ -29,8 +29,7 @@ pnw_panel <- function(){
                 ),
                 
                 ##  indicators----
-                h4(HTML("<b><u>Indicators</u></b>")),
-                
+                h3(HTML('<b><u>Indicators</u></b>')),
                 div(
                     fluidRow(
                         column(
@@ -42,7 +41,8 @@ pnw_panel <- function(){
                                     "Yes" = "Yes",
                                     "No" = "No"
                                 ),
-                                inline = T
+                                inline = T,
+                                selected = character(0)
                             )
                         )
                     ),
@@ -60,7 +60,8 @@ pnw_panel <- function(){
                                     "Yes" = "Yes",
                                     "No" = "No"
                                 ),
-                                inline = T
+                                inline = T,
+                                selected = character(0)
                             )
                         )
                     ),
@@ -78,7 +79,8 @@ pnw_panel <- function(){
                                     "Yes" = "Yes",
                                     "No" = "No"
                                 ),
-                                inline = T
+                                inline = T,
+                                selected = character(0)
                             )
                         )
                     ),
@@ -96,7 +98,8 @@ pnw_panel <- function(){
                                     "Yes" = "Yes",
                                     "No" = "No"
                                 ),
-                                inline = T
+                                inline = T,
+                                selected = character(0)
                             )
                         )
                     ),
@@ -108,19 +111,17 @@ pnw_panel <- function(){
                         column(
                             12,
                             numericInputIcon("user_slope",
-                                            "Enter the percent slope to the nearest 1/2 percent.",
+                                            HTML("<b><i>What is the slope? (In percent, measured for the valley, not the stream)</b></i>"),
                                             min = 0,
                                             max = 500,
-                                            value = 3,
+                                            value = NULL,
                                             step = 0.01,
-                                            icon = icon("hashtag"))
+                                            width = '100%',
+                                            icon = icon("percent"))
                         )
                     ),
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
-
-                HTML('<hr style="color: black; height: 2px; background-color: black;">'),
-                h4(HTML("<b><u>Single Indicators</u></b>")),
 
                 div(
                     fluidRow(
@@ -133,7 +134,8 @@ pnw_panel <- function(){
                                     "Yes" = "Yes",
                                     "No" = "No"
                                 ),
-                                inline = T
+                                inline = T,
+                                selected = character(0)
                             )
                         )
                     ),
@@ -151,7 +153,8 @@ pnw_panel <- function(){
                                     "Yes" = "Yes",
                                     "No" = "No"
                                 ),
-                                inline = T
+                                inline = T,
+                                selected = character(0)
                             )
                         )
                     ),
@@ -160,39 +163,52 @@ pnw_panel <- function(){
 
                 div(
                     fluidRow(
+                        
+                        # HTML('<hr style="color: black; width: 100%; height: 3px; background-color: black;">'),
                         tags$head(
-                            tags$style(HTML('#runmodel {background-color:#94d9f2;
-                                                                        padding: 8px;
-                                                                        font-size: 110%;
-                                                                        font-weight: bold;
-                                                                        border-style: outset;
-                                                                        
-                                                                        box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
-                                                                        transition-duration: 0.1s;
-                                                                        }',
-                                            '#runmodel:hover {
-                                                                        background-color:#5d8b9c;
-                                                                        color: black;
-                                                                        border-style: solid;
-                                                                        border-color: black;
-                                                                        border-width: px;
-                                                                        
-                                                                        }'))
+                        tags$style(HTML('#runmodel {background-color:#94d9f2;
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    align-items: center;
+                                                    padding: 8px;
+                                                    font-size: 110%;
+                                                    font-weight: bold;
+                                                    border-style: outset;
+                                                    
+                                                    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 1px 1px 0 rgba(0,0,0,0.19);
+                                                    transition-duration: 0.1s;
+                                                    }',
+                                        '#runmodel:hover {
+                                                            background-color:#5d8b9c;
+                                                            color: black;
+                                                            border-style: solid;
+                                                            border-color: black;
+                                                            border-width: px;
+                                                            
+                                                            }'
+                                        )
+                                    )
                         ),
                         column(
-                            6,
-                            actionButton("runmodel", div("Run Model"))
-                        ),
-                        column(
-                            6,
-                            conditionalPanel(
-                                condition = "input.runmodel != 0",
-                                uiOutput("class_out") %>%
-                                    tagAppendAttributes(class = 'border-my-class')
-                            )
+                        12,
+                        actionButton("runmodel", div("Run model")),
+                        align = 'center',
                         ),
                     ),
-                ) %>% tagAppendAttributes(class = 'question_box'),
+                    ) %>% tagAppendAttributes(class = 'question_box'),
+                    div(
+                    fluidRow(
+
+                        column(
+                        12,
+                        conditionalPanel(
+                            condition = "input.runmodel != 0",
+                            uiOutput("class_out") %>%
+                            tagAppendAttributes(class = 'border-my-class')
+                        )
+                        ),
+                    ),
+                    ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
 
                 fluidRow(
