@@ -48,7 +48,7 @@ pnw_report <- function(){
 
                     textInput(
                         "code",
-                        label = "Site Code or Identifier:",
+                        label = "Address:",
                         value = "",
                         width = NULL,
                         placeholder = NULL
@@ -77,58 +77,67 @@ pnw_report <- function(){
                         format = "yyyy-mm-dd"
                     ),
 
-                    radioButtons(
-                        inputId = "radio_weather",
-                        label = "Current Weather Conditions (check one):",
-                        choices = c(
-                            "Storm/Heavy Rain" = 'heavyrain',
-                            "Steady Rain" = 'steadyrain',
-                            "Intermittent Rain" = 'intermittentrain',
-                            "Snowing" = 'snowing',
-                            "Cloudy" = 'cloudy',
-                            "Clear/Sunny" = 'clearsunny'
-                        ),
-                        selected = NULL
-                    ),
-
-                    textAreaInput(
-                        "weather",
-                        label = "Notes on current or recent weather conditions:" ,
-                        value = "",
-                        width = '100%',
-                        height = '75px',
-                        placeholder = NULL
-                    ),
-
-                    checkboxGroupInput(
-                        inputId = "check_use",
-                        label = "Surrounding land-use within 100 m (check one or two):",
-                        choices = c(
-                            "Urban, industrial, or residential" = 'urban',
-                            "Agricultural" = 'agricultural',
-                            "Developed open-space (e.g., golf course, parks, lawn grasses)" = 'openspace',
-                            "Forested" = 'forested',
-                            "Other Natural" = 'othernatural',
-                            "Other" = 'other'
-                        ),
-                        selected = NULL
-                    ),
-
-                    textAreaInput(
-                        inputId = "notes_landuse",
-                        label = "Comments on observed land-use:",
-                        value = "",
-                        width = '100%',
-                        height = '75px',
-                        placeholder = NULL
-                    ),
-
                     numericInput(
                         inputId = "actreach",
-                        label = "Assessment reach length (m):",
+                        label = "Precipitation w/in 48 hours (cm):",
                         value = "",
                         min = 0,
                     ),
+
+                    numericInput(
+                        inputId = "cwidth",
+                        label = "Channel width (m):",
+                        value = "",
+                        min = 0,
+                    ),
+
+                    # radioButtons(
+                    #     inputId = "radio_weather",
+                    #     label = "Current Weather Conditions (check one):",
+                    #     choices = c(
+                    #         "Storm/Heavy Rain" = 'heavyrain',
+                    #         "Steady Rain" = 'steadyrain',
+                    #         "Intermittent Rain" = 'intermittentrain',
+                    #         "Snowing" = 'snowing',
+                    #         "Cloudy" = 'cloudy',
+                    #         "Clear/Sunny" = 'clearsunny'
+                    #     ),
+                    #     selected = NULL
+                    # ),
+
+                    # textAreaInput(
+                    #     "weather",
+                    #     label = "Notes on current or recent weather conditions:" ,
+                    #     value = "",
+                    #     width = '100%',
+                    #     height = '75px',
+                    #     placeholder = NULL
+                    # ),
+
+                    # checkboxGroupInput(
+                    #     inputId = "check_use",
+                    #     label = "Surrounding land-use within 100 m (check one or two):",
+                    #     choices = c(
+                    #         "Urban, industrial, or residential" = 'urban',
+                    #         "Agricultural" = 'agricultural',
+                    #         "Developed open-space (e.g., golf course, parks, lawn grasses)" = 'openspace',
+                    #         "Forested" = 'forested',
+                    #         "Other Natural" = 'othernatural',
+                    #         "Other" = 'other'
+                    #     ),
+                    #     selected = NULL
+                    # ),
+
+                    # textAreaInput(
+                    #     inputId = "notes_landuse",
+                    #     label = "Comments on observed land-use:",
+                    #     value = "",
+                    #     width = '100%',
+                    #     height = '75px',
+                    #     placeholder = NULL
+                    # ),
+
+                    
 
                     textAreaInput(
                         inputId = "boundary",
@@ -139,25 +148,50 @@ pnw_report <- function(){
                         placeholder = NULL
                     ),
 
-                    checkboxGroupInput(
-                        inputId = "radio_situation",
-                        label = "Disturbed or difficult conditions (check all that apply):",
-                        choices = c(
-                            "Recent flood or debris flow" = 'flood',
-                            "Stream modifications (e.g., channelization)" = 'stream_modifications',
-                            "Diversions" = 'diversions',
-                            "Water discharges" = 'discharges',
-                            "Drought" = 'drought',
-                            "Vegetation removal/limitations" = 'vegetation',
-                            "Other (explain in notes)" = 'other',
-                            "None" = 'none'
+                    checkboxInput(
+                                "diff_site",
+                                HTML("<b>Disturbed site / difficult situation</b>"),
+                                value = NULL,
+                                width = '100%'
+                    ),
+
+                    HTML("<b>Difficult situation (check all that apply):</b><br>"),
+                    div(
+                        style='padding-left:30px',
+                        HTML("Prolonged abnormal rainfall / snowpack:"),
+                        div(
+                            style='padding-left:30px; margin-top:-18px; margin-bottom:-10px',
+                            checkboxGroupInput(
+                                inputId = "precip_avg",
+                                label = "",
+                                choices = c(
+                                    "Below average" = 'Below average',
+                                    "Above average" = 'Above average'
+                                ),
+                                selected = NULL
+                            ) 
                         ),
-                        selected = NULL
+                        div(
+                            style='margin-bottom:-10px;',
+                            checkboxInput(
+                                    "disturbance",
+                                    HTML("Natural or anthropogenic disturbance"),
+                                    value = NULL,
+                                    width = '100%'
+                            )
+                        ),
+                        
+                        checkboxInput(
+                                    "diff_other",
+                                    HTML("Other (explain in notes)"),
+                                    value = NULL,
+                                    width = '100%'
+                        )
                     ),
 
                     textAreaInput(
                         inputId = "situation",
-                        label = "Site disturbances/difficulties:" ,
+                        label = "Notes for difficult situations (For disturbed streams, note extent, type, and history of disturbance):" ,
                         value = "",
                         width = '100%',
                         height = '75px',
@@ -174,23 +208,21 @@ pnw_report <- function(){
                 ) %>% tagAppendAttributes(class = 'center-div-text'),
                 div(
                     numericInput(
-                        inputId = "subflow",
-                        label = "Percent of reach with surface and sub-surface flows:",
-                        value = 0,
-                        min = 0,
-                    ),
-                    numericInput(
                         inputId = "surfflow",
                         label = "Percent of reach with surface flows:",
                         value = 0,
                         min = 0,
                     ),
-
-                    
+                    numericInput(
+                        inputId = "subflow",
+                        label = "Percent of reach with any flow (surface or hyporheic):",
+                        value = 0,
+                        min = 0,
+                    ),
 
                     numericInput(
                         inputId = "pool",
-                        label = "Number of isolated pools:",
+                        label = "Number of pools observed:",
                         value = 0,
                         min = 0,
                     ),
@@ -659,6 +691,43 @@ pnw_report <- function(){
                     ),
                 ) %>% tagAppendAttributes(class = 'question_box'),
                 br(),
+
+                div(
+                    h4(HTML("<b><u>Ancillary Information</u></b>")
+                    ) %>% tagAppendAttributes(class = 'center-div-text'),
+                    checkboxInput(
+                                "anc_rip",
+                                HTML("Riparian corridor"),
+                                value = NULL,
+                                width = '100%'
+                    ),
+
+                    checkboxInput(
+                                "anc_erosion",
+                                HTML("Erosion and deposition"),
+                                value = NULL,
+                                width = '100%'
+                    ),
+
+                    checkboxInput(
+                                "anc_fp",
+                                HTML("Floodplain connectivity"),
+                                value = NULL,
+                                width = '100%'
+                    ),
+                    
+                    textAreaInput(
+                        inputId = "notes_anc",
+                        label = "Notes about observed ancillary information:",
+                        value = "",
+                        width = '100%',
+                        height = '75px',
+                        placeholder = NULL
+                    ),
+
+                ) %>% tagAppendAttributes(class = 'question_box'),
+                br(),
+
 
                 
                 ## Notes and photos----

@@ -89,43 +89,63 @@ run_sdam <- function(
                                 output_df$Class
 
                         } else if (pnts_join_df$Strata_UNC == 'Pacific Northwest'){
-                        
-                                if (df$aqua_presence == 'Yes'){
-                                        if (df$ephemeroptera == 'Yes'){
-                                                if (df$peren_taxa == 'Yes'){
-                                                                df$Class = 'perennial'
-                                                } else if (df$peren_taxa == 'No'){
-                                                                if (df$slope < 16){
-                                                                        df$Class = 'intermittent'
-                                                                } else if (df$slope >= 16){
-                                                                        df$Class = 'perennial'
-                                                                }
-                                                } 
-
-                                        } else if (df$ephemeroptera == 'No'){
-                                                df$Class = 'intermittent'
+                                check_list <- list()
+                                for (t in names(df)){
+                                        if((length(df[[t]]) == 0) | (is.na(df[[t]]))){
+                                                cv <- 'NULL'
+                                                print(df[[t]])
+                                                check_list <- append(check_list, cv)
                                         }
-                                } else if (df$aqua_presence == 'No'){
-                                        if (df$plants == 'Yes'){
-                                                if (df$slope < 10.5){
+                                }
+                                if ('NULL' %in% check_list) {
+                                        print('Null found in check list')
+                                        show_alert(
+                                                title = "",
+                                                text = tagList(
+                                                        tags$p(HTML(paste0("Indicator data missing!  Please fill in all indicators before running the model prediction.")
+                                                                )
+                                                                )
+                                                        ),
+                                                        type = "default"
+                                                        )
+                                } else {
+                                        if (df$aqua_presence == 'Yes'){
+                                                if (df$ephemeroptera == 'Yes'){
+                                                        if (df$peren_taxa == 'Yes'){
+                                                                        df$Class = 'perennial'
+                                                        } else if (df$peren_taxa == 'No'){
+                                                                        if (df$slope < 16){
+                                                                                df$Class = 'intermittent'
+                                                                        } else if (df$slope >= 16){
+                                                                                df$Class = 'perennial'
+                                                                        }
+                                                        } 
+
+                                                } else if (df$ephemeroptera == 'No'){
                                                         df$Class = 'intermittent'
-                                                } else if (df$slope >= 10.5){
+                                                }
+                                        } else if (df$aqua_presence == 'No'){
+                                                if (df$plants == 'Yes'){
+                                                        if (df$slope < 10.5){
+                                                                df$Class = 'intermittent'
+                                                        } else if (df$slope >= 10.5){
+                                                                df$Class = 'ephemeral'
+                                                        }
+                                                } else if (df$plants == 'No'){
                                                         df$Class = 'ephemeral'
                                                 }
-                                        } else if (df$plants == 'No'){
-                                                df$Class = 'ephemeral'
                                         }
-                                }
 
-                                if (df$Class == 'ephemeral'){
-                                        if (df$fish == 'Yes'){
-                                                df$Class == 'at least intermittent'
-                                        } else if (df$amphibians == 'Yes'){
-                                                df$Class == 'at least intermittent'
+                                        if (df$Class == 'ephemeral'){
+                                                if (df$fish == 'Yes'){
+                                                        df$Class == 'at least intermittent'
+                                                } else if (df$amphibians == 'Yes'){
+                                                        df$Class == 'at least intermittent'
+                                                }
                                         }
-                                }
 
-                                output_df$Class
+                                        output_df$Class
+                                }
                         }
 
                 } else if (var_input_reg == 'East'){
@@ -196,45 +216,66 @@ run_sdam <- function(
                         output_df$Class
 
                 } else if (var_input_reg == 'Pacific Northwest'){
-
-                        if (df$aqua_presence == 'Yes'){
-                                if (df$ephemeroptera == 'Yes'){
-                                        if (df$peren_taxa == 'Yes'){
-                                                df$Class = 'perennial'
-                                        } else if (df$peren_taxa == 'No'){
-                                                if (df$slope < 16){
-                                                        df$Class = 'intermittent'
-                                                } else if (df$slope >= 16){
-                                                        df$Class = 'perennial'
-                                                }
-                                        } 
-
-                                } else if (df$ephemeroptera == 'No'){
-                                        df$Class = 'intermittent'
+                        check_list <- list()
+                        for (t in names(df)){
+                                if((length(df[[t]]) == 0) | (is.na(df[[t]]))){
+                                        cv <- 'NULL'
+                                        print(df[[t]])
+                                        check_list <- append(check_list, cv)
                                 }
+                        }
+                        if ('NULL' %in% check_list) {
+                                print('Null found in check list')
+                                show_alert(
+                                        title = "",
+                                        text = tagList(
+                                                tags$p(HTML(paste0("Indicator data missing!  Please fill in all indicators before running the model prediction.")
+                                                        )
+                                                        )
+                                                ),
+                                                type = "default"
+                                                )
+                        } else {
+                        
+                                if (df$aqua_presence == 'Yes'){
+                                        if (df$ephemeroptera == 'Yes'){
+                                                if (df$peren_taxa == 'Yes'){
+                                                        df$Class = 'perennial'
+                                                } else if (df$peren_taxa == 'No'){
+                                                        if (df$slope < 16){
+                                                                df$Class = 'intermittent'
+                                                        } else if (df$slope >= 16){
+                                                                df$Class = 'perennial'
+                                                        }
+                                                } 
 
-                        } else if (df$aqua_presence == 'No'){
-                                if (df$plants == 'Yes'){
-                                        if (df$slope < 10.5){
+                                        } else if (df$ephemeroptera == 'No'){
                                                 df$Class = 'intermittent'
-                                        } else if (df$slope >= 10.5){
+                                        }
+
+                                } else if (df$aqua_presence == 'No'){
+                                        if (df$plants == 'Yes'){
+                                                if (df$slope < 10.5){
+                                                        df$Class = 'intermittent'
+                                                } else if (df$slope >= 10.5){
+                                                        df$Class = 'ephemeral'
+                                                }
+                                        } else if (df$plants == 'No'){
                                                 df$Class = 'ephemeral'
                                         }
-                                } else if (df$plants == 'No'){
-                                        df$Class = 'ephemeral'
                                 }
-                        }
 
-                        if (df$Class == 'ephemeral'){
-                                if (df$fish == 'Yes'){
-                                        df$Class = 'at least intermittent'
-                                } else if (df$amphibians == 'Yes'){
-                                        df$Class = 'at least intermittent'
+                                if (df$Class == 'ephemeral'){
+                                        if (df$fish == 'Yes'){
+                                                df$Class = 'at least intermittent'
+                                        } else if (df$amphibians == 'Yes'){
+                                                df$Class = 'at least intermittent'
+                                        }
                                 }
+
+
+                                df$Class
                         }
-
-
-                        df$Class
                         
         }
 }

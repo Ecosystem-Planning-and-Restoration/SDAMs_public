@@ -1545,13 +1545,22 @@ server <- function(input, output, session){
       # print(format(input$date, '%Y-%m-%d'))
     })
 
+    # observeEvent(input$run_model, {
+    #   for (t in names(df())){
+        
+     
+    #             print(df[[t]])
+             
+            
+    #     }
+    # })
 
     observeEvent(input$runmodel, {
         check_list <- list()
         for (t in names(df())){
             if(length(df()[[t]]) == 0){
                 cv <- 'NULL'
-                print('something')
+                # print('something')
                 check_list <- append(check_list, cv)
             }
         }
@@ -2245,9 +2254,23 @@ server <- function(input, output, session){
                             # Set up parameters to pass to Rmd document
                             region_params <- list(
                                 
+                                cwidth = input$cwidth,
+                                diff_site = input$diff_site,
+                                diff_situation = input$diff_situation %>% as.character() %>% paste0(collapse = ", "),
+                                precip_avg = input$precip_avg,
+
+                                # -------------------Ancillary Info
+                                notes_anc = input$notes_anc,
+                                anc_rip = input$anc_rip,
+                                anc_erosion = input$anc_erosion,
+                                anc_fp = input$anc_fp,
+                                disturbance = input$disturbance,
+                                diff_other = input$diff_other,
+
+
                                 # ------------------- Biological indicators
                                 # EPT Taxa
-                                aqua_inv = input$user_total_abundance,
+                                aqua_inv = input$user_aquatic_presence,
                                 ephem = input$user_ephemeroptera,
                                 f6 = fig6(),
                                 f6_cap = input$inv1_cap,

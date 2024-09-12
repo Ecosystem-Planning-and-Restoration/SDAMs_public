@@ -5,7 +5,7 @@
 
 rsconnect/shinyapps.io/ecosystemplanningrestoration/SDAMS_staging.dcf
 gp_report.log
-*.tex
+
 /gp_report_files
 spatial/tl_2019_us_primaryroads.cpg
 spatial/tl_2019_us_primaryroads.dbf

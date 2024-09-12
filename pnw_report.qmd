@@ -13,6 +13,8 @@ format:
   pdf:
     include-in-header:
       - text: |
+          \setlength\parindent{24pt}
+          \usepackage{indentfirst}
           \usepackage{geometry}
           \usepackage{xcolor}
           \usepackage{fancyhdr}
@@ -174,12 +176,23 @@ params:
     f54: NA
     f54_cap: NA
     notes_mb: NA
+    cwidth: NA
+    diff_site: NA
+    diff_situation: NA
+    notes_anc: NA
+    anc_rip: NA
+    anc_erosion: NA
+    anc_fp: NA
+    precip_avg: NA
+    disturbance: NA
+    diff_other: NA
   
 ---
 \newcommand{\sitedate}{`r params$e`}
 \newgeometry{left=20mm, right=20mm, top=10mm, bottom=4mm}
 \thispagestyle{empty}
 \pagecolor{darker-blue}
+\setlength\parindent{15pt}
 
 ```{r, setup, include=FALSE}
 library(knitr)
@@ -228,7 +241,7 @@ opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
     \end{center}
     \vspace{2mm}
     \begin{center}
-        \begin{large}Site code: `r params$c`\end{large}
+        \begin{large}Address: `r params$c`\end{large}
     \end{center}
     \vspace{2mm}
     \begin{center}
@@ -311,16 +324,16 @@ if (params$h != 'Not Provided'){
 \setcounter{page}{1}
 
 \begin{center}
-\textbf{\underline{\LARGE{General Site Information}}}
+\textbf{\underline{\LARGE{General site information}}}
 \end{center}
 
 Project name or number: `r params$a`
 
-Site code or identifier: `r params$c`
+Address: `r params$c`
 
 SDAM Region: `r params$region`
 
-Adjacent SDAM Regions within 10 Miles: `r params$adj_regions`
+Adjacent SDAM Regions within 10 miles: `r params$adj_regions`
 
 Assessor(s): `r params$b`
 
@@ -328,45 +341,42 @@ Waterway name: `r params$d`
 
 Visit date: `r params$e`
 
-Current weather conditions: `r params$bm`
-
-Notes on current or recent weather conditions:
-`r params$j`
-
 Location: `r paste0(params$g," N, ", params$h, " E")`
 
-Surrounding land use within 100 m: `r params$l`
+Reach boundaries: `r params$f`
 
-Notes on land use: `r params$notes_landuse`
+Precipitation w/in 48 hours (cm): `r if (!is.na(params$fff)){params$fff}`
 
-Description of reach boundaries: `r params$f`
+Channel width (m): `r if (!is.na(params$cwidth)){params$cwidth}`
 
-Assessment reach length (m): `r if (!is.na(params$fff)){params$fff}`
+Disturbed site / difficult situation: `r ifelse(params$diff_site == TRUE, 'Yes', 'No')`
 
-Disturbed or difficult conditions:
-```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-cat(params$bn)
-```
+\phantom{x}\hspace{3ex}Prolonged abnormal rainfall / snowpack: `r ifelse(is.null(params$precip_avg), 'Not selected', params$precip_avg)`
 
-Notes on disturbances or difficult site conditions:
-`r params$k`
+\phantom{x}\hspace{3ex}Natural or anthropogenic disturbance: `r ifelse(params$disturbance == TRUE, 'Yes', 'No')`
+
+\phantom{x}\hspace{3ex}Other (explain in notes): `r ifelse(params$diff_other == TRUE, 'Yes', 'No')`
+
+\phantom{x}\hspace{3ex}Notes for difficult situations: `r params$k`
+
+
 
 \vspace{3mm}
 \begin{center}
-\textbf{\underline{\LARGE{Observed Hydrology}}}
+\textbf{\underline{\LARGE{Observed hydrology}}}
 \end{center}
 
-Percent of reach with surface flow: `r params$m`
+Percent of reach with observed surface flow: `r params$m`
 
-Percent of reach with surface and sub-surface flows: `r params$n`
+Percent of reach with any flow (surface or hyporheic): `r params$n`
 
-Number of isolated pools: `r params$o`
+Number of pools observed:: `r params$o`
 
 Notes on observed hydrology: `r params$r`
 
 \vspace{3mm}
 \begin{center}
-\textbf{\underline{\LARGE{Site Photos}}}
+\textbf{\underline{\LARGE{Site photos}}}
 \end{center}
 
 Top of reach looking downstream:
@@ -402,7 +412,7 @@ if (!length(params$s)==0){
 
 \vspace{3mm}
 \begin{center}
-\textbf{\underline{\LARGE{Site Sketch}}}
+\textbf{\underline{\LARGE{Site sketch}}}
 \end{center}
 
 
@@ -424,16 +434,18 @@ if (!length(params$w)==0){
 
 \vspace{2mm}
 
-Aquatic benthic macroinvertebrates present: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`
+\textbf{Macroinvertebrates present: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`}
  
-Six or more individuals of the order of Ephemeroptera present: `r if (!is.null(params$ephem)) {params$ephem}`
+\textbf{Six or more individuals of the order of Ephemeroptera present: `r if (!is.null(params$ephem)) {params$ephem}`}
 
-Notes on aquatic invertebrates:
+\textbf{Perennial taxa present: `r if (!is.null(params$per_taxa)){params$per_taxa}`}
+
+Notes about observed macroinvertebrates:
 
 `r params$notes_aquainv`
 
 
-Aquatic invertebrate photos and photo descriptions:
+Macroinvertebrate photos and photo descriptions:
 
 ```{r, out.width='50%', fig.align='center'}
 
@@ -531,16 +543,16 @@ if (!length(params$f8_1)==0){
 
 \vspace{2mm}
 
-Number of hydrophytic plant species: `r if (!is.null(params$hydro)) {params$hydro}`
 
-FACW, OBL, or SAV plants present (within ½ channel width): `r if (!is.null(params$hydro)) {params$hydro}`
 
-Notes on hydrophytic plants:
+\textbf{FACW, OBL, or SAV plants present (within ½ channel width): `r if (!is.null(params$hydro)) {params$hydro}`}
+
+Notes about observed wetland plants:
 
 `r params$notes_hydro`
 
 
-Hydrophyte photos and photo descriptions:
+Wetland plant photos and photo descriptions:
 
 ```{r, out.width='50%', fig.align='center'}
 
@@ -635,13 +647,68 @@ if (!length(params$f29)==0){
 ```
 
 
+
 \vspace{2mm}
 
-Fish present: `r if (!is.null(params$fish)){params$fish}`
+\textbf{Slope Percent: `r if (!is.null(params$slope)){params$slope}`\%}
 
-Amphibians present: `r if (!is.null(params$amphibians)){params$amphibians}`
+Notes about slope:
 
-Notes about fish:
+`r params$notes_slope`
+
+
+Slope photos and descriptions:
+```{r, out.width='50%', fig.align='center'}
+
+if (!length(params$f21)==0){ 
+    knitr::include_graphics(params[["f21"]])
+}
+
+```
+
+```{r}
+if (!length(params$f21)==0){ 
+  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f21_cap, perl = TRUE)))
+}
+```
+
+```{r, out.width='50%', fig.align='center'}
+
+if (!length(params$f22)==0){ 
+    knitr::include_graphics(params[["f22"]])
+}
+```
+
+```{r}
+if (!length(params$f22)==0){ 
+  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f22_cap, perl = TRUE)))
+}
+```
+
+```{r, out.width='50%', fig.align='center'}
+
+if (!length(params$f23)==0){ 
+    knitr::include_graphics(params[["f23"]])
+}
+
+```
+
+```{r}
+if (!length(params$f23)==0){ 
+  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f23_cap, perl = TRUE)))
+}
+```
+
+
+\vspace{2mm}
+
+\textbf{Fish present:} `r if (!is.null(params$fish)){params$fish}`
+
+\textbf{Amphibians present:} `r if (!is.null(params$amphibians)){params$amphibians}`
+
+
+
+Notes about observed amphibians, snakes, and fish:
 
 `r params$notes_fish`
 
@@ -733,137 +800,25 @@ if (!length(params$f41)==0){
 }
 ```
 
-\vspace{2mm}
+\begin{center}
+\textbf{\underline{\LARGE{Ancillary information}}}
+\end{center}
 
+\textbf{Riparian corridor: `r ifelse(params$anc_rip == TRUE,'Yes','No')`}
 
+\textbf{Erosion and deposition: `r ifelse(params$anc_erosion == TRUE,'Yes','No')`}
 
+\textbf{Floodplain connectivity: `r ifelse(params$anc_fp == TRUE,'Yes','No')`}
 
-Notes about amphibians:
+Notes about observed ancillary information: `r params$notes_anc`
 
-`r params$notes_amph`
-
-
-Amphbian photos and descriptions:
-
-
-\vspace{2mm}
-
-Perennial taxa present: `r if (!is.null(params$per_taxa)){params$per_taxa}`
-
-
-Notes about perennial taxa:
-
-`r params$notes_per`
-
-
-Perennial taxa photos and descriptions:
-
-```{r, out.width='50%', fig.align='center'}
-
-if (!length(params$f33)==0){ 
-  knitr::include_graphics(params[["f33"]])
-}
-
-```
-
-```{r}
-if (!length(params$f33)==0){ 
-  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f33_cap, perl = TRUE)))
-}
-```
-
-
-```{r, out.width='50%', fig.align='center'}
-
-if (!length(params$f34)==0){ 
-  knitr::include_graphics(params[["f34"]])
-} 
-
-```
-
-```{r}
-if (!length(params$f34)==0){ 
-  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f34_cap, perl = TRUE)))
-}
-```
-
-```{r, out.width='50%', fig.align='center'}
-
-if (!length(params$f35)==0){ 
-  knitr::include_graphics(params[["f35"]])
-}
-
-```
-
-```{r}
-if (!length(params$f35)==0){ 
-  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f35_cap, perl = TRUE)))
-}
-```
-
-\vspace{2mm}
-
-Slope Percent: `r if (!is.null(params$slope)){params$slope}`
-
-<!-- 2x maximum bankfull depth (m.m): `r if (!is.null(params$bank2x)){params$bank2x}` -->
-
-<!-- Flood-prone width (m.m): `r if (!is.null(params$fpw)){params$fpw}` -->
-
-<!-- Entrenchment Ratio: `r if (!is.null(params$entrenchment)){params$entrenchment}` -->
-
-Notes about slope:
-
-`r params$notes_slope`
-
-
-Slope photos and descriptions:
-```{r, out.width='50%', fig.align='center'}
-
-if (!length(params$f21)==0){ 
-    knitr::include_graphics(params[["f21"]])
-}
-
-```
-
-```{r}
-if (!length(params$f21)==0){ 
-  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f21_cap, perl = TRUE)))
-}
-```
-
-```{r, out.width='50%', fig.align='center'}
-
-if (!length(params$f22)==0){ 
-    knitr::include_graphics(params[["f22"]])
-}
-```
-
-```{r}
-if (!length(params$f22)==0){ 
-  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f22_cap, perl = TRUE)))
-}
-```
-
-```{r, out.width='50%', fig.align='center'}
-
-if (!length(params$f23)==0){ 
-    knitr::include_graphics(params[["f23"]])
-}
-
-```
-
-```{r}
-if (!length(params$f23)==0){ 
-  cat(paste0("Description: ",gsub('(?=(?:.{91})+$)', "\n", params$f23_cap, perl = TRUE)))
-}
-```
 
 \vfill
 \noindent\rule{16cm}{2pt}\
 \pagebreak
 
 \begin{center}
-\textbf{\underline{\LARGE{Supplemental Information}}}
+\textbf{\underline{\LARGE{Supplemental information}}}
 \end{center}
 
 Additional notes about the assessment:
@@ -941,7 +896,7 @@ if (!length(params$f51)==0){
 \noindent\rule{16cm}{2.5pt}
 
 \begin{center}
-\textbf{\underline{\LARGE{Additional Resources}}}
+\textbf{\underline{\LARGE{Additional resources}}}
 \end{center}
 
 

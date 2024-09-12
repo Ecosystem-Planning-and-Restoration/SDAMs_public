@@ -333,7 +333,7 @@ if (params$h != 'Not Provided'){
 \pagecolor{white}
 \setcounter{page}{1}
 \begin{center}
-\textbf{\underline{\LARGE{General Site Information}}}
+\textbf{\underline{\LARGE{General site information}}}
 \end{center}
 
 Project name or number: `r params$a`
@@ -342,7 +342,7 @@ Site code or identifier: `r params$c`
 
 SDAM Region: `r params$region`
 
-Adjacent SDAM Regions within 10 Miles: `r params$adj_regions`
+Adjacent SDAM Regions within 10 miles: `r params$adj_regions`
 
 Assessor(s): `r params$b`
 
@@ -367,7 +367,7 @@ Assessment reach length (m): `r if (!is.na(params$fff)){params$fff}`
 
 Disturbed or difficult conditions:
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-cat(params$bn)
+params$bn
 ```
 
 Notes on disturbances or difficult site conditions:
@@ -375,7 +375,7 @@ Notes on disturbances or difficult site conditions:
 
 \vspace{3mm}
 \begin{center}
-\textbf{\underline{\LARGE{Observed Hydrology}}}
+\textbf{\underline{\LARGE{Observed hydrology}}}
 \end{center}
 
 Percent of reach with surface flow: `r params$m`
@@ -388,7 +388,7 @@ Notes on observed hydrology: `r params$r`
 
 \vspace{3mm}
 \begin{center}
-\textbf{\underline{\LARGE{Site Photos}}}
+\textbf{\underline{\LARGE{Site photos}}}
 \end{center}
 
 Top of reach looking downstream:
@@ -424,7 +424,7 @@ if (!length(params$s)==0){
 
 \vspace{3mm}
 \begin{center}
-\textbf{\underline{\LARGE{Site Sketch}}}
+\textbf{\underline{\LARGE{Site sketch}}}
 \end{center}
 
 ```{r, out.width='50%', fig.align='center'}
