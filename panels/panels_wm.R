@@ -219,10 +219,10 @@ wm_panel <- function(){
                                 "user_substrate", 
                                 HTML("<b><i>Particle size or stream substrate sorting</b></i>"),
                                 c(
-                                    "0 (Weak)" = 0,
+                                    "0 (Poor)" = 0,
                                     "0.75" = 0.75,
-                                    "1.5 (Moderate)" = 1,
-                                    "2.25" = 2.5,
+                                    "1.5 (Moderate)" = 1.5,
+                                    "2.25" = 2.25,
                                     "3 (Strong)" = 3
                                 ),
                                 inline = F,

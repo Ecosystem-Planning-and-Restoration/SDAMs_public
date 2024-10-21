@@ -90,7 +90,7 @@ aw_report <- function(){
                             "Cloudy" = 'cloudy',
                             "Clear/Sunny" = 'clearsunny'
                         ),
-                        selected = NULL
+                        selected = character(0)
                     ),
 
                     textAreaInput(
@@ -179,13 +179,13 @@ aw_report <- function(){
                     numericInput(
                         inputId = "subflow",
                         label = "Percent of reach with surface and sub-surface flows:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
                     numericInput(
                         inputId = "surfflow",
                         label = "Percent of reach with surface flows:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
 
@@ -194,7 +194,7 @@ aw_report <- function(){
                     numericInput(
                         inputId = "pool",
                         label = "Number of isolated pools:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
 
@@ -325,6 +325,14 @@ aw_report <- function(){
                 div(
                     h4(HTML("<b><u>Aquatic macroinvertebrates</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
+
+                    HTML('Check if applicable:'),
+                    checkboxInput(
+                                    "macro_check",
+                                    HTML("No aquatic macroinvertebrates in assessment area"),
+                                    value = NULL,
+                                    width = '100%'
+                    ),
 
                     textAreaInput(
                         inputId = "notes_totalAbundance",
@@ -480,6 +488,14 @@ aw_report <- function(){
                     h4(HTML("<b><u>Hydrophytic plants</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
 
+                    HTML('Check if applicable:'),
+                    checkboxInput(
+                                    "hydro_check",
+                                    HTML("No vegetation in assessment area"),
+                                    value = NULL,
+                                    width = '100%'
+                    ),
+                    
                     textAreaInput(
                         inputId = "notes_hydro",
                         label = "Notes about hydrophytic vegetation (e.g., list species here or in photo captions and note odd distributions):",

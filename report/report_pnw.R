@@ -210,20 +210,20 @@ pnw_report <- function(){
                     numericInput(
                         inputId = "surfflow",
                         label = "Percent of reach with surface flows:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
                     numericInput(
                         inputId = "subflow",
                         label = "Percent of reach with any flow (surface or hyporheic):",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
 
                     numericInput(
                         inputId = "pool",
                         label = "Number of pools observed:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
 

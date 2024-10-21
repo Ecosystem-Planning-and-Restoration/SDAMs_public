@@ -89,7 +89,7 @@ gp_report <- function(){
                             "Cloudy" = 'cloudy',
                             "Clear/Sunny" = 'clearsunny'
                         ),
-                        selected = NULL
+                        selected = character(0)
                     ),
 
                     textAreaInput(
@@ -178,20 +178,20 @@ gp_report <- function(){
                     numericInput(
                         inputId = "subflow",
                         label = "Percent of reach with surface and sub-surface flows:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
                     numericInput(
                         inputId = "surfflow",
                         label = "Percent of reach with surface flows:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),   
 
                     numericInput(
                         inputId = "pool",
                         label = "Number of isolated pools:",
-                        value = 0,
+                        value = NULL,
                         min = 0,
                     ),
 
@@ -417,6 +417,14 @@ gp_report <- function(){
                 div(
                     h4(HTML("<b><u>Hydrophytic plants</u></b>")
                     ) %>% tagAppendAttributes(class = 'center-div-text'),
+
+                    HTML('Check if applicable:'),
+                    checkboxInput(
+                                    "hydro_check",
+                                    HTML("No vegetation in assessment area"),
+                                    value = NULL,
+                                    width = '100%'
+                    ),
 
                     textAreaInput(
                         inputId = "notes_hydro",

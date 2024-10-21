@@ -26,7 +26,7 @@ format:
           \newtcolorbox{mybox}{colback=red!5!white,colframe=red!75!black}
           \rfoot{Page \thepage\ of \pageref{LastPage}}
           \cfoot{}
-          \lfoot{SDAM Version 1.0 September 2024, Date of site visit: \sitedate}
+          \lfoot{SDAM Version 1.0 October 2024, Date of site visit: \sitedate}
     template-partials:
       - before-body.tex
 params:
@@ -183,6 +183,8 @@ params:
     f54: NA
     f54_cap: NA
     notes_mb: NA
+    hydro_check: NA
+    macro_check: NA
 
 
 ---
@@ -190,6 +192,8 @@ params:
 \newgeometry{left=20mm, right=20mm, top=10mm, bottom=4mm}
 \thispagestyle{empty}
 \pagecolor{darker-blue}
+\clearpage
+\setcounter{page}{1}
 
 ```{r, setup, include=FALSE}
 library(knitr)
@@ -218,7 +222,7 @@ opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
     \end{center}
     \vspace{2mm}
     \begin{center}
-        \begin{Large} SDAM Version 1.0 Release Date: September 2024 \end{Large}
+        \begin{Large} SDAM Version 1.0 Release Date: October 2024 \end{Large}
     \end{center}
     \vspace{2mm}
     \begin{center}
@@ -318,7 +322,7 @@ if (params$h != 'Not Provided'){
 \restoregeometry
 \clearpage
 \pagecolor{white}
-\setcounter{page}{1}
+
 
 \begin{center}
 \textbf{\underline{\LARGE{General site information}}}
@@ -343,7 +347,7 @@ Current weather conditions: `r params$bm`
 Notes on current or recent weather conditions:
 `r params$j`
 
-Location: `r paste0(params$g," N, ", params$h, " E")`
+Location: `r ifelse(params$g != 'Not Provided' | params$h != 'Not Provided', paste0(params$g," N, ", params$h, " E"), paste0('Not provided'))`
 
 Surrounding land use within 100 m: `r params$l`
 
@@ -354,9 +358,8 @@ Description of reach boundaries: `r params$f`
 Assessment reach length (m): `r if (!is.na(params$fff)){params$fff}`
 
 Disturbed or difficult conditions:
-```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-params$bn
-```
+`r params$bn`
+
 
 Notes on disturbances or difficult site conditions:
 `r params$k`
@@ -431,7 +434,7 @@ if (!length(params$w)==0){
 \end{center}
 
 \vspace{2mm}
-\textbf{\large{Mean bankfull channel width (m):}} `r params$bankwidth`
+\textbf{Mean bankfull channel width (m): `r params$bankwidth`}
 
 Notes on mean bankfull channel width: `r params$notes_mb`
 
@@ -484,7 +487,9 @@ if (!length(params$f54)==0){
 \vspace{2mm}
 
 
-Perennial indicator taxa: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`
+\textbf{Perennial indicator taxa: `r if (!is.null(params$aqua_inv)) {params$aqua_inv}`}
+
+Aquatic macroinvertebrates in assessment area: `r ifelse(params$macro_check == TRUE, 'Aquatic macroinvertebrates absent', 'Aquatic macroinvertebrates present')`
 
 Notes on aquatic macroinvertebrates:
 
@@ -588,13 +593,7 @@ if (!length(params$f8_1)==0){
 
 \vspace{2mm}
 
-Slope Percent: `r if (!is.null(params$slope)){params$slope}`
-
-<!-- 2x maximum bankfull depth (m.m): `r if (!is.null(params$bank2x)){params$bank2x}` -->
-
-<!-- Flood-prone width (m.m): `r if (!is.null(params$fpw)){params$fpw}` -->
-
-<!-- Entrenchment Ratio: `r if (!is.null(params$entrenchment)){params$entrenchment}` -->
+\textbf{Slope Percent: `r if (!is.null(params$slope)){params$slope}`}
 
 Notes about slope:
 
@@ -646,7 +645,9 @@ if (!length(params$f23)==0){
 
 \vspace{2mm}
 
-Number of hydrophytic plant species: `r if (!is.null(params$hydro)) {params$hydro}`
+\textbf{Number of hydrophytic plant species: `r if (!is.null(params$hydro)) {params$hydro}`}
+
+Vegetation in assessment area: `r ifelse(params$hydro_check == TRUE, 'vegetation absent', 'vegetation present')`
 
 Notes on hydrophytic plants:
 
@@ -749,7 +750,7 @@ if (!length(params$f29)==0){
 
 \vspace{2mm}
 
-Prevalence of upland rooted plants in streambed: `r if (!is.null(params$upland_rooted)){params$upland_rooted}`
+\textbf{Prevalence of upland rooted plants in streambed: `r if (!is.null(params$upland_rooted)){params$upland_rooted}`}
 
 
 Notes about upland rooted plants:
@@ -805,9 +806,7 @@ if (!length(params$f47)==0){
 
 \vspace{2mm}
 
-Algal cover: `r if (!is.null(params$algal)){params$algal}`
-
-`r if (params$algal_cb == TRUE){paste0('Algae exclusively appears to have been deposited from an upstream source, and no local growth is evident.')}`
+\textbf{Algal cover: `r if (!is.null(params$algal)){params$algal}`}
 
 Notes about algal cover:
 
@@ -861,7 +860,7 @@ if (!length(params$f38)==0){
 
 \vspace{2mm}
 
-Differences in vegetation: `r if (!is.null(params$veg)){params$veg}`
+\textbf{Differences in vegetation: `r if (!is.null(params$veg)){params$veg}`}
 
 
 Notes about differences in vegetation:
@@ -917,7 +916,7 @@ if (!length(params$f17)==0){
 
 \vspace{2mm}
 
-Riffle-pool sequence: `r if (!is.null(params$riff)){params$riff}`
+\textbf{Riffle-pool sequence: `r if (!is.null(params$riff)){params$riff}`}
 
 
 Notes about riffle-pool sequence:
@@ -1055,18 +1054,10 @@ if (!length(params$f51)==0){
 
 \noindent\rule{16cm}{2.5pt}
 
+\vspace{2cm}
 \begin{center}
-\textbf{\underline{\LARGE{Additional resources}}}
+  \href{https://www.epa.gov/streamflow-duration-assessment/supporting-materials}{\textcolor{cyan}{\textbf{\underline{\Huge{SDAM resources}}}}}
 \end{center}
-
-
-[\textcolor{cyan}{User Manual}](https://www.epa.gov/streamflow-duration-assessment)
-
-[\textcolor{cyan}{Field Form}](https://www.epa.gov/streamflow-duration-assessment)
-
-[\textcolor{cyan}{Training Materials}](https://www.epa.gov/streamflow-duration-assessment)
-
-[\textcolor{cyan}{SDAMs Home}](https://www.epa.gov/streamflow-duration-assessment)
  
 \vfill
 \noindent\rule{16cm}{3pt}\

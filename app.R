@@ -573,7 +573,7 @@ ui <- fluidPage(
             "Web application for the Regional Streamflow Duration Assessment Methods (SDAMs)"
             )
         ),
-        h4(HTML("<p>Version <a href=\"https://github.com/Ecosystem-Planning-and-Restoration/SDAMs_public\">1.0</a> Release date: September 2024 </p>")),
+        h4(HTML("<p>Version <a href=\"https://github.com/USEPA/SDAM-web-app\">1.0</a> Release date: October 2024 </p>")),
     ),
     "SDAMs"
     ),
@@ -597,18 +597,15 @@ ui <- fluidPage(
                                     '<div class="alert alert-danger" role="alert" 
                                       style="background-color:#005ea2; margin-top:-50px; padding-top:0px; padding-bottom:0px;">
                                       <h3 style=padding-top:2%;>
-                                        <span class="badge badge-info" 
-                                          style="font-size:1.5rem; margin-right:6px; background-color:#404040;">Info
-                                        </span>
                                         <a href=\"https://www.epa.gov/streamflow-duration-assessment/supporting-materials\" style="color:#ffffff;">
-                                        Supporting materials including user manuals, field assessment forms, training videos and more</a>
+                                        Supporting SDAM materials including user manuals, field assessment forms, training videos and more </a>
                                       </h3>
                                     </div>'                                      
                                   ),
 
                                   HTML(
                                     '<div class="alert alert-danger" role="alert" style="color:#000000; text-align:center;">
-                                      <b>This is an analysis tool and does not store data. After 60 minutes the tool will timeout and all data will have to be re-entered.</b>
+                                      <b>This web application is an analysis tool; it does not store data. After 60 minutes, the tool will timeout and all data will have to be re-entered. </b>
                                     </div>'
                                   ),
                                   
@@ -922,45 +919,19 @@ server <- function(input, output, session){
             alt_regions <- region_checker(map_coords()[1], map_coords()[2])
             alt_regions <- alt_regions[alt_regions != 'East']
             alt_regions_str <- str_c(alt_regions, collapse=', ')
-            if (length(alt_regions) > 0){
-                show_alert(
-                    title = "Location Warning!",
-                    text = tagList(
-                            tags$p(
-                                    HTML(paste0("This site is located within 10 miles of another SDAM region. Please consider using one of the following SDAMs:",
-                                                "<br><br>",
-                                                "<b>", alt_regions_str, "</b>"
-                                            )
-                                        )
-                                )
-                            ),
-                    type = "info"
-                )
 
-            }
         } else if (input$vol_region != 'Select region' && input$vol_region != 'Select location on map'){
             alt_regions <- region_checker(input$lat, input$lon)
             alt_regions <- alt_regions[alt_regions != 'East']
             alt_regions_str <- str_c(alt_regions, collapse=', ')
-            if (length(alt_regions) > 0){
-                show_alert(
-                    title = "Location Warning!",
-                    text = tagList(
-                            tags$p(
-                                    HTML(paste0("This site is located within 10 miles of another SDAM region.  <br>Please consider using one of the following SDAMs:",
-                                                "<br><br>",
-                                                "<b>", alt_regions_str, "</b>"
-                                            )
-                                        )
-                                    )
-                                ),
-                    type = "info"
-                )
 
-            }
+        } else if (input$vol_region == 'Select region'){
+          alt_regions_str <- 'Unknown'
+
         } else {
-          alt_regions_str <- 'No Regions Within 10 Miles'
+          alt_regions_str <- 'None'
         }
+        
         alt_regions_str
     })
 
@@ -1545,16 +1516,6 @@ server <- function(input, output, session){
       # print(format(input$date, '%Y-%m-%d'))
     })
 
-    # observeEvent(input$run_model, {
-    #   for (t in names(df())){
-        
-     
-    #             print(df[[t]])
-             
-            
-    #     }
-    # })
-
     observeEvent(input$runmodel, {
         check_list <- list()
         for (t in names(df())){
@@ -1685,6 +1646,10 @@ server <- function(input, output, session){
                 }
             }
         }
+    })
+
+    observeEvent(alt_regions_str(), {
+      print(alt_regions_str())
     })
     
 
@@ -1831,7 +1796,7 @@ server <- function(input, output, session){
               c = input$code,
               d = input$waterway,
               e = visit_date(),
-              adj_regions = alt_regions_str(),
+              adj_regions = ifelse(alt_regions_str()=='', 'None', alt_regions_str()),
               bm = case_when(input$radio_weather == 'heavyrain' ~ "Storm/heavy rain",
                               input$radio_weather == 'steadyrain' ~ "Steady rain",
                               input$radio_weather == 'intermittentrain' ~ "Intermittent rain",
@@ -1854,7 +1819,7 @@ server <- function(input, output, session){
                       "Forested","Other Natural","Other")
                   ) %>% as.character() %>% paste0(collapse = ", "),
               f = input$boundary,
-              fff = input$actreach,
+              fff = ifelse(is.na(input$actreach), ' ', input$actreach),
               bn = plyr::mapvalues(
                   input$radio_situation,
                   from = c(
@@ -1875,9 +1840,9 @@ server <- function(input, output, session){
               s = fig1(),
 
               # ------------------- Observed Hydrology
-              m = input$surfflow,
-              n = input$subflow,
-              o = input$pool,
+              m = ifelse(is.na(input$surfflow), ' ', input$surfflow),
+              n = ifelse(is.na(input$subflow), ' ', input$subflow),
+              o = ifelse(is.na(input$pool), ' ', input$pool),
               r = input$notes_observed_hydrology,
 
               # ------------------- Site Sketch
@@ -1919,6 +1884,7 @@ server <- function(input, output, session){
                                 
                                 ### ------------------- Biological indicators
                                 # EPT Taxa
+                                macro_check = input$macro_check,
                                 aqua_inv = case_when(
                                   input$user_eph_isa == 0 ~ '0',
                                   input$user_eph_isa == 1 ~ "1 to 4",
@@ -1941,6 +1907,7 @@ server <- function(input, output, session){
                                 notes_aquainv = input$notes_totalAbundance,
 
                                 # Hydrophytes
+                                hydro_check = input$hydro_check,
                                 hydro = case_when(
                                   input$user_hydrophyte < 5 ~ as.character(input$user_hydrophyte),
                                   T ~ "Greater than or equal to 5"
@@ -1998,7 +1965,7 @@ server <- function(input, output, session){
                                 # Difference in Veg
                                 vegetation = case_when(
                                   input$user_diff_veg == 0 ~ "0 (Poor)",
-                                  input$user_diff_veg == 0.5 ~ "0.5)",
+                                  input$user_diff_veg == 0.5 ~ "0.5",
                                   input$user_diff_veg == 1 ~ "1 (Weak)",
                                   input$user_diff_veg == 1.5 ~ "1.5",
                                   input$user_diff_veg == 2 ~ "2 (Moderate)",
@@ -2026,7 +1993,7 @@ server <- function(input, output, session){
                                 # Riffle Pool Sequence
                                 riff = case_when(
                                   input$user_riff_pool == 0 ~ "0 (Poor)",
-                                  input$user_riff_pool == 0.5 ~ "0.5)",
+                                  input$user_riff_pool == 0.5 ~ "0.5",
                                   input$user_riff_pool == 1 ~ "1 (Weak)",
                                   input$user_riff_pool == 1.5 ~ "1.5",
                                   input$user_riff_pool == 2 ~ "2 (Moderate)",
@@ -2107,6 +2074,7 @@ server <- function(input, output, session){
                                 notes_aquainv = input$notes_totalAbundance,
 
                                 # Hydrophytes
+                                hydro_check = input$hydro_check,
                                 hydro = case_when(
                                   input$user_hydrophyte == 0 ~ 'Less than 2',
                                   T ~ "Greater than or equal to 2"
@@ -2146,7 +2114,7 @@ server <- function(input, output, session){
                                 # Substrate
                                 substrate = case_when(
                                   input$user_substrate == 0 ~ "0 (Weak)",
-                                  input$user_substrate == 0.75 ~ "0.5)",
+                                  input$user_substrate == 0.75 ~ "0.5",
                                   input$user_substrate == 1.5 ~ "1 (Moderate)",
                                   input$user_substrate == 2.25 ~ "2.25",
                                   input$user_substrate == 3 ~ "3 (Strong)"
@@ -2162,7 +2130,7 @@ server <- function(input, output, session){
                                 # Difference in Veg
                                 vegetation = case_when(
                                   input$user_diff_veg == 0 ~ "0 (Poor)",
-                                  input$user_diff_veg == 0.5 ~ "0.5)",
+                                  input$user_diff_veg == 0.5 ~ "0.5",
                                   input$user_diff_veg == 1 ~ "1 (Weak)",
                                   input$user_diff_veg == 1.5 ~ "1.5",
                                   input$user_diff_veg == 2 ~ "2 (Moderate)",
@@ -2198,7 +2166,7 @@ server <- function(input, output, session){
                                 # Riffle Pool Sequence
                                 riff = case_when(
                                   input$user_riff_pool == 0 ~ "0 (Poor)",
-                                  input$user_riff_pool == 0.5 ~ "0.5)",
+                                  input$user_riff_pool == 0.5 ~ "0.5",
                                   input$user_riff_pool == 1 ~ "1 (Weak)",
                                   input$user_riff_pool == 1.5 ~ "1.5",
                                   input$user_riff_pool == 2 ~ "2 (Moderate)",
@@ -2253,8 +2221,8 @@ server <- function(input, output, session){
 
                             # Set up parameters to pass to Rmd document
                             region_params <- list(
-                                
-                                cwidth = input$cwidth,
+                                cwidth = ifelse(is.na(input$cwidth), ' ', input$cwidth),
+                                # cwidth = input$cwidth,
                                 diff_site = input$diff_site,
                                 diff_situation = input$diff_situation %>% as.character() %>% paste0(collapse = ", "),
                                 precip_avg = input$precip_avg,
@@ -2383,6 +2351,7 @@ server <- function(input, output, session){
                                 
                                 # ------------------- Biological indicators
                                 # EPT Taxa
+                                macro_check = input$macro_check,
                                 aqua_inv = case_when(
                                   input$user_total_abundance == 0 ~ '0',
                                   input$user_total_abundance == 1 ~ "1 to 4",
@@ -2413,6 +2382,7 @@ server <- function(input, output, session){
                                 ),
 
                                 # Hydrophytes
+                                hydro_check = input$hydro_check,
                                 hydro = case_when(
                                   input$user_hydrophyte < 5 ~ as.character(input$user_hydrophyte),
                                   T ~ "Greater than or equal to 5"
@@ -2452,8 +2422,8 @@ server <- function(input, output, session){
                                 # Substrate
                                 substrate = case_when(
                                   input$user_substrate == 0 ~ "0 (Weak)",
-                                  input$user_substrate == 0.75 ~ "0.5)",
-                                  input$user_substrate == 1.5 ~ "1 (Moderate)",
+                                  input$user_substrate == 0.75 ~ "0.75",
+                                  input$user_substrate == 1.5 ~ "1.5 (Moderate)",
                                   input$user_substrate == 2.25 ~ "2.25",
                                   input$user_substrate == 3 ~ "3 (Strong)"
                                 ),
@@ -2468,7 +2438,7 @@ server <- function(input, output, session){
                                 # Difference in Veg
                                 vegetation = case_when(
                                   input$user_diff_veg == 0 ~ "0 (Poor)",
-                                  input$user_diff_veg == 0.5 ~ "0.5)",
+                                  input$user_diff_veg == 0.5 ~ "0.5",
                                   input$user_diff_veg == 1 ~ "1 (Weak)",
                                   input$user_diff_veg == 1.5 ~ "1.5",
                                   input$user_diff_veg == 2 ~ "2 (Moderate)",
@@ -2508,7 +2478,7 @@ server <- function(input, output, session){
                                 # Riffle Pool Sequence
                                 riff = case_when(
                                   input$user_riff_pool == 0 ~ "0 (Poor)",
-                                  input$user_riff_pool == 0.5 ~ "0.5)",
+                                  input$user_riff_pool == 0.5 ~ "0.5",
                                   input$user_riff_pool == 1 ~ "1 (Weak)",
                                   input$user_riff_pool == 1.5 ~ "1.5",
                                   input$user_riff_pool == 2 ~ "2 (Moderate)",
